@@ -1,6 +1,6 @@
 {
   "name": "@luisjpf/alpaca-sdk",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Complete Alpaca SDK - Trading, Broker, Market Data, and Streaming",
   "type": "module",
   "main": "./dist/index.cjs",
