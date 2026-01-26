@@ -162,7 +162,18 @@ class TradeUpdatesStreamImpl {
         try {
           handler(data)
         } catch (error) {
-          console.error(`Error in ${event} handler:`, error)
+          // For error handlers, just log to avoid infinite recursion
+          // For other handlers, re-emit as an error event
+          if (event === 'error') {
+            console.error(`Error in ${event} handler:`, error)
+          } else {
+            this.emit(
+              'error',
+              error instanceof Error
+                ? error
+                : new Error(`Error in ${event} handler: ${String(error)}`)
+            )
+          }
         }
       }
     }
@@ -241,7 +252,13 @@ class TradeUpdatesStreamImpl {
       } else {
         return
       }
-    } catch {
+    } catch (error) {
+      this.emit(
+        'error',
+        new Error(
+          `Failed to parse message: ${error instanceof Error ? error.message : String(error)}`
+        )
+      )
       return
     }
 
