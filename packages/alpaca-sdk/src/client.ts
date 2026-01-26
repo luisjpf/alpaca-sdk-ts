@@ -2,19 +2,19 @@
  * Unified Alpaca client
  */
 
-import type { AlpacaConfig } from '@alpaca-sdk/core'
-import { createTradingClient } from '@alpaca-sdk/trading'
-import type { TradingClient } from '@alpaca-sdk/trading'
-import { createBrokerClient } from '@alpaca-sdk/broker'
-import type { BrokerClient } from '@alpaca-sdk/broker'
-import { createMarketDataClient } from '@alpaca-sdk/market-data'
-import type { MarketDataClient } from '@alpaca-sdk/market-data'
+import type { AlpacaConfig } from '@luisjpf/core'
+import { createTradingClient } from '@luisjpf/trading'
+import type { TradingClient } from '@luisjpf/trading'
+import { createBrokerClient } from '@luisjpf/broker'
+import type { BrokerClient } from '@luisjpf/broker'
+import { createMarketDataClient } from '@luisjpf/market-data'
+import type { MarketDataClient } from '@luisjpf/market-data'
 import {
   createStockStream,
   createCryptoStream,
   createTradeUpdatesStream,
-} from '@alpaca-sdk/streaming'
-import type { StockStream, CryptoStream, TradeUpdatesStream } from '@alpaca-sdk/streaming'
+} from '@luisjpf/streaming'
+import type { StockStream, CryptoStream, TradeUpdatesStream } from '@luisjpf/streaming'
 
 export type AlpacaClientConfig = AlpacaConfig
 

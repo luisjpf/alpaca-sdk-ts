@@ -80,7 +80,7 @@ export function createTradingClient(config: AlpacaConfig) {
 
 ### Error System
 
-Dual error pattern in `@alpaca-sdk/core`:
+Dual error pattern in `@luisjpf/core`:
 
 - **Class-based**: `AuthenticationError`, `RateLimitError`, etc. for `instanceof` checks
 - **Discriminated unions**: `ApiError` type with `type` field for pattern matching

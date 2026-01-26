@@ -1,5 +1,5 @@
 {
-  "name": "@alpaca-sdk/trading",
+  "name": "@luisjpf/trading",
   "version": "0.1.0",
   "description": "Alpaca Trading API client - orders, positions, account management",
   "type": "module",
@@ -44,7 +44,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@alpaca-sdk/core": "workspace:*",
+    "@luisjpf/core": "workspace:*",
     "openapi-fetch": "^0.13.0"
   },
   "peerDependencies": {

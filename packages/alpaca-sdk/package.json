@@ -1,5 +1,5 @@
 {
-  "name": "@alpaca-sdk/alpaca-sdk",
+  "name": "@luisjpf/alpaca-sdk",
   "version": "0.1.0",
   "description": "Complete Alpaca SDK - Trading, Broker, Market Data, and Streaming",
   "type": "module",
@@ -45,11 +45,11 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@alpaca-sdk/core": "workspace:*",
-    "@alpaca-sdk/trading": "workspace:*",
-    "@alpaca-sdk/broker": "workspace:*",
-    "@alpaca-sdk/market-data": "workspace:*",
-    "@alpaca-sdk/streaming": "workspace:*"
+    "@luisjpf/core": "workspace:*",
+    "@luisjpf/trading": "workspace:*",
+    "@luisjpf/broker": "workspace:*",
+    "@luisjpf/market-data": "workspace:*",
+    "@luisjpf/streaming": "workspace:*"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"

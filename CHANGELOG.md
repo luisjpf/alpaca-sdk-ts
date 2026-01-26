@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-#### Core Package (`@alpaca-sdk/core`)
+#### Core Package (`@luisjpf/core`)
 
 - HTTP client with automatic retry and exponential backoff
 - Support for both API key and OAuth authentication
@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Credential validation helpers
 - Paper trading support
 
-#### Trading Package (`@alpaca-sdk/trading`)
+#### Trading Package (`@luisjpf/trading`)
 
 - Account management (get account info, configurations)
 - Order management (create, cancel, list orders)
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Calendar and clock endpoints
 - Corporate announcements
 
-#### Market Data Package (`@alpaca-sdk/market-data`)
+#### Market Data Package (`@luisjpf/market-data`)
 
 - Historical stock bars, trades, and quotes
 - Real-time snapshots
@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Most active stocks
 - Market movers
 
-#### Broker Package (`@alpaca-sdk/broker`)
+#### Broker Package (`@luisjpf/broker`)
 
 - Account creation and management
 - KYC/CIP verification
@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Journal management
 - Asset management
 
-#### Streaming Package (`@alpaca-sdk/streaming`)
+#### Streaming Package (`@luisjpf/streaming`)
 
 - Real-time stock data streaming
   - IEX feed (free)
@@ -63,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automatic reconnection with exponential backoff
 - MessagePack encoding support
 
-#### Unified Package (`@alpaca-sdk/alpaca-sdk`)
+#### Unified Package (`@luisjpf/alpaca-sdk`)
 
 - Single entry point for all SDK functionality
 - Factory function for creating clients

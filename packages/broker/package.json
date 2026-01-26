@@ -1,5 +1,5 @@
 {
-  "name": "@alpaca-sdk/broker",
+  "name": "@luisjpf/broker",
   "version": "0.1.0",
   "description": "Alpaca Broker API client - account management, funding, KYC",
   "type": "module",
@@ -44,7 +44,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@alpaca-sdk/core": "workspace:*",
+    "@luisjpf/core": "workspace:*",
     "openapi-fetch": "^0.13.0"
   },
   "peerDependencies": {

@@ -11,7 +11,7 @@ import {
   unwrap,
   unwrapList,
   unwrapOptional,
-} from '@alpaca-sdk/core'
+} from '@luisjpf/core'
 import type { paths, components, operations } from './generated/broker-api'
 
 // Account types

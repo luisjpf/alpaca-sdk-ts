@@ -9,7 +9,7 @@ import {
   createApiKeyAuth,
   type RequestOptions,
   unwrap,
-} from '@alpaca-sdk/core'
+} from '@luisjpf/core'
 import type { paths, components, operations } from './generated/market-data-api'
 
 // Stock data types

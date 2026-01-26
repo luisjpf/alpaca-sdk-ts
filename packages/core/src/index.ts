@@ -1,5 +1,5 @@
 /**
- * @alpaca-sdk/core
+ * @luisjpf/core
  * Core utilities for Alpaca SDK - auth, errors, base client
  */
 

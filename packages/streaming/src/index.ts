@@ -1,5 +1,5 @@
 /**
- * @alpaca-sdk/streaming
+ * @luisjpf/streaming
  * Alpaca WebSocket streaming client - real-time market data and trade updates
  */
 

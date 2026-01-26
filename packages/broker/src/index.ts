@@ -1,5 +1,5 @@
 /**
- * @alpaca-sdk/broker
+ * @luisjpf/broker
  * Alpaca Broker API client - sub-account management, funding, trading on behalf
  */
 

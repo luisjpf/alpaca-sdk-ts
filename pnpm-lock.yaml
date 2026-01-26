@@ -53,19 +53,19 @@ importers:
 
   packages/alpaca-sdk:
     dependencies:
-      '@alpaca-sdk/broker':
+      '@luisjpf/broker':
         specifier: workspace:*
         version: link:../broker
-      '@alpaca-sdk/core':
+      '@luisjpf/core':
         specifier: workspace:*
         version: link:../core
-      '@alpaca-sdk/market-data':
+      '@luisjpf/market-data':
         specifier: workspace:*
         version: link:../market-data
-      '@alpaca-sdk/streaming':
+      '@luisjpf/streaming':
         specifier: workspace:*
         version: link:../streaming
-      '@alpaca-sdk/trading':
+      '@luisjpf/trading':
         specifier: workspace:*
         version: link:../trading
       typescript:
@@ -74,7 +74,7 @@ importers:
 
   packages/broker:
     dependencies:
-      '@alpaca-sdk/core':
+      '@luisjpf/core':
         specifier: workspace:*
         version: link:../core
       openapi-fetch:
@@ -92,7 +92,7 @@ importers:
 
   packages/market-data:
     dependencies:
-      '@alpaca-sdk/core':
+      '@luisjpf/core':
         specifier: workspace:*
         version: link:../core
       openapi-fetch:
@@ -104,7 +104,7 @@ importers:
 
   packages/streaming:
     dependencies:
-      '@alpaca-sdk/core':
+      '@luisjpf/core':
         specifier: workspace:*
         version: link:../core
       '@msgpack/msgpack':
@@ -123,7 +123,7 @@ importers:
 
   packages/trading:
     dependencies:
-      '@alpaca-sdk/core':
+      '@luisjpf/core':
         specifier: workspace:*
         version: link:../core
       openapi-fetch:

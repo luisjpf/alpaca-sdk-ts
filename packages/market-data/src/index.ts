@@ -1,5 +1,5 @@
 /**
- * @alpaca-sdk/market-data
+ * @luisjpf/market-data
  * Alpaca Market Data API client - stocks, crypto, options, news
  */
 

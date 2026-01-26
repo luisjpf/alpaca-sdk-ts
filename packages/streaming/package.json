@@ -1,5 +1,5 @@
 {
-  "name": "@alpaca-sdk/streaming",
+  "name": "@luisjpf/streaming",
   "version": "0.1.0",
   "description": "Alpaca WebSocket streaming client - real-time market data and trade updates",
   "type": "module",
@@ -44,7 +44,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@alpaca-sdk/core": "workspace:*",
+    "@luisjpf/core": "workspace:*",
     "@msgpack/msgpack": "^3.0.0",
     "ws": "^8.19.0"
   },

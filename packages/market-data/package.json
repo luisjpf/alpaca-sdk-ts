@@ -1,5 +1,5 @@
 {
-  "name": "@alpaca-sdk/market-data",
+  "name": "@luisjpf/market-data",
   "version": "0.1.0",
   "description": "Alpaca Market Data API client - stocks, crypto, options, news",
   "type": "module",
@@ -45,7 +45,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@alpaca-sdk/core": "workspace:*",
+    "@luisjpf/core": "workspace:*",
     "openapi-fetch": "^0.13.0"
   },
   "peerDependencies": {

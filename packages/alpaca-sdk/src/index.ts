@@ -1,17 +1,17 @@
 /**
- * @alpaca-sdk/alpaca-sdk
+ * @luisjpf/alpaca-sdk
  * Complete Alpaca SDK - Trading, Broker, Market Data, and Streaming
  */
 
 // Core - Re-export all (no conflicts)
-export * from '@alpaca-sdk/core'
+export * from '@luisjpf/core'
 
 // Trading - Export client factory and specific types
 export {
   createTradingClient,
   type TradingClient,
   type TradingClientConfig,
-} from '@alpaca-sdk/trading'
+} from '@luisjpf/trading'
 
 // Trading types (namespaced to avoid conflicts)
 export type {
@@ -33,14 +33,14 @@ export type {
   OrderType as TradingOrderType,
   TimeInForce as TradingTimeInForce,
   OrderClass as TradingOrderClass,
-} from '@alpaca-sdk/trading'
+} from '@luisjpf/trading'
 
 // Market Data - Export client factory and types
 export {
   createMarketDataClient,
   type MarketDataClient,
   type MarketDataClientConfig,
-} from '@alpaca-sdk/market-data'
+} from '@luisjpf/market-data'
 
 export type {
   StockBar,
@@ -63,10 +63,10 @@ export type {
   MostActive,
   Mover,
   CorporateActions,
-} from '@alpaca-sdk/market-data'
+} from '@luisjpf/market-data'
 
 // Broker - Export client factory and types
-export { createBrokerClient, type BrokerClient, type BrokerClientConfig } from '@alpaca-sdk/broker'
+export { createBrokerClient, type BrokerClient, type BrokerClientConfig } from '@luisjpf/broker'
 
 // Broker types (namespaced to avoid conflicts)
 export type {
@@ -103,7 +103,7 @@ export type {
   TrustedContact,
   Calendar as BrokerCalendar,
   Clock as BrokerClock,
-} from '@alpaca-sdk/broker'
+} from '@luisjpf/broker'
 
 // Streaming - Export client factory and types
 export {
@@ -115,7 +115,7 @@ export {
   type TradeUpdatesStream,
   type StreamConfig,
   type StreamState,
-} from '@alpaca-sdk/streaming'
+} from '@luisjpf/streaming'
 
 // Unified client
 export { createAlpacaClient, type AlpacaClient, type AlpacaClientConfig } from './client'

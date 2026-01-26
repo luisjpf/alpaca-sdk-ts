@@ -1,5 +1,5 @@
 /**
- * @alpaca-sdk/trading
+ * @luisjpf/trading
  * Alpaca Trading API client - orders, positions, account management
  */
 

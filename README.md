@@ -1,7 +1,7 @@
 # Alpaca SDK for TypeScript
 
 [![CI](https://github.com/luisjpf/alpaca-sdk-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/luisjpf/alpaca-sdk-ts/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/@alpaca-sdk/alpaca-sdk.svg)](https://www.npmjs.com/package/@alpaca-sdk/alpaca-sdk)
+[![npm version](https://img.shields.io/npm/v/@luisjpf/alpaca-sdk.svg)](https://www.npmjs.com/package/@luisjpf/alpaca-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green.svg)](https://nodejs.org/)
@@ -21,19 +21,19 @@ Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data A
 
 ```bash
 # Full SDK (recommended)
-pnpm add @alpaca-sdk/alpaca-sdk
+pnpm add @luisjpf/alpaca-sdk
 
 # Or individual packages
-pnpm add @alpaca-sdk/trading
-pnpm add @alpaca-sdk/market-data
-pnpm add @alpaca-sdk/broker
-pnpm add @alpaca-sdk/streaming
+pnpm add @luisjpf/trading
+pnpm add @luisjpf/market-data
+pnpm add @luisjpf/broker
+pnpm add @luisjpf/streaming
 ```
 
 ## Quick Start
 
 ```typescript
-import { createAlpacaClient } from '@alpaca-sdk/alpaca-sdk'
+import { createAlpacaClient } from '@luisjpf/alpaca-sdk'
 
 const alpaca = createAlpacaClient({
   keyId: process.env.ALPACA_KEY_ID!,
@@ -65,17 +65,17 @@ const bars = await alpaca.marketData.stocks.getSymbolBars('AAPL', {
 
 | Package                   | Description                                     |
 | ------------------------- | ----------------------------------------------- |
-| `@alpaca-sdk/alpaca-sdk`  | Complete SDK with all APIs                      |
-| `@alpaca-sdk/trading`     | Trading API (orders, positions, account)        |
-| `@alpaca-sdk/market-data` | Market Data API (stocks, crypto, options, news) |
-| `@alpaca-sdk/broker`      | Broker API (sub-accounts, funding, KYC)         |
-| `@alpaca-sdk/streaming`   | WebSocket clients for real-time data            |
-| `@alpaca-sdk/core`        | Shared utilities (auth, errors, types)          |
+| `@luisjpf/alpaca-sdk`  | Complete SDK with all APIs                      |
+| `@luisjpf/trading`     | Trading API (orders, positions, account)        |
+| `@luisjpf/market-data` | Market Data API (stocks, crypto, options, news) |
+| `@luisjpf/broker`      | Broker API (sub-accounts, funding, KYC)         |
+| `@luisjpf/streaming`   | WebSocket clients for real-time data            |
+| `@luisjpf/core`        | Shared utilities (auth, errors, types)          |
 
 ## Configuration
 
 ```typescript
-import { createTradingClient } from '@alpaca-sdk/trading'
+import { createTradingClient } from '@luisjpf/trading'
 
 const client = createTradingClient({
   keyId: 'YOUR_API_KEY',
@@ -120,7 +120,7 @@ import {
   ValidationError,
   MarketClosedError,
   ServerError,
-} from '@alpaca-sdk/core'
+} from '@luisjpf/core'
 
 try {
   await client.orders.create({ ... })
@@ -189,7 +189,7 @@ import {
   isNotFoundError,
   isMarketClosedError,
   isServerError,
-} from '@alpaca-sdk/core'
+} from '@luisjpf/core'
 
 try {
   await client.orders.create({ ... })
@@ -213,7 +213,7 @@ Real-time market data and trade updates via WebSocket.
 ### Stock Data Streaming
 
 ```typescript
-import { createStockStream } from '@alpaca-sdk/streaming'
+import { createStockStream } from '@luisjpf/streaming'
 
 const stream = createStockStream({
   keyId: 'YOUR_API_KEY',
@@ -247,7 +247,7 @@ stream.subscribeForBars(['AAPL'])
 ### Crypto Data Streaming
 
 ```typescript
-import { createCryptoStream } from '@alpaca-sdk/streaming'
+import { createCryptoStream } from '@luisjpf/streaming'
 
 const stream = createCryptoStream({
   keyId: 'YOUR_API_KEY',
@@ -266,7 +266,7 @@ stream.subscribeForTrades(['BTC/USD', 'ETH/USD'])
 ### Trade Updates Streaming
 
 ```typescript
-import { createTradeUpdatesStream } from '@alpaca-sdk/streaming'
+import { createTradeUpdatesStream } from '@luisjpf/streaming'
 
 const stream = createTradeUpdatesStream({
   keyId: 'YOUR_API_KEY',
