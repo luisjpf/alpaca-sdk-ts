@@ -1,5 +1,6 @@
 {
   "name": "@luisjpf/core",
+  "private": true,
   "version": "0.1.0",
   "description": "Core utilities for Alpaca SDK - auth, errors, base client",
   "type": "module",

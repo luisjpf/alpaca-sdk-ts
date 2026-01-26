@@ -1,5 +1,6 @@
 {
   "name": "@luisjpf/streaming",
+  "private": true,
   "version": "0.1.0",
   "description": "Alpaca WebSocket streaming client - real-time market data and trade updates",
   "type": "module",

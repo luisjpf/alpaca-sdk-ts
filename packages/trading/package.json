@@ -1,5 +1,6 @@
 {
   "name": "@luisjpf/trading",
+  "private": true,
   "version": "0.1.0",
   "description": "Alpaca Trading API client - orders, positions, account management",
   "type": "module",

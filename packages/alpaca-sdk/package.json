@@ -1,6 +1,6 @@
 {
   "name": "@luisjpf/alpaca-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Complete Alpaca SDK - Trading, Broker, Market Data, and Streaming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -45,6 +45,11 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "openapi-fetch": "^0.13.0",
+    "@msgpack/msgpack": "^3.0.0",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
     "@luisjpf/core": "workspace:*",
     "@luisjpf/trading": "workspace:*",
     "@luisjpf/broker": "workspace:*",

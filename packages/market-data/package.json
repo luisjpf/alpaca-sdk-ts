@@ -1,5 +1,6 @@
 {
   "name": "@luisjpf/market-data",
+  "private": true,
   "version": "0.1.0",
   "description": "Alpaca Market Data API client - stocks, crypto, options, news",
   "type": "module",

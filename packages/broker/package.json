@@ -1,5 +1,6 @@
 {
   "name": "@luisjpf/broker",
+  "private": true,
   "version": "0.1.0",
   "description": "Alpaca Broker API client - account management, funding, KYC",
   "type": "module",
