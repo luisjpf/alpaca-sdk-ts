@@ -671,5 +671,605 @@ describe('streaming', () => {
 
       expect(ws.binaryType).toBe('arraybuffer')
     })
+
+    it('should not set arraybuffer binaryType when useMsgpack is false', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      expect(ws.binaryType).toBe('blob')
+    })
+  })
+
+  describe('Error handling', () => {
+    it('should emit error on API error message', () => {
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'error', msg: 'invalid symbol', code: 400 }])
+
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.stringContaining('invalid symbol') as string,
+        })
+      )
+    })
+
+    it('should emit error on auth error and disconnect', () => {
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'error', msg: 'unauthorized', code: 401 }])
+
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.stringContaining('unauthorized') as string,
+        })
+      )
+      expect(ws.close).toHaveBeenCalled()
+    })
+
+    it('should emit error for invalid JSON message', () => {
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+
+      // Simulate invalid JSON
+      if (ws?.onmessage) ws.onmessage({ data: 'invalid json {{{' })
+
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.stringContaining('Failed to parse message') as string,
+        })
+      )
+    })
+
+    it('should re-emit errors from event handlers', () => {
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+      const tradeHandler = vi.fn().mockImplementation(() => {
+        throw new Error('Handler error')
+      })
+
+      stream.onError(errorHandler)
+      stream.onTrade(tradeHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Simulate a trade message that will trigger the throwing handler
+      simulateMessage(ws, [
+        {
+          T: 't',
+          S: 'AAPL',
+          i: 12345,
+          p: 150.25,
+          s: 100,
+          t: '2024-01-15T10:30:00Z',
+        },
+      ])
+
+      expect(tradeHandler).toHaveBeenCalled()
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Handler error',
+        })
+      )
+    })
+  })
+
+  describe('Reconnection logic', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('should attempt reconnect after connection close', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Simulate connection close
+      if (ws?.onclose) ws.onclose()
+
+      expect(MockWS).toHaveBeenCalledTimes(1)
+
+      // Fast forward past initial reconnect delay (1000ms)
+      vi.advanceTimersByTime(1000)
+
+      expect(MockWS).toHaveBeenCalledTimes(2)
+    })
+
+    it('should use exponential backoff for reconnection', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+
+      // First connection
+      let ws = getMockWebSocket()
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+      if (ws?.onclose) ws.onclose()
+
+      // First reconnect (1000ms delay)
+      vi.advanceTimersByTime(1000)
+      expect(MockWS).toHaveBeenCalledTimes(2)
+
+      // Simulate second connection close
+      ws = getMockWebSocket()
+      if (ws?.onclose) ws.onclose()
+
+      // Second reconnect should have 2000ms delay
+      vi.advanceTimersByTime(1000)
+      expect(MockWS).toHaveBeenCalledTimes(2) // Still 2
+
+      vi.advanceTimersByTime(1000)
+      expect(MockWS).toHaveBeenCalledTimes(3) // Now 3
+    })
+
+    it('should not reconnect after manual disconnect', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Manual disconnect
+      stream.disconnect()
+
+      // Fast forward past any potential reconnect delay
+      vi.advanceTimersByTime(30000)
+
+      // Should only have the initial connection
+      expect(MockWS).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not reconnect after auth error', () => {
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'error', msg: 'unauthorized', code: 401 }])
+
+      // Fast forward past any potential reconnect delay
+      vi.advanceTimersByTime(30000)
+
+      // Should only have the initial connection
+      expect(MockWS).toHaveBeenCalledTimes(1)
+    })
+
+    it('should call onDisconnect when connected stream closes', () => {
+      const stream = createStockStream(testConfig)
+      const disconnectHandler = vi.fn()
+
+      stream.onDisconnect(disconnectHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Now connected - close should trigger onDisconnect
+      if (ws?.onclose) ws.onclose()
+
+      expect(disconnectHandler).toHaveBeenCalled()
+    })
+
+    it('should process pending subscriptions after reconnect', () => {
+      const stream = createStockStream(testConfig)
+
+      // Subscribe before connecting - this queues the subscription
+      stream.subscribeForTrades(['AAPL'])
+
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'connected' }])
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Subscription should have been sent
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'subscribe',
+          trades: ['AAPL'],
+        })
+      )
+    })
+  })
+
+  describe('CryptoStream additional tests', () => {
+    it('should register quote handlers and receive messages', () => {
+      const stream = createCryptoStream(testConfig)
+      const handler = vi.fn()
+
+      stream.onQuote(handler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      simulateMessage(ws, [
+        {
+          T: 'q',
+          S: 'BTC/USD',
+          bp: 45000.0,
+          bs: 1.5,
+          ap: 45010.0,
+          as: 2.0,
+          t: '2024-01-15T10:30:00Z',
+        },
+      ])
+
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          T: 'q',
+          S: 'BTC/USD',
+          bp: 45000.0,
+          ap: 45010.0,
+        })
+      )
+    })
+
+    it('should register bar handlers and receive messages', () => {
+      const stream = createCryptoStream(testConfig)
+      const handler = vi.fn()
+
+      stream.onBar(handler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      simulateMessage(ws, [
+        {
+          T: 'b',
+          S: 'ETH/USD',
+          o: 2500.0,
+          h: 2550.0,
+          l: 2480.0,
+          c: 2520.0,
+          v: 100.5,
+          t: '2024-01-15T10:30:00Z',
+        },
+      ])
+
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          T: 'b',
+          S: 'ETH/USD',
+          o: 2500.0,
+          c: 2520.0,
+        })
+      )
+    })
+
+    it('should send unsubscribe message', () => {
+      const stream = createCryptoStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      stream.subscribeForTrades(['BTC/USD'])
+      stream.unsubscribeFromTrades(['BTC/USD'])
+
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'unsubscribe',
+          trades: ['BTC/USD'],
+        })
+      )
+    })
+
+    it('should handle subscribe for quotes and bars', () => {
+      const stream = createCryptoStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      stream.subscribeForQuotes(['BTC/USD'])
+      stream.subscribeForBars(['ETH/USD'])
+
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'subscribe',
+          quotes: ['BTC/USD'],
+        })
+      )
+
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'subscribe',
+          bars: ['ETH/USD'],
+        })
+      )
+    })
+
+    it('should disconnect properly', () => {
+      const stream = createCryptoStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      stream.disconnect()
+
+      expect(ws.close).toHaveBeenCalled()
+    })
+
+    it('should call onConnect and onDisconnect handlers', () => {
+      const stream = createCryptoStream(testConfig)
+      const connectHandler = vi.fn()
+      const disconnectHandler = vi.fn()
+
+      stream.onConnect(connectHandler)
+      stream.onDisconnect(disconnectHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      expect(connectHandler).toHaveBeenCalled()
+
+      // Simulate disconnect
+      if (ws?.onclose) ws.onclose()
+
+      expect(disconnectHandler).toHaveBeenCalled()
+    })
+
+    it('should call onError handler', () => {
+      const stream = createCryptoStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateError(ws, 'Connection error')
+
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Error))
+    })
+  })
+
+  describe('TradeUpdatesStream additional tests', () => {
+    it('should send unsubscribe message', () => {
+      const stream = createTradeUpdatesStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, {
+        stream: 'authorization',
+        data: { status: 'authorized', action: 'authenticate' },
+      })
+
+      stream.subscribe()
+      stream.unsubscribe()
+
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'listen',
+          data: {
+            streams: [],
+          },
+        })
+      )
+    })
+
+    it('should not duplicate subscription when already subscribed', () => {
+      const stream = createTradeUpdatesStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, {
+        stream: 'authorization',
+        data: { status: 'authorized', action: 'authenticate' },
+      })
+
+      // Clear previous calls
+      ws.send.mockClear()
+
+      // Subscribe twice
+      stream.subscribe()
+      stream.subscribe()
+
+      // Should only send one subscription message
+      const subscribeCalls = ws.send.mock.calls.filter((call: string[]) => {
+        const parsed = JSON.parse(call[0]) as { action: string; data: { streams: string[] } }
+        return parsed.action === 'listen' && parsed.data.streams.length > 0
+      })
+
+      expect(subscribeCalls).toHaveLength(1)
+    })
+
+    it('should not queue duplicate pending subscriptions', () => {
+      const stream = createTradeUpdatesStream(testConfig)
+
+      // Subscribe twice before connecting
+      stream.subscribe()
+      stream.subscribe()
+
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+
+      // Clear previous calls
+      ws.send.mockClear()
+
+      simulateMessage(ws, {
+        stream: 'authorization',
+        data: { status: 'authorized', action: 'authenticate' },
+      })
+
+      // Should only send one subscription message
+      const subscribeCalls = ws.send.mock.calls.filter((call: string[]) => {
+        const parsed = JSON.parse(call[0]) as { action: string; data: { streams: string[] } }
+        return parsed.action === 'listen' && parsed.data.streams.length > 0
+      })
+
+      expect(subscribeCalls).toHaveLength(1)
+    })
+
+    it('should call onDisconnect when connected stream closes', () => {
+      const stream = createTradeUpdatesStream(testConfig)
+      const disconnectHandler = vi.fn()
+
+      stream.onDisconnect(disconnectHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, {
+        stream: 'authorization',
+        data: { status: 'authorized', action: 'authenticate' },
+      })
+
+      // Now connected - close should trigger onDisconnect
+      if (ws?.onclose) ws.onclose()
+
+      expect(disconnectHandler).toHaveBeenCalled()
+    })
+
+    it('should handle listening confirmation message', () => {
+      const stream = createTradeUpdatesStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, {
+        stream: 'authorization',
+        data: { status: 'authorized', action: 'authenticate' },
+      })
+
+      stream.subscribe()
+
+      // Simulate listening confirmation - should not cause error
+      simulateMessage(ws, {
+        stream: 'listening',
+        data: { streams: ['trade_updates'] },
+      })
+
+      expect(errorHandler).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('Connection behavior', () => {
+    it('should not create new connection if already connecting', () => {
+      const stream = createStockStream(testConfig)
+
+      // Connect twice immediately
+      stream.connect()
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      expect(MockWS).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not create new connection if already connected', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Try to connect again
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      expect(MockWS).toHaveBeenCalledTimes(1)
+    })
+
+    it('should send auth message after receiving connected message', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      // Before 'connected' message, no auth should be sent
+      expect(ws.send).not.toHaveBeenCalled()
+
+      simulateOpen(ws)
+
+      // Simulate server sending 'connected' message
+      simulateMessage(ws, [{ T: 'success', msg: 'connected' }])
+
+      // Now auth should be sent
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'auth',
+          key: 'test-key',
+          secret: 'test-secret',
+        })
+      )
+    })
   })
 })
