@@ -89,23 +89,119 @@ const client = createTradingClient({
 
 ## Error Handling
 
+### Automatic Retries
+
+The SDK automatically retries failed requests for:
+
+- **429 Rate Limit** - Uses `retry-after` header or exponential backoff
+- **500+ Server Errors** - Uses exponential backoff with jitter
+
+```typescript
+const client = createTradingClient({
+  keyId: 'YOUR_API_KEY',
+  secretKey: 'YOUR_SECRET_KEY',
+  maxRetries: 2, // default: 2 (set to 0 to disable)
+  timeout: 30_000, // default: 30s
+})
+```
+
+### Error Classes
+
+All errors extend `AlpacaError` and can be caught with `instanceof`:
+
 ```typescript
 import {
   AlpacaError,
   AuthenticationError,
   RateLimitError,
-  InsufficientFundsError
+  InsufficientFundsError,
+  ForbiddenError,
+  NotFoundError,
+  ValidationError,
+  MarketClosedError,
+  ServerError,
 } from '@alpaca-sdk/core'
 
 try {
   await client.orders.create({ ... })
 } catch (error) {
   if (error instanceof RateLimitError) {
+    // Auto-retried, but still failed after maxRetries
     console.log(`Rate limited. Retry after ${error.retryAfter}s`)
   } else if (error instanceof InsufficientFundsError) {
     console.log('Not enough buying power')
   } else if (error instanceof AuthenticationError) {
     console.log('Invalid API credentials')
+  } else if (error instanceof ValidationError) {
+    console.log('Invalid order parameters')
+  } else if (error instanceof MarketClosedError) {
+    console.log('Market is closed')
+  } else if (error instanceof NotFoundError) {
+    console.log('Resource not found')
+  } else if (error instanceof AlpacaError) {
+    // Base class for all Alpaca errors
+    console.log(`Error ${error.code}: ${error.message}`)
+  }
+}
+```
+
+### Error Classes Reference
+
+| Error Class              | Status | Description                        |
+| ------------------------ | ------ | ---------------------------------- |
+| `AuthenticationError`    | 401    | Invalid API credentials            |
+| `ForbiddenError`         | 403    | Insufficient permissions           |
+| `InsufficientFundsError` | 403    | Not enough buying power            |
+| `MarketClosedError`      | 403    | Market is currently closed         |
+| `NotFoundError`          | 404    | Resource not found                 |
+| `ValidationError`        | 422    | Invalid request parameters         |
+| `RateLimitError`         | 429    | Rate limit exceeded (auto-retried) |
+| `ServerError`            | 500+   | Server error (auto-retried)        |
+
+### Error Properties
+
+All errors include:
+
+```typescript
+interface AlpacaError {
+  message: string // Human-readable error message
+  code: number // Alpaca error code
+  status: number // HTTP status code
+  requestId?: string // Request ID for support
+}
+
+// RateLimitError also includes:
+interface RateLimitError extends AlpacaError {
+  retryAfter?: number // Seconds until retry (from retry-after header)
+}
+```
+
+### Type Guards
+
+For type-safe error handling without `instanceof`:
+
+```typescript
+import {
+  isAuthenticationError,
+  isRateLimitError,
+  isInsufficientFundsError,
+  isValidationError,
+  isNotFoundError,
+  isMarketClosedError,
+  isServerError,
+} from '@alpaca-sdk/core'
+
+try {
+  await client.orders.create({ ... })
+} catch (error) {
+  if (error instanceof AlpacaError) {
+    const apiError = error.toApiError()
+
+    if (isRateLimitError(apiError)) {
+      console.log(`Retry after ${apiError.retryAfter}s`)
+    } else if (isInsufficientFundsError(apiError)) {
+      console.log('Not enough buying power')
+    }
   }
 }
 ```
