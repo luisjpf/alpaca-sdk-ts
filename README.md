@@ -54,7 +54,7 @@ const order = await alpaca.trading.orders.create({
 })
 
 // Get market data
-const bars = await alpaca.marketData.stocks.getBars('AAPL', {
+const bars = await alpaca.marketData.stocks.getSymbolBars('AAPL', {
   start: '2024-01-01',
   end: '2024-01-31',
   timeframe: '1Day',
