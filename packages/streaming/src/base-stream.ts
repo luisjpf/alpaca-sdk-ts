@@ -250,7 +250,7 @@ export abstract class BaseStream {
     }
 
     if (type === 'error') {
-      const errorMsg = message.msg as string || 'Unknown error'
+      const errorMsg = (message.msg as string) || 'Unknown error'
       const errorCode = message.code as number | undefined
       this.emit('error', new Error(`[${String(errorCode ?? 'unknown')}] ${errorMsg}`))
 

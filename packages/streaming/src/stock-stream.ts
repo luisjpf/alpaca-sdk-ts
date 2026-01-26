@@ -246,20 +246,48 @@ export function createStockStream(config: StockStreamConfig): StockStream {
   const impl = new StockStreamImpl(config)
 
   return {
-    connect: () => { impl.connect(); },
-    disconnect: () => { impl.disconnect(); },
+    connect: () => {
+      impl.connect()
+    },
+    disconnect: () => {
+      impl.disconnect()
+    },
     isConnected: () => impl.isConnected(),
-    subscribeForTrades: (symbols) => { impl.subscribeForTrades(symbols); },
-    subscribeForQuotes: (symbols) => { impl.subscribeForQuotes(symbols); },
-    subscribeForBars: (symbols) => { impl.subscribeForBars(symbols); },
-    unsubscribeFromTrades: (symbols) => { impl.unsubscribeFromTrades(symbols); },
-    unsubscribeFromQuotes: (symbols) => { impl.unsubscribeFromQuotes(symbols); },
-    unsubscribeFromBars: (symbols) => { impl.unsubscribeFromBars(symbols); },
-    onTrade: (handler) => { impl.onTrade(handler); },
-    onQuote: (handler) => { impl.onQuote(handler); },
-    onBar: (handler) => { impl.onBar(handler); },
-    onConnect: (handler) => { impl.onConnect(handler); },
-    onDisconnect: (handler) => { impl.onDisconnect(handler); },
-    onError: (handler) => { impl.onError(handler); },
+    subscribeForTrades: (symbols) => {
+      impl.subscribeForTrades(symbols)
+    },
+    subscribeForQuotes: (symbols) => {
+      impl.subscribeForQuotes(symbols)
+    },
+    subscribeForBars: (symbols) => {
+      impl.subscribeForBars(symbols)
+    },
+    unsubscribeFromTrades: (symbols) => {
+      impl.unsubscribeFromTrades(symbols)
+    },
+    unsubscribeFromQuotes: (symbols) => {
+      impl.unsubscribeFromQuotes(symbols)
+    },
+    unsubscribeFromBars: (symbols) => {
+      impl.unsubscribeFromBars(symbols)
+    },
+    onTrade: (handler) => {
+      impl.onTrade(handler)
+    },
+    onQuote: (handler) => {
+      impl.onQuote(handler)
+    },
+    onBar: (handler) => {
+      impl.onBar(handler)
+    },
+    onConnect: (handler) => {
+      impl.onConnect(handler)
+    },
+    onDisconnect: (handler) => {
+      impl.onDisconnect(handler)
+    },
+    onError: (handler) => {
+      impl.onError(handler)
+    },
   }
 }

@@ -18,7 +18,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -29,7 +31,14 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
-  "keywords": ["alpaca", "sdk", "trading", "broker", "market-data", "streaming"],
+  "keywords": [
+    "alpaca",
+    "sdk",
+    "trading",
+    "broker",
+    "market-data",
+    "streaming"
+  ],
   "author": "Luis JP Fleming <luis.j245@gmail.com>",
   "license": "MIT",
   "engines": {

@@ -363,14 +363,30 @@ export function createTradeUpdatesStream(config: StreamConfig): TradeUpdatesStre
   const impl = new TradeUpdatesStreamImpl(config)
 
   return {
-    connect: () => { impl.connect(); },
-    disconnect: () => { impl.disconnect(); },
+    connect: () => {
+      impl.connect()
+    },
+    disconnect: () => {
+      impl.disconnect()
+    },
     isConnected: () => impl.isConnected(),
-    subscribe: () => { impl.subscribe(); },
-    unsubscribe: () => { impl.unsubscribe(); },
-    onTradeUpdate: (handler) => { impl.onTradeUpdate(handler); },
-    onConnect: (handler) => { impl.onConnect(handler); },
-    onDisconnect: (handler) => { impl.onDisconnect(handler); },
-    onError: (handler) => { impl.onError(handler); },
+    subscribe: () => {
+      impl.subscribe()
+    },
+    unsubscribe: () => {
+      impl.unsubscribe()
+    },
+    onTradeUpdate: (handler) => {
+      impl.onTradeUpdate(handler)
+    },
+    onConnect: (handler) => {
+      impl.onConnect(handler)
+    },
+    onDisconnect: (handler) => {
+      impl.onDisconnect(handler)
+    },
+    onError: (handler) => {
+      impl.onError(handler)
+    },
   }
 }

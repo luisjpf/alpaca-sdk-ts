@@ -4,34 +4,20 @@
  */
 
 // Client factory and type
-export { createMarketDataClient, type MarketDataClient, type MarketDataClientConfig } from './client'
+export {
+  createMarketDataClient,
+  type MarketDataClient,
+  type MarketDataClientConfig,
+} from './client'
 
 // Stock data types
-export type {
-  StockBar,
-  StockTrade,
-  StockQuote,
-  StockSnapshot,
-  StockAuction,
-} from './client'
+export type { StockBar, StockTrade, StockQuote, StockSnapshot, StockAuction } from './client'
 
 // Crypto data types
-export type {
-  CryptoBar,
-  CryptoTrade,
-  CryptoQuote,
-  CryptoSnapshot,
-  CryptoOrderbook,
-} from './client'
+export type { CryptoBar, CryptoTrade, CryptoQuote, CryptoSnapshot, CryptoOrderbook } from './client'
 
 // Options data types
-export type {
-  OptionBar,
-  OptionTrade,
-  OptionQuote,
-  OptionSnapshot,
-  OptionGreeks,
-} from './client'
+export type { OptionBar, OptionTrade, OptionQuote, OptionSnapshot, OptionGreeks } from './client'
 
 // News types
 export type { News, NewsImage } from './client'

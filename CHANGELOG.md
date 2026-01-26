@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Core Package (`@alpaca-sdk/core`)
+
 - HTTP client with automatic retry and exponential backoff
 - Support for both API key and OAuth authentication
 - Comprehensive error types (`AlpacaError`, `RateLimitError`, `AuthenticationError`, etc.)
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Paper trading support
 
 #### Trading Package (`@alpaca-sdk/trading`)
+
 - Account management (get account info, configurations)
 - Order management (create, cancel, list orders)
 - Position management (get positions, close positions)
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corporate announcements
 
 #### Market Data Package (`@alpaca-sdk/market-data`)
+
 - Historical stock bars, trades, and quotes
 - Real-time snapshots
 - Options data (trades, quotes, snapshots)
@@ -37,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Market movers
 
 #### Broker Package (`@alpaca-sdk/broker`)
+
 - Account creation and management
 - KYC/CIP verification
 - Document management
@@ -46,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Asset management
 
 #### Streaming Package (`@alpaca-sdk/streaming`)
+
 - Real-time stock data streaming
   - IEX feed (free)
   - SIP feed (paid Algo Trader Plus)
@@ -59,16 +64,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MessagePack encoding support
 
 #### Unified Package (`@alpaca-sdk/alpaca-sdk`)
+
 - Single entry point for all SDK functionality
 - Factory function for creating clients
 
 ### CI/CD
+
 - GitHub Actions workflow for PR checks
 - Automated test coverage reports on PRs
 - Security audit (non-blocking) on PRs
 - Release workflow for automated npm publishing
 
 ### Documentation
+
 - Comprehensive README with examples
 - TypeScript types fully documented
 - JSDoc comments for all public APIs

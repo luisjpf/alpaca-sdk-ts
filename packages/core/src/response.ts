@@ -29,10 +29,7 @@ interface AlpacaApiErrorBody {
 /**
  * Creates an AlpacaError from an openapi-fetch error response
  */
-function createAlpacaErrorFromResponse(
-  error: unknown,
-  response: Response
-): AlpacaError {
+function createAlpacaErrorFromResponse(error: unknown, response: Response): AlpacaError {
   const requestId = response.headers.get('x-request-id') ?? undefined
   const retryAfterHeader = response.headers.get('retry-after')
   const retryAfter = retryAfterHeader ? parseInt(retryAfterHeader, 10) : undefined
@@ -107,9 +104,7 @@ export function unwrapList<T>(result: OpenApiFetchResponse<T[] | null>): T[] {
  * return unwrapOptional(result) // T | undefined
  * ```
  */
-export function unwrapOptional<T>(
-  result: OpenApiFetchResponse<T>
-): T | undefined {
+export function unwrapOptional<T>(result: OpenApiFetchResponse<T>): T | undefined {
   if (result.error) {
     throw createAlpacaErrorFromResponse(result.error, result.response)
   }

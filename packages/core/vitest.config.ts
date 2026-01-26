@@ -9,12 +9,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'json-summary', 'html'],
       include: ['src/**/*.ts'],
-      exclude: [
-        '**/*.test.ts',
-        '**/generated/**',
-        '**/index.ts',
-        '**/types.ts',
-      ],
+      exclude: ['**/*.test.ts', '**/generated/**', '**/index.ts', '**/types.ts'],
     },
   },
 })

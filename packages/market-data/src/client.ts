@@ -69,10 +69,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockBars']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/bars', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/bars', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical bars for a single symbol */
@@ -81,10 +83,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: NonNullable<operations['StockBarSingle']['parameters']['query']>,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/bars', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/bars', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest bars for multiple symbols */
@@ -92,22 +96,29 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockLatestBars']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/bars/latest', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/bars/latest', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest bar for a single symbol */
       async getLatestBar(
         symbol: string,
-        params?: Omit<NonNullable<operations['StockLatestBarSingle']['parameters']['query']>, 'symbol'>,
+        params?: Omit<
+          NonNullable<operations['StockLatestBarSingle']['parameters']['query']>,
+          'symbol'
+        >,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/bars/latest', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/bars/latest', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical trades for multiple symbols */
@@ -115,10 +126,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockTrades']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/trades', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/trades', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical trades for a single symbol */
@@ -127,10 +140,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: Omit<NonNullable<operations['StockTradeSingle']['parameters']['query']>, 'symbol'>,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/trades', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/trades', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest trades for multiple symbols */
@@ -138,22 +153,29 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockLatestTrades']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/trades/latest', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/trades/latest', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest trade for a single symbol */
       async getLatestTrade(
         symbol: string,
-        params?: Omit<NonNullable<operations['StockLatestTradeSingle']['parameters']['query']>, 'symbol'>,
+        params?: Omit<
+          NonNullable<operations['StockLatestTradeSingle']['parameters']['query']>,
+          'symbol'
+        >,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/trades/latest', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/trades/latest', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical quotes for multiple symbols */
@@ -161,10 +183,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockQuotes']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/quotes', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/quotes', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical quotes for a single symbol */
@@ -173,10 +197,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: Omit<NonNullable<operations['StockQuoteSingle']['parameters']['query']>, 'symbol'>,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/quotes', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/quotes', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest quotes for multiple symbols */
@@ -184,22 +210,29 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockLatestQuotes']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/quotes/latest', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/quotes/latest', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest quote for a single symbol */
       async getLatestQuote(
         symbol: string,
-        params?: Omit<NonNullable<operations['StockLatestQuoteSingle']['parameters']['query']>, 'symbol'>,
+        params?: Omit<
+          NonNullable<operations['StockLatestQuoteSingle']['parameters']['query']>,
+          'symbol'
+        >,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/quotes/latest', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/quotes/latest', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get snapshots for multiple symbols */
@@ -207,10 +240,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockSnapshots']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/snapshots', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/snapshots', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get snapshot for a single symbol */
@@ -219,10 +254,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: operations['StockSnapshotSingle']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/snapshot', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/snapshot', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get auctions for multiple symbols */
@@ -230,29 +267,38 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['StockAuctions']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/auctions', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/auctions', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get auctions for a single symbol */
       async getSymbolAuctions(
         symbol: string,
-        params?: Omit<NonNullable<operations['StockAuctionSingle']['parameters']['query']>, 'symbol'>,
+        params?: Omit<
+          NonNullable<operations['StockAuctionSingle']['parameters']['query']>,
+          'symbol'
+        >,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/{symbol}/auctions', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/{symbol}/auctions', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get exchange code mappings */
       async getExchanges(options?: RequestOptions) {
-        return unwrap(await client.GET('/v2/stocks/meta/exchanges', {
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/meta/exchanges', {
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get condition code mappings */
@@ -261,10 +307,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: NonNullable<operations['StockMetaConditions']['parameters']['query']>,
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v2/stocks/meta/conditions/{ticktype}', {
-          params: { path: { ticktype }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v2/stocks/meta/conditions/{ticktype}', {
+            params: { path: { ticktype }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -276,10 +324,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoBars']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/bars', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/bars', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest bars */
@@ -288,10 +338,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoLatestBars']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/latest/bars', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/latest/bars', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical trades */
@@ -300,10 +352,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoTrades']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/trades', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/trades', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest trades */
@@ -312,10 +366,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoLatestTrades']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/latest/trades', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/latest/trades', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical quotes */
@@ -324,10 +380,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoQuotes']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/quotes', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/quotes', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest quotes */
@@ -336,10 +394,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoLatestQuotes']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/latest/quotes', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/latest/quotes', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get snapshots */
@@ -348,10 +408,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoSnapshots']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/snapshots', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/snapshots', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest orderbooks */
@@ -360,10 +422,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CryptoLatestOrderbooks']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta3/crypto/{loc}/latest/orderbooks', {
-          params: { path: { loc }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta3/crypto/{loc}/latest/orderbooks', {
+            params: { path: { loc }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -374,10 +438,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['optionBars']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/options/bars', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/bars', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical trades */
@@ -385,10 +451,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['OptionTrades']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/options/trades', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/trades', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest trades */
@@ -396,10 +464,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['OptionLatestTrades']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/options/trades/latest', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/trades/latest', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get latest quotes */
@@ -407,10 +477,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['OptionLatestQuotes']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/options/quotes/latest', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/quotes/latest', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get snapshots for multiple symbols */
@@ -418,10 +490,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['OptionSnapshots']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/options/snapshots', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/snapshots', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get option chain for underlying symbol */
@@ -430,42 +504,44 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: operations['OptionChain']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/options/snapshots/{underlying_symbol}', {
-          params: { path: { underlying_symbol: underlyingSymbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/snapshots/{underlying_symbol}', {
+            params: { path: { underlying_symbol: underlyingSymbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get exchange code mappings */
       async getExchanges(options?: RequestOptions) {
-        return unwrap(await client.GET('/v1beta1/options/meta/exchanges', {
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/options/meta/exchanges', {
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get condition code mappings */
-      async getConditions(
-        ticktype: 'trade' | 'quote',
-        options?: RequestOptions
-      ) {
-        return unwrap(await client.GET('/v1beta1/options/meta/conditions/{ticktype}', {
-          params: { path: { ticktype } },
-          signal: options?.signal,
-        }))
+      async getConditions(ticktype: 'trade' | 'quote', options?: RequestOptions) {
+        return unwrap(
+          await client.GET('/v1beta1/options/meta/conditions/{ticktype}', {
+            params: { path: { ticktype } },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
     /** News operations */
     news: {
       /** Get news articles */
-      async get(
-        params?: operations['News']['parameters']['query'],
-        options?: RequestOptions
-      ) {
-        return unwrap(await client.GET('/v1beta1/news', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+      async get(params?: operations['News']['parameters']['query'], options?: RequestOptions) {
+        return unwrap(
+          await client.GET('/v1beta1/news', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -476,10 +552,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: operations['MostActives']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/screener/stocks/most-actives', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/screener/stocks/most-actives', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get market movers */
@@ -488,10 +566,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: operations['Movers']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/screener/{market_type}/movers', {
-          params: { path: { market_type: marketType }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/screener/{market_type}/movers', {
+            params: { path: { market_type: marketType }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -502,10 +582,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['CorporateActions']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1/corporate-actions', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1/corporate-actions', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -516,21 +598,22 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params: operations['LatestRates']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/forex/latest/rates', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/forex/latest/rates', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get historical forex rates */
-      async getRates(
-        params: operations['Rates']['parameters']['query'],
-        options?: RequestOptions
-      ) {
-        return unwrap(await client.GET('/v1beta1/forex/rates', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+      async getRates(params: operations['Rates']['parameters']['query'], options?: RequestOptions) {
+        return unwrap(
+          await client.GET('/v1beta1/forex/rates', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -542,10 +625,12 @@ export function createMarketDataClient(config: MarketDataClientConfig) {
         params?: operations['Logos']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrap(await client.GET('/v1beta1/logos/{symbol}', {
-          params: { path: { symbol }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1beta1/logos/{symbol}', {
+            params: { path: { symbol }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
   }

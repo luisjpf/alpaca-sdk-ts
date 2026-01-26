@@ -63,14 +63,14 @@ const bars = await alpaca.marketData.stocks.getBars('AAPL', {
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| `@alpaca-sdk/alpaca-sdk` | Complete SDK with all APIs |
-| `@alpaca-sdk/trading` | Trading API (orders, positions, account) |
+| Package                   | Description                                     |
+| ------------------------- | ----------------------------------------------- |
+| `@alpaca-sdk/alpaca-sdk`  | Complete SDK with all APIs                      |
+| `@alpaca-sdk/trading`     | Trading API (orders, positions, account)        |
 | `@alpaca-sdk/market-data` | Market Data API (stocks, crypto, options, news) |
-| `@alpaca-sdk/broker` | Broker API (sub-accounts, funding, KYC) |
-| `@alpaca-sdk/streaming` | WebSocket clients for real-time data |
-| `@alpaca-sdk/core` | Shared utilities (auth, errors, types) |
+| `@alpaca-sdk/broker`      | Broker API (sub-accounts, funding, KYC)         |
+| `@alpaca-sdk/streaming`   | WebSocket clients for real-time data            |
+| `@alpaca-sdk/core`        | Shared utilities (auth, errors, types)          |
 
 ## Configuration
 
@@ -80,9 +80,9 @@ import { createTradingClient } from '@alpaca-sdk/trading'
 const client = createTradingClient({
   keyId: 'YOUR_API_KEY',
   secretKey: 'YOUR_SECRET_KEY',
-  paper: true,           // default: true
-  timeout: 30_000,       // default: 30s
-  maxRetries: 2,         // default: 2
+  paper: true, // default: true
+  timeout: 30_000, // default: 30s
+  maxRetries: 2, // default: 2
   baseUrl: 'custom-url', // optional override
 })
 ```
@@ -188,19 +188,19 @@ stream.subscribe()
 
 ### Stock Feed Types
 
-| Feed | Description | Subscription |
-|------|-------------|--------------|
-| `iex` | IEX Exchange data only | Free (Basic plan) |
-| `sip` | Full consolidated market data | Algo Trader Plus |
-| `delayed_sip` | 15-minute delayed SIP data | Free |
+| Feed          | Description                   | Subscription      |
+| ------------- | ----------------------------- | ----------------- |
+| `iex`         | IEX Exchange data only        | Free (Basic plan) |
+| `sip`         | Full consolidated market data | Algo Trader Plus  |
+| `delayed_sip` | 15-minute delayed SIP data    | Free              |
 
 ### Crypto Locations
 
-| Location | Exchange | Notes |
-|----------|----------|-------|
-| `us` | Alpaca | Default, recommended |
-| `us-1` | Kraken US | Available in 23 US states |
-| `eu-1` | Kraken EU | European markets |
+| Location | Exchange  | Notes                     |
+| -------- | --------- | ------------------------- |
+| `us`     | Alpaca    | Default, recommended      |
+| `us-1`   | Kraken US | Available in 23 US states |
+| `eu-1`   | Kraken EU | European markets          |
 
 ## Development
 

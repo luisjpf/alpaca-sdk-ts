@@ -199,10 +199,7 @@ export async function fetchWithRetry<T>(
 /**
  * Create headers for API request
  */
-export function createHeaders(
-  auth: AuthHeaders,
-  options?: RequestOptions
-): Record<string, string> {
+export function createHeaders(auth: AuthHeaders, options?: RequestOptions): Record<string, string> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...auth,

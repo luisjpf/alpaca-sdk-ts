@@ -3,18 +3,9 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import {
-  unwrap,
-  unwrapList,
-  unwrapOptional,
-} from './response'
+import { unwrap, unwrapList, unwrapOptional } from './response'
 import type { OpenApiFetchResponse } from './response'
-import {
-  AlpacaError,
-  AuthenticationError,
-  RateLimitError,
-  NotFoundError,
-} from './errors'
+import { AlpacaError, AuthenticationError, RateLimitError, NotFoundError } from './errors'
 
 describe('response helpers', () => {
   describe('unwrap', () => {

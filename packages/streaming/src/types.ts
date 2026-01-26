@@ -2,12 +2,7 @@
  * Streaming types
  */
 
-export type StreamState =
-  | 'disconnected'
-  | 'connecting'
-  | 'authenticating'
-  | 'connected'
-  | 'error'
+export type StreamState = 'disconnected' | 'connecting' | 'authenticating' | 'connected' | 'error'
 
 export interface StreamConfig {
   keyId: string

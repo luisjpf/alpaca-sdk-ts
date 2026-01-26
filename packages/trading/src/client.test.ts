@@ -399,10 +399,7 @@ describe('orders.cancel()', () => {
 
 describe('positions.list()', () => {
   it('should return an array of positions', async () => {
-    const mockPositions = [
-      mockPosition,
-      { ...mockPosition, symbol: 'MSFT', asset_id: 'asset-456' },
-    ]
+    const mockPositions = [mockPosition, { ...mockPosition, symbol: 'MSFT', asset_id: 'asset-456' }]
 
     server.use(
       http.get(`${BASE_URL}/v2/positions`, () => {
@@ -560,10 +557,7 @@ describe('error handling', () => {
   it('should throw error when API returns 403 Forbidden', async () => {
     server.use(
       http.get(`${BASE_URL}/v2/account`, () => {
-        return HttpResponse.json(
-          { code: 40310000, message: 'Forbidden' },
-          { status: 403 }
-        )
+        return HttpResponse.json({ code: 40310000, message: 'Forbidden' }, { status: 403 })
       })
     )
 
@@ -579,10 +573,7 @@ describe('error handling', () => {
 
     server.use(
       http.get(`${BASE_URL}/v2/orders/${nonExistentOrderId}`, () => {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Order not found' },
-          { status: 404 }
-        )
+        return HttpResponse.json({ code: 40410000, message: 'Order not found' }, { status: 404 })
       })
     )
 
@@ -1028,9 +1019,7 @@ describe('watchlists', () => {
 
       const client = createTradingClient(TEST_CONFIG)
 
-      await expect(
-        client.watchlists.create({ name: 'Existing Name' })
-      ).rejects.toMatchObject({
+      await expect(client.watchlists.create({ name: 'Existing Name' })).rejects.toMatchObject({
         message: 'Watchlist name already exists',
       })
     })
@@ -1176,10 +1165,7 @@ describe('watchlists', () => {
 
       server.use(
         http.post(`${BASE_URL}/v2/watchlists/${watchlistId}`, () => {
-          return HttpResponse.json(
-            { code: 40010000, message: 'Invalid symbol' },
-            { status: 400 }
-          )
+          return HttpResponse.json({ code: 40010000, message: 'Invalid symbol' }, { status: 400 })
         })
       )
 
@@ -1206,9 +1192,7 @@ describe('watchlists', () => {
 
       const client = createTradingClient(TEST_CONFIG)
 
-      await expect(
-        client.watchlists.addSymbol(nonExistentId, 'AAPL')
-      ).rejects.toMatchObject({
+      await expect(client.watchlists.addSymbol(nonExistentId, 'AAPL')).rejects.toMatchObject({
         message: 'Watchlist not found',
       })
     })
@@ -1244,14 +1228,11 @@ describe('watchlists', () => {
       const symbol = 'AAPL'
 
       server.use(
-        http.delete(
-          `${BASE_URL}/v2/watchlists/:watchlistId/:symbol`,
-          ({ params }) => {
-            capturedWatchlistId = params.watchlistId as string
-            capturedSymbol = params.symbol as string
-            return HttpResponse.json(mockWatchlist)
-          }
-        )
+        http.delete(`${BASE_URL}/v2/watchlists/:watchlistId/:symbol`, ({ params }) => {
+          capturedWatchlistId = params.watchlistId as string
+          capturedSymbol = params.symbol as string
+          return HttpResponse.json(mockWatchlist)
+        })
       )
 
       const client = createTradingClient(TEST_CONFIG)
@@ -1276,9 +1257,7 @@ describe('watchlists', () => {
 
       const client = createTradingClient(TEST_CONFIG)
 
-      await expect(
-        client.watchlists.removeSymbol(watchlistId, symbol)
-      ).rejects.toMatchObject({
+      await expect(client.watchlists.removeSymbol(watchlistId, symbol)).rejects.toMatchObject({
         message: 'Symbol not found in watchlist',
       })
     })
@@ -1298,9 +1277,7 @@ describe('watchlists', () => {
 
       const client = createTradingClient(TEST_CONFIG)
 
-      await expect(
-        client.watchlists.removeSymbol(nonExistentId, symbol)
-      ).rejects.toMatchObject({
+      await expect(client.watchlists.removeSymbol(nonExistentId, symbol)).rejects.toMatchObject({
         message: 'Watchlist not found',
       })
     })
@@ -1480,7 +1457,9 @@ describe('options parameter branch coverage', () => {
 
     const client = createTradingClient(TEST_CONFIG)
     const controller = new AbortController()
-    const order = await client.orders.getByClientOrderId('client-123', { signal: controller.signal })
+    const order = await client.orders.getByClientOrderId('client-123', {
+      signal: controller.signal,
+    })
 
     expect(order).toBeDefined()
   })
@@ -1701,7 +1680,11 @@ describe('options parameter branch coverage', () => {
 
     const client = createTradingClient(TEST_CONFIG)
     const controller = new AbortController()
-    const watchlist = await client.watchlists.update('wl-123', { name: 'Updated' }, { signal: controller.signal })
+    const watchlist = await client.watchlists.update(
+      'wl-123',
+      { name: 'Updated' },
+      { signal: controller.signal }
+    )
 
     expect(watchlist.name).toBe('Updated')
   })

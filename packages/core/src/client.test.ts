@@ -5,19 +5,8 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest'
 import { setupServer } from 'msw/node'
 import { http, HttpResponse, delay } from 'msw'
-import {
-  resolveConfig,
-  fetchWithRetry,
-  createHeaders,
-  createApiFetch,
-  ALPACA_URLS,
-} from './client'
-import {
-  AlpacaError,
-  AuthenticationError,
-  RateLimitError,
-  ServerError,
-} from './errors'
+import { resolveConfig, fetchWithRetry, createHeaders, createApiFetch, ALPACA_URLS } from './client'
+import { AlpacaError, AuthenticationError, RateLimitError, ServerError } from './errors'
 import type { ResolvedAlpacaConfig } from './types'
 
 // MSW server setup
@@ -97,10 +86,7 @@ describe('client', () => {
 
       it('should prefer custom baseUrl over default URLs', () => {
         const customUrl = 'https://my-proxy.example.com'
-        const result = resolveConfig(
-          { ...baseConfig, baseUrl: customUrl, paper: false },
-          'trading'
-        )
+        const result = resolveConfig({ ...baseConfig, baseUrl: customUrl, paper: false }, 'trading')
 
         expect(result.baseUrl).toBe(customUrl)
         expect(result.baseUrl).not.toBe(ALPACA_URLS.trading.live)
@@ -257,10 +243,7 @@ describe('client', () => {
       it('should throw AlpacaError with correct status code', async () => {
         server.use(
           http.get('https://api.test.alpaca.markets/v2/test', () => {
-            return HttpResponse.json(
-              { code: 40000, message: 'Bad request' },
-              { status: 400 }
-            )
+            return HttpResponse.json({ code: 40000, message: 'Bad request' }, { status: 400 })
           })
         )
 
@@ -341,10 +324,7 @@ describe('client', () => {
           http.get('https://api.test.alpaca.markets/v2/retry-server', () => {
             requestCount++
             if (requestCount === 1) {
-              return HttpResponse.json(
-                { code: 50000, message: 'Internal error' },
-                { status: 500 }
-              )
+              return HttpResponse.json({ code: 50000, message: 'Internal error' }, { status: 500 })
             }
             return HttpResponse.json({ data: 'recovered' })
           })
@@ -364,10 +344,7 @@ describe('client', () => {
       it('should throw after max retries exceeded', async () => {
         server.use(
           http.get('https://api.test.alpaca.markets/v2/always-fail', () => {
-            return HttpResponse.json(
-              { code: 50000, message: 'Always failing' },
-              { status: 500 }
-            )
+            return HttpResponse.json({ code: 50000, message: 'Always failing' }, { status: 500 })
           })
         )
 
@@ -388,10 +365,7 @@ describe('client', () => {
         server.use(
           http.get('https://api.test.alpaca.markets/v2/no-retry', () => {
             requestCount++
-            return HttpResponse.json(
-              { code: 40000, message: 'Bad request' },
-              { status: 400 }
-            )
+            return HttpResponse.json({ code: 40000, message: 'Bad request' }, { status: 400 })
           })
         )
 

@@ -53,6 +53,7 @@ packages/
 ### Type Generation
 
 Types are auto-generated from OpenAPI specs in `/specs/` directory:
+
 - `specs/trading-api.json` → `packages/trading/src/generated/trading-api.d.ts`
 - `specs/broker-api.json` → `packages/broker/src/generated/broker-api.d.ts`
 - `specs/market-data-api.json` → `packages/market-data/src/generated/market-data-api.d.ts`
@@ -62,6 +63,7 @@ Run `pnpm generate:types` after updating any spec file.
 ### Client Pattern
 
 Each API package follows the same factory pattern:
+
 ```typescript
 // Factory creates typed client with namespaced methods
 export function createTradingClient(config: AlpacaConfig) {
@@ -79,6 +81,7 @@ export function createTradingClient(config: AlpacaConfig) {
 ### Error System
 
 Dual error pattern in `@alpaca-sdk/core`:
+
 - **Class-based**: `AuthenticationError`, `RateLimitError`, etc. for `instanceof` checks
 - **Discriminated unions**: `ApiError` type with `type` field for pattern matching
 - Factory function `createAlpacaError()` maps HTTP status codes to appropriate error types
