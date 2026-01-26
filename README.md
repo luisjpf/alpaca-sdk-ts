@@ -20,14 +20,7 @@ Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data A
 ## Installation
 
 ```bash
-# Full SDK (recommended)
 pnpm add @luisjpf/alpaca-sdk
-
-# Or individual packages
-pnpm add @luisjpf/trading
-pnpm add @luisjpf/market-data
-pnpm add @luisjpf/broker
-pnpm add @luisjpf/streaming
 ```
 
 ## Quick Start
@@ -61,29 +54,17 @@ const bars = await alpaca.marketData.stocks.getSymbolBars('AAPL', {
 })
 ```
 
-## Packages
-
-| Package                | Description                                     |
-| ---------------------- | ----------------------------------------------- |
-| `@luisjpf/alpaca-sdk`  | Complete SDK with all APIs                      |
-| `@luisjpf/trading`     | Trading API (orders, positions, account)        |
-| `@luisjpf/market-data` | Market Data API (stocks, crypto, options, news) |
-| `@luisjpf/broker`      | Broker API (sub-accounts, funding, KYC)         |
-| `@luisjpf/streaming`   | WebSocket clients for real-time data            |
-| `@luisjpf/core`        | Shared utilities (auth, errors, types)          |
-
 ## Configuration
 
 ```typescript
-import { createTradingClient } from '@luisjpf/trading'
+import { createAlpacaClient } from '@luisjpf/alpaca-sdk'
 
-const client = createTradingClient({
+const alpaca = createAlpacaClient({
   keyId: 'YOUR_API_KEY',
   secretKey: 'YOUR_SECRET_KEY',
   paper: true, // default: true
   timeout: 30_000, // default: 30s
   maxRetries: 2, // default: 2
-  baseUrl: 'custom-url', // optional override
 })
 ```
 
@@ -97,7 +78,7 @@ The SDK automatically retries failed requests for:
 - **500+ Server Errors** - Uses exponential backoff with jitter
 
 ```typescript
-const client = createTradingClient({
+const alpaca = createAlpacaClient({
   keyId: 'YOUR_API_KEY',
   secretKey: 'YOUR_SECRET_KEY',
   maxRetries: 2, // default: 2 (set to 0 to disable)
@@ -120,7 +101,7 @@ import {
   ValidationError,
   MarketClosedError,
   ServerError,
-} from '@luisjpf/core'
+} from '@luisjpf/alpaca-sdk'
 
 try {
   await client.orders.create({ ... })
@@ -182,6 +163,7 @@ For type-safe error handling without `instanceof`:
 
 ```typescript
 import {
+  AlpacaError,
   isAuthenticationError,
   isRateLimitError,
   isInsufficientFundsError,
@@ -189,7 +171,7 @@ import {
   isNotFoundError,
   isMarketClosedError,
   isServerError,
-} from '@luisjpf/core'
+} from '@luisjpf/alpaca-sdk'
 
 try {
   await client.orders.create({ ... })
@@ -213,7 +195,7 @@ Real-time market data and trade updates via WebSocket.
 ### Stock Data Streaming
 
 ```typescript
-import { createStockStream } from '@luisjpf/streaming'
+import { createStockStream } from '@luisjpf/alpaca-sdk'
 
 const stream = createStockStream({
   keyId: 'YOUR_API_KEY',
@@ -247,7 +229,7 @@ stream.subscribeForBars(['AAPL'])
 ### Crypto Data Streaming
 
 ```typescript
-import { createCryptoStream } from '@luisjpf/streaming'
+import { createCryptoStream } from '@luisjpf/alpaca-sdk'
 
 const stream = createCryptoStream({
   keyId: 'YOUR_API_KEY',
@@ -266,7 +248,7 @@ stream.subscribeForTrades(['BTC/USD', 'ETH/USD'])
 ### Trade Updates Streaming
 
 ```typescript
-import { createTradeUpdatesStream } from '@luisjpf/streaming'
+import { createTradeUpdatesStream } from '@luisjpf/alpaca-sdk'
 
 const stream = createTradeUpdatesStream({
   keyId: 'YOUR_API_KEY',
