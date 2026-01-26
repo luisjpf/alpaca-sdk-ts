@@ -14,11 +14,7 @@ import {
   createCryptoStream,
   createTradeUpdatesStream,
 } from '@alpaca-sdk/streaming'
-import type {
-  StockStream,
-  CryptoStream,
-  TradeUpdatesStream,
-} from '@alpaca-sdk/streaming'
+import type { StockStream, CryptoStream, TradeUpdatesStream } from '@alpaca-sdk/streaming'
 
 export type AlpacaClientConfig = AlpacaConfig
 

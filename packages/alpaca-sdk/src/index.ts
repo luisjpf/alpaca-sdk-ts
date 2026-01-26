@@ -66,11 +66,7 @@ export type {
 } from '@alpaca-sdk/market-data'
 
 // Broker - Export client factory and types
-export {
-  createBrokerClient,
-  type BrokerClient,
-  type BrokerClientConfig,
-} from '@alpaca-sdk/broker'
+export { createBrokerClient, type BrokerClient, type BrokerClientConfig } from '@alpaca-sdk/broker'
 
 // Broker types (namespaced to avoid conflicts)
 export type {

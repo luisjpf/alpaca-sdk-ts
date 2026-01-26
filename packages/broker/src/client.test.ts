@@ -335,10 +335,7 @@ const handlers = [
     if (authHeader !== EXPECTED_AUTH) {
       return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-    return HttpResponse.json(
-      { code: 50000000, message: 'Internal server error' },
-      { status: 500 }
-    )
+    return HttpResponse.json({ code: 50000000, message: 'Internal server error' }, { status: 500 })
   }),
 
   // Accounts list endpoint
@@ -358,10 +355,7 @@ const handlers = [
     }
     const account = mockAccountsList.find((a) => a.id === params.accountId)
     if (!account) {
-      return HttpResponse.json(
-        { code: 40410000, message: 'Account not found' },
-        { status: 404 }
-      )
+      return HttpResponse.json({ code: 40410000, message: 'Account not found' }, { status: 404 })
     }
     return HttpResponse.json(account)
   }),
@@ -387,94 +381,77 @@ const handlers = [
   }),
 
   // Transfers endpoints
-  http.get(
-    `${BASE_URL}/v1/accounts/:accountId/transfers`,
-    ({ request, params }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      // Filter transfers by account
-      const transfers = mockTransfersList.filter(
-        (t) => t.account_id === params.accountId
-      )
-      return HttpResponse.json(transfers)
+  http.get(`${BASE_URL}/v1/accounts/:accountId/transfers`, ({ request, params }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    // Filter transfers by account
+    const transfers = mockTransfersList.filter((t) => t.account_id === params.accountId)
+    return HttpResponse.json(transfers)
+  }),
 
-  http.post(
-    `${BASE_URL}/v1/accounts/:accountId/transfers`,
-    async ({ request, params }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      const body = (await request.json()) as Record<string, unknown>
-      return HttpResponse.json(
-        {
-          id: 'txn-new-001',
-          account_id: params.accountId,
-          type: body.transfer_type ?? 'ach',
-          status: 'PENDING',
-          direction: body.direction ?? 'INCOMING',
-          amount: body.amount ?? '1000.00',
-          created_at: new Date().toISOString(),
-        },
-        { status: 201 }
-      )
+  http.post(`${BASE_URL}/v1/accounts/:accountId/transfers`, async ({ request, params }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    const body = (await request.json()) as Record<string, unknown>
+    return HttpResponse.json(
+      {
+        id: 'txn-new-001',
+        account_id: params.accountId,
+        type: body.transfer_type ?? 'ach',
+        status: 'PENDING',
+        direction: body.direction ?? 'INCOMING',
+        amount: body.amount ?? '1000.00',
+        created_at: new Date().toISOString(),
+      },
+      { status: 201 }
+    )
+  }),
 
   // Trading Orders endpoints
-  http.get(
-    `${BASE_URL}/v1/trading/accounts/:accountId/orders`,
-    ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      return HttpResponse.json(mockOrdersList)
+  http.get(`${BASE_URL}/v1/trading/accounts/:accountId/orders`, ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    return HttpResponse.json(mockOrdersList)
+  }),
 
-  http.post(
-    `${BASE_URL}/v1/trading/accounts/:accountId/orders`,
-    async ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      const body = (await request.json()) as Record<string, unknown>
-      return HttpResponse.json(
-        {
-          ...mockOrder,
-          id: 'ord-new-001',
-          client_order_id: (body.client_order_id as string) ?? 'auto-generated',
-          symbol: body.symbol,
-          qty: body.qty,
-          side: body.side,
-          type: body.type,
-          time_in_force: body.time_in_force,
-          status: 'pending_new',
-          filled_qty: '0',
-          filled_avg_price: null,
-        },
-        { status: 201 }
-      )
+  http.post(`${BASE_URL}/v1/trading/accounts/:accountId/orders`, async ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    const body = (await request.json()) as Record<string, unknown>
+    return HttpResponse.json(
+      {
+        ...mockOrder,
+        id: 'ord-new-001',
+        client_order_id: (body.client_order_id as string) ?? 'auto-generated',
+        symbol: body.symbol,
+        qty: body.qty,
+        side: body.side,
+        type: body.type,
+        time_in_force: body.time_in_force,
+        status: 'pending_new',
+        filled_qty: '0',
+        filled_avg_price: null,
+      },
+      { status: 201 }
+    )
+  }),
 
   // Trading Positions endpoint
-  http.get(
-    `${BASE_URL}/v1/trading/accounts/:accountId/positions`,
-    ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      return HttpResponse.json(mockPositionsList)
+  http.get(`${BASE_URL}/v1/trading/accounts/:accountId/positions`, ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    return HttpResponse.json(mockPositionsList)
+  }),
 
   // PATCH account update
   http.patch(`${BASE_URL}/v1/accounts/:accountId`, async ({ request, params }) => {
@@ -485,10 +462,7 @@ const handlers = [
     const body = (await request.json()) as Record<string, unknown>
     const account = mockAccountsList.find((a) => a.id === params.accountId)
     if (!account) {
-      return HttpResponse.json(
-        { code: 40410000, message: 'Account not found' },
-        { status: 404 }
-      )
+      return HttpResponse.json({ code: 40410000, message: 'Account not found' }, { status: 404 })
     }
     return HttpResponse.json({
       ...account,
@@ -498,22 +472,16 @@ const handlers = [
   }),
 
   // GET trading account details
-  http.get(
-    `${BASE_URL}/v1/trading/accounts/:accountId/account`,
-    ({ request, params }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      if (params.accountId === 'non-existent') {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Account not found' },
-          { status: 404 }
-        )
-      }
-      return HttpResponse.json(mockTradingAccount)
+  http.get(`${BASE_URL}/v1/trading/accounts/:accountId/account`, ({ request, params }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    if (params.accountId === 'non-existent') {
+      return HttpResponse.json({ code: 40410000, message: 'Account not found' }, { status: 404 })
+    }
+    return HttpResponse.json(mockTradingAccount)
+  }),
 
   // GET activities by type
   http.get(`${BASE_URL}/v1/accounts/activities/:activityType`, ({ request, params }) => {
@@ -521,67 +489,53 @@ const handlers = [
     if (authHeader !== EXPECTED_AUTH) {
       return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-    const filtered = mockActivitiesList.filter(
-      (a) => a.activity_type === params.activityType
-    )
+    const filtered = mockActivitiesList.filter((a) => a.activity_type === params.activityType)
     return HttpResponse.json(filtered)
   }),
 
   // DELETE transfer
-  http.delete(
-    `${BASE_URL}/v1/accounts/:accountId/transfers/:transferId`,
-    ({ request, params }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      if (params.transferId === 'non-existent') {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Transfer not found' },
-          { status: 404 }
-        )
-      }
-      return new HttpResponse(null, { status: 204 })
+  http.delete(`${BASE_URL}/v1/accounts/:accountId/transfers/:transferId`, ({ request, params }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    if (params.transferId === 'non-existent') {
+      return HttpResponse.json({ code: 40410000, message: 'Transfer not found' }, { status: 404 })
+    }
+    return new HttpResponse(null, { status: 204 })
+  }),
 
   // ACH Relationships endpoints
-  http.get(
-    `${BASE_URL}/v1/accounts/:accountId/ach_relationships`,
-    ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      return HttpResponse.json(mockAchRelationshipsList)
+  http.get(`${BASE_URL}/v1/accounts/:accountId/ach_relationships`, ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    return HttpResponse.json(mockAchRelationshipsList)
+  }),
 
-  http.post(
-    `${BASE_URL}/v1/accounts/:accountId/ach_relationships`,
-    async ({ request, params }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      const body = (await request.json()) as Record<string, unknown>
-      return HttpResponse.json(
-        {
-          id: 'ach-rel-new-001',
-          account_id: params.accountId,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          status: 'QUEUED',
-          account_owner_name: body.account_owner_name ?? 'Test User',
-          bank_account_type: body.bank_account_type ?? 'CHECKING',
-          bank_account_number: '****5678',
-          bank_routing_number: body.bank_routing_number ?? '121000358',
-          nickname: body.nickname ?? 'New Account',
-        },
-        { status: 201 }
-      )
+  http.post(`${BASE_URL}/v1/accounts/:accountId/ach_relationships`, async ({ request, params }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    const body = (await request.json()) as Record<string, unknown>
+    return HttpResponse.json(
+      {
+        id: 'ach-rel-new-001',
+        account_id: params.accountId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'QUEUED',
+        account_owner_name: body.account_owner_name ?? 'Test User',
+        bank_account_type: body.bank_account_type ?? 'CHECKING',
+        bank_account_number: '****5678',
+        bank_routing_number: body.bank_routing_number ?? '121000358',
+        nickname: body.nickname ?? 'New Account',
+      },
+      { status: 201 }
+    )
+  }),
 
   http.delete(
     `${BASE_URL}/v1/accounts/:accountId/ach_relationships/:achRelationshipId`,
@@ -601,23 +555,17 @@ const handlers = [
   ),
 
   // GET single order
-  http.get(
-    `${BASE_URL}/v1/trading/accounts/:accountId/orders/:orderId`,
-    ({ request, params }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      const order = mockOrdersList.find((o) => o.id === params.orderId)
-      if (!order) {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Order not found' },
-          { status: 404 }
-        )
-      }
-      return HttpResponse.json(order)
+  http.get(`${BASE_URL}/v1/trading/accounts/:accountId/orders/:orderId`, ({ request, params }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    const order = mockOrdersList.find((o) => o.id === params.orderId)
+    if (!order) {
+      return HttpResponse.json({ code: 40410000, message: 'Order not found' }, { status: 404 })
+    }
+    return HttpResponse.json(order)
+  }),
 
   // PATCH replace order
   http.patch(
@@ -630,10 +578,7 @@ const handlers = [
       const body = (await request.json()) as Record<string, unknown>
       const order = mockOrdersList.find((o) => o.id === params.orderId)
       if (!order) {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Order not found' },
-          { status: 404 }
-        )
+        return HttpResponse.json({ code: 40410000, message: 'Order not found' }, { status: 404 })
       }
       return HttpResponse.json({
         ...order,
@@ -656,30 +601,24 @@ const handlers = [
         return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
       }
       if (params.orderId === 'non-existent') {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Order not found' },
-          { status: 404 }
-        )
+        return HttpResponse.json({ code: 40410000, message: 'Order not found' }, { status: 404 })
       }
       return new HttpResponse(null, { status: 204 })
     }
   ),
 
   // DELETE cancel all orders
-  http.delete(
-    `${BASE_URL}/v1/trading/accounts/:accountId/orders`,
-    ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      // Return list of cancelled order statuses
-      return HttpResponse.json([
-        { id: 'ord-001', status: 200 },
-        { id: 'ord-002', status: 200 },
-      ])
+  http.delete(`${BASE_URL}/v1/trading/accounts/:accountId/orders`, ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    // Return list of cancelled order statuses
+    return HttpResponse.json([
+      { id: 'ord-001', status: 200 },
+      { id: 'ord-002', status: 200 },
+    ])
+  }),
 
   // GET single position
   http.get(
@@ -693,10 +632,7 @@ const handlers = [
         (p) => p.symbol === params.symbolOrAssetId || p.asset_id === params.symbolOrAssetId
       )
       if (!position) {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Position not found' },
-          { status: 404 }
-        )
+        return HttpResponse.json({ code: 40410000, message: 'Position not found' }, { status: 404 })
       }
       return HttpResponse.json(position)
     }
@@ -714,10 +650,7 @@ const handlers = [
         (p) => p.symbol === params.symbolOrAssetId || p.asset_id === params.symbolOrAssetId
       )
       if (!position) {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Position not found' },
-          { status: 404 }
-        )
+        return HttpResponse.json({ code: 40410000, message: 'Position not found' }, { status: 404 })
       }
       // Return close order
       return HttpResponse.json({
@@ -729,32 +662,26 @@ const handlers = [
   ),
 
   // DELETE close all positions
-  http.delete(
-    `${BASE_URL}/v1/trading/accounts/:accountId/positions`,
-    ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      // Return list of close orders
-      return HttpResponse.json([
-        { ...mockClosePositionOrder, symbol: 'AAPL' },
-        { ...mockClosePositionOrder, id: 'close-ord-002', symbol: 'GOOGL' },
-      ])
+  http.delete(`${BASE_URL}/v1/trading/accounts/:accountId/positions`, ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    // Return list of close orders
+    return HttpResponse.json([
+      { ...mockClosePositionOrder, symbol: 'AAPL' },
+      { ...mockClosePositionOrder, id: 'close-ord-002', symbol: 'GOOGL' },
+    ])
+  }),
 
   // Documents endpoints
-  http.get(
-    `${BASE_URL}/v1/accounts/:accountId/documents`,
-    ({ request }) => {
-      const authHeader = request.headers.get('Authorization')
-      if (authHeader !== EXPECTED_AUTH) {
-        return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-      }
-      return HttpResponse.json(mockDocumentsList)
+  http.get(`${BASE_URL}/v1/accounts/:accountId/documents`, ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+    if (authHeader !== EXPECTED_AUTH) {
+      return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
-  ),
+    return HttpResponse.json(mockDocumentsList)
+  }),
 
   http.get(
     `${BASE_URL}/v1/accounts/:accountId/documents/:documentId/download`,
@@ -764,14 +691,12 @@ const handlers = [
         return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
       }
       if (params.documentId === 'non-existent') {
-        return HttpResponse.json(
-          { code: 40410000, message: 'Document not found' },
-          { status: 404 }
-        )
+        return HttpResponse.json({ code: 40410000, message: 'Document not found' }, { status: 404 })
       }
       // Return a download URL or content (depending on API design)
+      const docId = String(params.documentId)
       return HttpResponse.json({
-        download_url: `https://example.com/documents/${params.documentId}/download`,
+        download_url: `https://example.com/documents/${docId}/download`,
       })
     }
   ),
@@ -794,10 +719,7 @@ const handlers = [
       (a) => a.symbol === params.symbolOrAssetId || a.id === params.symbolOrAssetId
     )
     if (!asset) {
-      return HttpResponse.json(
-        { code: 40410000, message: 'Asset not found' },
-        { status: 404 }
-      )
+      return HttpResponse.json({ code: 40410000, message: 'Asset not found' }, { status: 404 })
     }
     return HttpResponse.json(asset)
   }),
@@ -1050,16 +972,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when account has no transfers', async () => {
       server.use(
-        http.get(
-          `${BASE_URL}/v1/accounts/:accountId/transfers`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.get(`${BASE_URL}/v1/accounts/:accountId/transfers`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1120,16 +1039,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when account has no orders', async () => {
       server.use(
-        http.get(
-          `${BASE_URL}/v1/trading/accounts/:accountId/orders`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.get(`${BASE_URL}/v1/trading/accounts/:accountId/orders`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1218,16 +1134,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when account has no positions', async () => {
       server.use(
-        http.get(
-          `${BASE_URL}/v1/trading/accounts/:accountId/positions`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.get(`${BASE_URL}/v1/trading/accounts/:accountId/positions`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1438,9 +1351,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.accounts.getTradingAccount('non-existent')
-      ).rejects.toMatchObject({
+      await expect(client.accounts.getTradingAccount('non-existent')).rejects.toMatchObject({
         message: 'Account not found',
       })
     })
@@ -1454,7 +1365,9 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      const activities = await client.activities.getByType('FILL' as Parameters<typeof client.activities.getByType>[0])
+      const activities = await client.activities.getByType(
+        'FILL' as Parameters<typeof client.activities.getByType>[0]
+      )
 
       expect(Array.isArray(activities)).toBe(true)
       expect(activities).toHaveLength(1)
@@ -1468,7 +1381,9 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      const activities = await client.activities.getByType('ACATC' as Parameters<typeof client.activities.getByType>[0])
+      const activities = await client.activities.getByType(
+        'ACATC' as Parameters<typeof client.activities.getByType>[0]
+      )
 
       expect(activities).toEqual([])
     })
@@ -1483,9 +1398,7 @@ describe('createBrokerClient', () => {
       })
 
       // Should not throw
-      await expect(
-        client.transfers.delete('acc-001', 'txn-001')
-      ).resolves.toBeUndefined()
+      await expect(client.transfers.delete('acc-001', 'txn-001')).resolves.toBeUndefined()
     })
 
     it('should throw error when transfer not found', async () => {
@@ -1495,9 +1408,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.transfers.delete('acc-001', 'non-existent')
-      ).rejects.toMatchObject({
+      await expect(client.transfers.delete('acc-001', 'non-existent')).rejects.toMatchObject({
         message: 'Transfer not found',
       })
     })
@@ -1522,16 +1433,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when account has no ACH relationships', async () => {
       server.use(
-        http.get(
-          `${BASE_URL}/v1/accounts/:accountId/ach_relationships`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.get(`${BASE_URL}/v1/accounts/:accountId/ach_relationships`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1594,11 +1502,11 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.achRelationships.delete('acc-001', 'non-existent')
-      ).rejects.toMatchObject({
-        message: 'ACH relationship not found',
-      })
+      await expect(client.achRelationships.delete('acc-001', 'non-existent')).rejects.toMatchObject(
+        {
+          message: 'ACH relationship not found',
+        }
+      )
     })
   })
 
@@ -1625,9 +1533,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.trading.orders.get('acc-001', 'non-existent')
-      ).rejects.toMatchObject({
+      await expect(client.trading.orders.get('acc-001', 'non-existent')).rejects.toMatchObject({
         message: 'Order not found',
       })
     })
@@ -1687,9 +1593,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.trading.orders.cancel('acc-001', 'ord-001')
-      ).resolves.toBeUndefined()
+      await expect(client.trading.orders.cancel('acc-001', 'ord-001')).resolves.toBeUndefined()
     })
 
     it('should throw error when order not found', async () => {
@@ -1699,9 +1603,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.trading.orders.cancel('acc-001', 'non-existent')
-      ).rejects.toMatchObject({
+      await expect(client.trading.orders.cancel('acc-001', 'non-existent')).rejects.toMatchObject({
         message: 'Order not found',
       })
     })
@@ -1725,16 +1627,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when no orders to cancel', async () => {
       server.use(
-        http.delete(
-          `${BASE_URL}/v1/trading/accounts/:accountId/orders`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.delete(`${BASE_URL}/v1/trading/accounts/:accountId/orders`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1786,9 +1685,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.trading.positions.get('acc-001', 'INVALID')
-      ).rejects.toMatchObject({
+      await expect(client.trading.positions.get('acc-001', 'INVALID')).rejects.toMatchObject({
         message: 'Position not found',
       })
     })
@@ -1832,9 +1729,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.trading.positions.close('acc-001', 'INVALID')
-      ).rejects.toMatchObject({
+      await expect(client.trading.positions.close('acc-001', 'INVALID')).rejects.toMatchObject({
         message: 'Position not found',
       })
     })
@@ -1872,16 +1767,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when no positions to close', async () => {
       server.use(
-        http.delete(
-          `${BASE_URL}/v1/trading/accounts/:accountId/positions`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.delete(`${BASE_URL}/v1/trading/accounts/:accountId/positions`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1914,16 +1806,13 @@ describe('createBrokerClient', () => {
 
     it('should return empty array when no documents exist', async () => {
       server.use(
-        http.get(
-          `${BASE_URL}/v1/accounts/:accountId/documents`,
-          ({ request }) => {
-            const authHeader = request.headers.get('Authorization')
-            if (authHeader !== EXPECTED_AUTH) {
-              return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
-            }
-            return HttpResponse.json([])
+        http.get(`${BASE_URL}/v1/accounts/:accountId/documents`, ({ request }) => {
+          const authHeader = request.headers.get('Authorization')
+          if (authHeader !== EXPECTED_AUTH) {
+            return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 })
           }
-        )
+          return HttpResponse.json([])
+        })
       )
 
       const client = createBrokerClient({
@@ -1959,9 +1848,7 @@ describe('createBrokerClient', () => {
         paper: true,
       })
 
-      await expect(
-        client.documents.download('acc-001', 'non-existent')
-      ).rejects.toMatchObject({
+      await expect(client.documents.download('acc-001', 'non-existent')).rejects.toMatchObject({
         message: 'Document not found',
       })
     })
@@ -2194,7 +2081,10 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const accounts = await client.accounts.list({ query: 'test' } as Parameters<typeof client.accounts.list>[0], { signal: controller.signal })
+        const accounts = await client.accounts.list(
+          { query: 'test' } as Parameters<typeof client.accounts.list>[0],
+          { signal: controller.signal }
+        )
 
         expect(Array.isArray(accounts)).toBe(true)
       })
@@ -2267,7 +2157,9 @@ describe('createBrokerClient', () => {
         const controller = new AbortController()
         const account = await client.accounts.update(
           'acc-001',
-          { contact: { email_address: 'updated@example.com' } } as Parameters<typeof client.accounts.update>[1],
+          { contact: { email_address: 'updated@example.com' } } as Parameters<
+            typeof client.accounts.update
+          >[1],
           { signal: controller.signal }
         )
 
@@ -2281,7 +2173,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const tradingAccount = await client.accounts.getTradingAccount('acc-001', { signal: controller.signal })
+        const tradingAccount = await client.accounts.getTradingAccount('acc-001', {
+          signal: controller.signal,
+        })
 
         expect(tradingAccount.id).toBe('acc-001')
       })
@@ -2352,7 +2246,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const transfers = await client.transfers.list('acc-001', undefined, { signal: controller.signal })
+        const transfers = await client.transfers.list('acc-001', undefined, {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(transfers)).toBe(true)
       })
@@ -2414,7 +2310,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const relationships = await client.achRelationships.list('acc-001', { signal: controller.signal })
+        const relationships = await client.achRelationships.list('acc-001', {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(relationships)).toBe(true)
       })
@@ -2461,7 +2359,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const orders = await client.trading.orders.list('acc-001', undefined, { signal: controller.signal })
+        const orders = await client.trading.orders.list('acc-001', undefined, {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(orders)).toBe(true)
       })
@@ -2489,7 +2389,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const order = await client.trading.orders.get('acc-001', 'ord-001', { signal: controller.signal })
+        const order = await client.trading.orders.get('acc-001', 'ord-001', {
+          signal: controller.signal,
+        })
 
         expect(order.id).toBe('ord-001')
       })
@@ -2553,7 +2455,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const result = await client.trading.orders.cancelAll('acc-001', { signal: controller.signal })
+        const result = await client.trading.orders.cancelAll('acc-001', {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(result)).toBe(true)
       })
@@ -2565,7 +2469,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const positions = await client.trading.positions.list('acc-001', { signal: controller.signal })
+        const positions = await client.trading.positions.list('acc-001', {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(positions)).toBe(true)
       })
@@ -2577,7 +2483,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const position = await client.trading.positions.get('acc-001', 'AAPL', { signal: controller.signal })
+        const position = await client.trading.positions.get('acc-001', 'AAPL', {
+          signal: controller.signal,
+        })
 
         expect(position.symbol).toBe('AAPL')
       })
@@ -2589,7 +2497,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const order = await client.trading.positions.close('acc-001', 'AAPL', undefined, { signal: controller.signal })
+        const order = await client.trading.positions.close('acc-001', 'AAPL', undefined, {
+          signal: controller.signal,
+        })
 
         expect(order.symbol).toBe('AAPL')
       })
@@ -2618,7 +2528,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const orders = await client.trading.positions.closeAll('acc-001', undefined, { signal: controller.signal })
+        const orders = await client.trading.positions.closeAll('acc-001', undefined, {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(orders)).toBe(true)
       })
@@ -2646,7 +2558,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const documents = await client.documents.list('acc-001', undefined, { signal: controller.signal })
+        const documents = await client.documents.list('acc-001', undefined, {
+          signal: controller.signal,
+        })
 
         expect(Array.isArray(documents)).toBe(true)
       })
@@ -2674,7 +2588,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
         const controller = new AbortController()
-        const downloadInfo = await client.documents.download('acc-001', 'doc-001', { signal: controller.signal })
+        const downloadInfo = await client.documents.download('acc-001', 'doc-001', {
+          signal: controller.signal,
+        })
 
         expect(downloadInfo.download_url).toBeDefined()
       })
@@ -2822,7 +2738,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
 
-        const activities = await client.activities.getByType('FILL' as Parameters<typeof client.activities.getByType>[0])
+        const activities = await client.activities.getByType(
+          'FILL' as Parameters<typeof client.activities.getByType>[0]
+        )
 
         expect(activities).toEqual([])
       })
@@ -3060,7 +2978,9 @@ describe('createBrokerClient', () => {
           paper: true,
         })
 
-        const activities = await client.activities.getByType('FILL' as Parameters<typeof client.activities.getByType>[0])
+        const activities = await client.activities.getByType(
+          'FILL' as Parameters<typeof client.activities.getByType>[0]
+        )
 
         expect(Array.isArray(activities)).toBe(true)
       })

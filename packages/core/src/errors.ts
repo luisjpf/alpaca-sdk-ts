@@ -118,13 +118,7 @@ export class AlpacaError extends Error {
   readonly status: number
   readonly requestId?: string
 
-  constructor(
-    message: string,
-    type: ErrorType,
-    code: number,
-    status: number,
-    requestId?: string
-  ) {
+  constructor(message: string, type: ErrorType, code: number, status: number, requestId?: string) {
     super(message)
     this.name = 'AlpacaError'
     this.type = type
@@ -400,8 +394,7 @@ export const isAuthenticationError = (e: ApiError): e is AuthenticationApiError 
 export const isRateLimitError = (e: ApiError): e is RateLimitApiError =>
   e.type === ErrorType.RateLimit
 
-export const isNotFoundError = (e: ApiError): e is NotFoundApiError =>
-  e.type === ErrorType.NotFound
+export const isNotFoundError = (e: ApiError): e is NotFoundApiError => e.type === ErrorType.NotFound
 
 export const isValidationError = (e: ApiError): e is ValidationApiError =>
   e.type === ErrorType.Validation
@@ -412,5 +405,4 @@ export const isInsufficientFundsError = (e: ApiError): e is InsufficientFundsApi
 export const isMarketClosedError = (e: ApiError): e is MarketClosedApiError =>
   e.type === ErrorType.MarketClosed
 
-export const isServerError = (e: ApiError): e is ServerApiError =>
-  e.type === ErrorType.Server
+export const isServerError = (e: ApiError): e is ServerApiError => e.type === ErrorType.Server

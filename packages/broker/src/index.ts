@@ -18,12 +18,7 @@ export type {
 } from './client'
 
 // Activity types
-export type {
-  Activity,
-  TradeActivity,
-  NonTradeActivity,
-  ActivityType,
-} from './client'
+export type { Activity, TradeActivity, NonTradeActivity, ActivityType } from './client'
 
 // Order types
 export type {
@@ -40,32 +35,16 @@ export type {
 export type { Position } from './client'
 
 // Transfer types
-export type {
-  Transfer,
-  CreateTransferRequest,
-  TransferDirection,
-  TransferType,
-} from './client'
+export type { Transfer, CreateTransferRequest, TransferDirection, TransferType } from './client'
 
 // ACH types
-export type {
-  ACHRelationship,
-  CreateACHRelationshipRequest,
-} from './client'
+export type { ACHRelationship, CreateACHRelationshipRequest } from './client'
 
 // Document types
-export type {
-  AccountDocument,
-  OwnerDocument,
-} from './client'
+export type { AccountDocument, OwnerDocument } from './client'
 
 // Identity types
-export type {
-  Contact,
-  Identity,
-  Disclosures,
-  TrustedContact,
-} from './client'
+export type { Contact, Identity, Disclosures, TrustedContact } from './client'
 
 // Calendar and Clock
 export type { Calendar, Clock } from './client'

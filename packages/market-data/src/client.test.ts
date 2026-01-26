@@ -34,9 +34,9 @@ function createTestClient() {
 const mockStockBar = {
   t: '2024-01-15T14:30:00Z',
   o: 150.25,
-  h: 151.50,
+  h: 151.5,
   l: 149.75,
-  c: 151.00,
+  c: 151.0,
   v: 1250000,
   n: 5432,
   vw: 150.65,
@@ -45,7 +45,7 @@ const mockStockBar = {
 const mockStockTrade = {
   t: '2024-01-15T14:30:00Z',
   x: 'V',
-  p: 150.50,
+  p: 150.5,
   s: 100,
   c: ['@', 'I'],
   i: 123456789,
@@ -74,10 +74,10 @@ const mockStockSnapshot = {
 
 const mockCryptoBar = {
   t: '2024-01-15T14:30:00Z',
-  o: 42500.00,
-  h: 42750.00,
-  l: 42250.00,
-  c: 42600.00,
+  o: 42500.0,
+  h: 42750.0,
+  l: 42250.0,
+  c: 42600.0,
   v: 125.5,
   n: 1500,
   vw: 42550.25,
@@ -85,7 +85,7 @@ const mockCryptoBar = {
 
 const mockCryptoTrade = {
   t: '2024-01-15T14:30:00Z',
-  p: 42550.00,
+  p: 42550.0,
   s: 0.5,
   tks: 'B',
   i: 987654321,
@@ -118,9 +118,9 @@ const mockMostActive = {
 
 const mockCryptoQuote = {
   t: '2024-01-15T14:30:00Z',
-  bp: 42500.00,
+  bp: 42500.0,
   bs: 1.5,
-  ap: 42510.00,
+  ap: 42510.0,
   as: 2.0,
 }
 
@@ -135,36 +135,36 @@ const mockCryptoSnapshot = {
 const mockCryptoOrderbook = {
   t: '2024-01-15T14:30:00Z',
   b: [
-    { p: 42500.00, s: 1.5 },
-    { p: 42490.00, s: 2.0 },
+    { p: 42500.0, s: 1.5 },
+    { p: 42490.0, s: 2.0 },
   ],
   a: [
-    { p: 42510.00, s: 1.0 },
-    { p: 42520.00, s: 1.5 },
+    { p: 42510.0, s: 1.0 },
+    { p: 42520.0, s: 1.5 },
   ],
 }
 
 const mockStockAuction = {
   d: '2024-01-15',
-  o: [{ t: '2024-01-15T14:30:00Z', x: 'V', p: 150.00, s: 1000 }],
-  c: [{ t: '2024-01-15T20:00:00Z', x: 'V', p: 151.00, s: 2000 }],
+  o: [{ t: '2024-01-15T14:30:00Z', x: 'V', p: 150.0, s: 1000 }],
+  c: [{ t: '2024-01-15T20:00:00Z', x: 'V', p: 151.0, s: 2000 }],
 }
 
 const mockOptionBar = {
   t: '2024-01-15T14:30:00Z',
   o: 5.25,
   h: 5.75,
-  l: 5.00,
-  c: 5.50,
+  l: 5.0,
+  c: 5.5,
   v: 1500,
   n: 250,
-  vw: 5.40,
+  vw: 5.4,
 }
 
 const mockOptionTrade = {
   t: '2024-01-15T14:30:00Z',
   x: 'C',
-  p: 5.50,
+  p: 5.5,
   s: 10,
   c: '@',
 }
@@ -172,10 +172,10 @@ const mockOptionTrade = {
 const mockOptionQuote = {
   t: '2024-01-15T14:30:00Z',
   ax: 'C',
-  ap: 5.60,
+  ap: 5.6,
   as: 20,
   bx: 'C',
-  bp: 5.40,
+  bp: 5.4,
   bs: 15,
   c: 'A',
 }
@@ -195,7 +195,7 @@ const mockOptionGreeks = {
 
 const mockMover = {
   symbol: 'NVDA',
-  price: 850.50,
+  price: 850.5,
   change: 25.75,
   percent_change: 3.12,
 }
@@ -212,10 +212,10 @@ const mockCorporateAction = {
 
 const mockForexRate = {
   t: '2024-01-15T14:30:00Z',
-  o: 1.0850,
+  o: 1.085,
   h: 1.0875,
   l: 1.0825,
-  c: 1.0860,
+  c: 1.086,
 }
 
 const mockExchangeMapping = {
@@ -227,7 +227,7 @@ const mockExchangeMapping = {
 
 const mockConditionMapping = {
   '@': 'Regular Sale',
-  'I': 'Odd Lot Trade',
+  I: 'Odd Lot Trade',
 }
 
 const mockOptionsExchangeMapping = {
@@ -259,7 +259,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const bars: Record<string, typeof mockStockBar[]> = {}
+    const bars: Record<string, (typeof mockStockBar)[]> = {}
     for (const symbol of symbolList) {
       bars[symbol] = [mockStockBar]
     }
@@ -298,7 +298,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const trades: Record<string, typeof mockStockTrade[]> = {}
+    const trades: Record<string, (typeof mockStockTrade)[]> = {}
     for (const symbol of symbolList) {
       trades[symbol] = [mockStockTrade]
     }
@@ -319,7 +319,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const quotes: Record<string, typeof mockStockQuote[]> = {}
+    const quotes: Record<string, (typeof mockStockQuote)[]> = {}
     for (const symbol of symbolList) {
       quotes[symbol] = [mockStockQuote]
     }
@@ -363,7 +363,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const bars: Record<string, typeof mockCryptoBar[]> = {}
+    const bars: Record<string, (typeof mockCryptoBar)[]> = {}
     for (const symbol of symbolList) {
       bars[symbol] = [mockCryptoBar]
     }
@@ -389,7 +389,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const trades: Record<string, typeof mockCryptoTrade[]> = {}
+    const trades: Record<string, (typeof mockCryptoTrade)[]> = {}
     for (const symbol of symbolList) {
       trades[symbol] = [mockCryptoTrade]
     }
@@ -528,7 +528,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const auctions: Record<string, typeof mockStockAuction[]> = {}
+    const auctions: Record<string, (typeof mockStockAuction)[]> = {}
     for (const symbol of symbolList) {
       auctions[symbol] = [mockStockAuction]
     }
@@ -620,7 +620,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const quotes: Record<string, typeof mockCryptoQuote[]> = {}
+    const quotes: Record<string, (typeof mockCryptoQuote)[]> = {}
     for (const symbol of symbolList) {
       quotes[symbol] = [mockCryptoQuote]
     }
@@ -710,7 +710,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const bars: Record<string, typeof mockOptionBar[]> = {}
+    const bars: Record<string, (typeof mockOptionBar)[]> = {}
     for (const symbol of symbolList) {
       bars[symbol] = [mockOptionBar]
     }
@@ -731,7 +731,7 @@ const handlers = [
     }
 
     const symbolList = symbols.split(',')
-    const trades: Record<string, typeof mockOptionTrade[]> = {}
+    const trades: Record<string, (typeof mockOptionTrade)[]> = {}
     for (const symbol of symbolList) {
       trades[symbol] = [mockOptionTrade]
     }
@@ -855,13 +855,16 @@ const handlers = [
     const currencyPairs = url.searchParams.get('currency_pairs')
 
     if (!currencyPairs) {
-      return HttpResponse.json({ code: 42210000, message: 'currency_pairs is required' }, { status: 422 })
+      return HttpResponse.json(
+        { code: 42210000, message: 'currency_pairs is required' },
+        { status: 422 }
+      )
     }
 
     const pairList = currencyPairs.split(',')
     const rates: Record<string, { bp: number; ap: number; mp: number; t: string }> = {}
     for (const pair of pairList) {
-      rates[pair] = { bp: 1.0850, ap: 1.0855, mp: 1.08525, t: '2024-01-15T14:30:00Z' }
+      rates[pair] = { bp: 1.085, ap: 1.0855, mp: 1.08525, t: '2024-01-15T14:30:00Z' }
     }
 
     return HttpResponse.json({ rates })
@@ -873,11 +876,14 @@ const handlers = [
     const currencyPairs = url.searchParams.get('currency_pairs')
 
     if (!currencyPairs) {
-      return HttpResponse.json({ code: 42210000, message: 'currency_pairs is required' }, { status: 422 })
+      return HttpResponse.json(
+        { code: 42210000, message: 'currency_pairs is required' },
+        { status: 422 }
+      )
     }
 
     const pairList = currencyPairs.split(',')
-    const rates: Record<string, typeof mockForexRate[]> = {}
+    const rates: Record<string, (typeof mockForexRate)[]> = {}
     for (const pair of pairList) {
       rates[pair] = [mockForexRate]
     }
@@ -915,18 +921,12 @@ const handlers = [
 
   // Error handler for server error test
   http.get(`${BASE_URL}/v2/stocks/error/server`, () => {
-    return HttpResponse.json(
-      { code: 50000000, message: 'Internal server error' },
-      { status: 500 }
-    )
+    return HttpResponse.json({ code: 50000000, message: 'Internal server error' }, { status: 500 })
   }),
 
   // Error handler for not found test
   http.get(`${BASE_URL}/v2/stocks/error/notfound`, () => {
-    return HttpResponse.json(
-      { code: 40400000, message: 'Resource not found' },
-      { status: 404 }
-    )
+    return HttpResponse.json({ code: 40400000, message: 'Resource not found' }, { status: 404 })
   }),
 ]
 
@@ -1040,9 +1040,9 @@ describe('Market Data Client', () => {
       expect(result.bars![symbol]).toHaveLength(1)
       expect(result.bars![symbol]![0]).toMatchObject({
         o: 150.25,
-        h: 151.50,
+        h: 151.5,
         l: 149.75,
-        c: 151.00,
+        c: 151.0,
         v: 1250000,
       })
     })
@@ -1094,7 +1094,7 @@ describe('Market Data Client', () => {
       expect(result.trades).toHaveProperty('AMZN')
       expect(result.trades![symbol]).toHaveLength(1)
       expect(result.trades![symbol]![0]).toMatchObject({
-        p: 150.50,
+        p: 150.5,
         s: 100,
         x: 'V',
       })
@@ -1153,7 +1153,7 @@ describe('Market Data Client', () => {
 
       const snapshot = result[symbol]
       expect(snapshot.latestTrade).toMatchObject({
-        p: 150.50,
+        p: 150.5,
         s: 100,
       })
     })
@@ -1177,9 +1177,9 @@ describe('Market Data Client', () => {
       expect(result.bars).toHaveLength(1)
       expect(result.bars![0]).toMatchObject({
         o: 150.25,
-        h: 151.50,
+        h: 151.5,
         l: 149.75,
-        c: 151.00,
+        c: 151.0,
       })
     })
   })
@@ -1195,9 +1195,9 @@ describe('Market Data Client', () => {
       expect(result.symbol).toBe('TSLA')
       expect(result.bar).toMatchObject({
         o: 150.25,
-        h: 151.50,
+        h: 151.5,
         l: 149.75,
-        c: 151.00,
+        c: 151.0,
       })
     })
 
@@ -1222,7 +1222,7 @@ describe('Market Data Client', () => {
       expect(result.symbol).toBe('GOOGL')
       expect(result.trades).toHaveLength(1)
       expect(result.trades![0]).toMatchObject({
-        p: 150.50,
+        p: 150.5,
         s: 100,
         x: 'V',
       })
@@ -1242,8 +1242,8 @@ describe('Market Data Client', () => {
       expect(result.trades).toHaveProperty('AAPL')
       expect(result.trades).toHaveProperty('MSFT')
       expect(result.trades).toHaveProperty('GOOGL')
-      expect(result.trades!['AAPL']).toMatchObject({
-        p: 150.50,
+      expect(result.trades!.AAPL).toMatchObject({
+        p: 150.5,
         s: 100,
       })
     })
@@ -1259,7 +1259,7 @@ describe('Market Data Client', () => {
       expect(result.trade).toBeDefined()
       expect(result.symbol).toBe('NVDA')
       expect(result.trade).toMatchObject({
-        p: 150.50,
+        p: 150.5,
         s: 100,
         x: 'V',
       })
@@ -1306,7 +1306,7 @@ describe('Market Data Client', () => {
       expect(result.quotes).toBeDefined()
       expect(result.quotes).toHaveProperty('AAPL')
       expect(result.quotes).toHaveProperty('TSLA')
-      expect(result.quotes!['AAPL']).toMatchObject({
+      expect(result.quotes!.AAPL).toMatchObject({
         ap: 150.55,
         bp: 150.45,
       })
@@ -1353,7 +1353,7 @@ describe('Market Data Client', () => {
       expect(result).toHaveProperty('dailyBar')
       expect(result).toHaveProperty('prevDailyBar')
       expect(result.latestTrade).toMatchObject({
-        p: 150.50,
+        p: 150.5,
         s: 100,
       })
     })
@@ -1380,10 +1380,10 @@ describe('Market Data Client', () => {
       expect(result.auctions).toBeDefined()
       expect(result.auctions).toHaveProperty('AAPL')
       expect(result.auctions).toHaveProperty('MSFT')
-      expect(result.auctions!['AAPL']).toHaveLength(1)
-      expect(result.auctions!['AAPL']![0]).toHaveProperty('d')
-      expect(result.auctions!['AAPL']![0]).toHaveProperty('o')
-      expect(result.auctions!['AAPL']![0]).toHaveProperty('c')
+      expect(result.auctions!.AAPL).toHaveLength(1)
+      expect(result.auctions!.AAPL![0]).toHaveProperty('d')
+      expect(result.auctions!.AAPL![0]).toHaveProperty('o')
+      expect(result.auctions!.AAPL![0]).toHaveProperty('c')
     })
   })
 
@@ -1412,7 +1412,7 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('A')
       expect(result).toHaveProperty('V')
-      expect(result['V']).toBe('IEX')
+      expect(result.V).toBe('IEX')
     })
   })
 
@@ -1454,10 +1454,10 @@ describe('Market Data Client', () => {
       expect(result.bars).toHaveProperty('ETH/USD')
       expect(result.bars!['BTC/USD']).toHaveLength(1)
       expect(result.bars!['BTC/USD']![0]).toMatchObject({
-        o: 42500.00,
-        h: 42750.00,
-        l: 42250.00,
-        c: 42600.00,
+        o: 42500.0,
+        h: 42750.0,
+        l: 42250.0,
+        c: 42600.0,
       })
     })
 
@@ -1486,7 +1486,7 @@ describe('Market Data Client', () => {
       expect(result.trades).toHaveProperty('BTC/USD')
       expect(result.trades!['BTC/USD']).toHaveLength(1)
       expect(result.trades!['BTC/USD']![0]).toMatchObject({
-        p: 42550.00,
+        p: 42550.0,
         s: 0.5,
         tks: 'B',
       })
@@ -1506,10 +1506,10 @@ describe('Market Data Client', () => {
       expect(result.bars).toHaveProperty('BTC/USD')
       expect(result.bars).toHaveProperty('ETH/USD')
       expect(result.bars!['BTC/USD']).toMatchObject({
-        o: 42500.00,
-        h: 42750.00,
-        l: 42250.00,
-        c: 42600.00,
+        o: 42500.0,
+        h: 42750.0,
+        l: 42250.0,
+        c: 42600.0,
       })
     })
 
@@ -1538,7 +1538,7 @@ describe('Market Data Client', () => {
       expect(result.trades).toHaveProperty('BTC/USD')
       expect(result.trades).toHaveProperty('ETH/USD')
       expect(result.trades!['BTC/USD']).toMatchObject({
-        p: 42550.00,
+        p: 42550.0,
         s: 0.5,
         tks: 'B',
       })
@@ -1558,8 +1558,8 @@ describe('Market Data Client', () => {
       expect(result.quotes).toHaveProperty('BTC/USD')
       expect(result.quotes!['BTC/USD']).toHaveLength(1)
       expect(result.quotes!['BTC/USD']![0]).toMatchObject({
-        bp: 42500.00,
-        ap: 42510.00,
+        bp: 42500.0,
+        ap: 42510.0,
       })
     })
   })
@@ -1577,9 +1577,9 @@ describe('Market Data Client', () => {
       expect(result.quotes).toHaveProperty('BTC/USD')
       expect(result.quotes).toHaveProperty('ETH/USD')
       expect(result.quotes!['BTC/USD']).toMatchObject({
-        bp: 42500.00,
+        bp: 42500.0,
         bs: 1.5,
-        ap: 42510.00,
+        ap: 42510.0,
         as: 2.0,
       })
     })
@@ -1631,7 +1631,7 @@ describe('Market Data Client', () => {
       expect(result.orderbooks!['BTC/USD'].b).toHaveLength(2)
       expect(result.orderbooks!['BTC/USD'].a).toHaveLength(2)
       expect(result.orderbooks!['BTC/USD'].b![0]).toMatchObject({
-        p: 42500.00,
+        p: 42500.0,
         s: 1.5,
       })
     })
@@ -1663,12 +1663,12 @@ describe('Market Data Client', () => {
       expect(result.bars).toBeDefined()
       expect(result.bars).toHaveProperty('AAPL240119C00150000')
       expect(result.bars).toHaveProperty('AAPL240119P00150000')
-      expect(result.bars!['AAPL240119C00150000']).toHaveLength(1)
-      expect(result.bars!['AAPL240119C00150000']![0]).toMatchObject({
+      expect(result.bars!.AAPL240119C00150000).toHaveLength(1)
+      expect(result.bars!.AAPL240119C00150000![0]).toMatchObject({
         o: 5.25,
         h: 5.75,
-        l: 5.00,
-        c: 5.50,
+        l: 5.0,
+        c: 5.5,
       })
     })
   })
@@ -1684,9 +1684,9 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result.trades).toBeDefined()
       expect(result.trades).toHaveProperty('AAPL240119C00150000')
-      expect(result.trades!['AAPL240119C00150000']).toHaveLength(1)
-      expect(result.trades!['AAPL240119C00150000']![0]).toMatchObject({
-        p: 5.50,
+      expect(result.trades!.AAPL240119C00150000).toHaveLength(1)
+      expect(result.trades!.AAPL240119C00150000![0]).toMatchObject({
+        p: 5.5,
         s: 10,
         x: 'C',
       })
@@ -1705,8 +1705,8 @@ describe('Market Data Client', () => {
       expect(result.trades).toBeDefined()
       expect(result.trades).toHaveProperty('AAPL240119C00150000')
       expect(result.trades).toHaveProperty('AAPL240119P00150000')
-      expect(result.trades!['AAPL240119C00150000']).toMatchObject({
-        p: 5.50,
+      expect(result.trades!.AAPL240119C00150000).toMatchObject({
+        p: 5.5,
         s: 10,
       })
     })
@@ -1724,10 +1724,10 @@ describe('Market Data Client', () => {
       expect(result.quotes).toBeDefined()
       expect(result.quotes).toHaveProperty('AAPL240119C00150000')
       expect(result.quotes).toHaveProperty('AAPL240119P00150000')
-      expect(result.quotes!['AAPL240119C00150000']).toMatchObject({
-        ap: 5.60,
+      expect(result.quotes!.AAPL240119C00150000).toMatchObject({
+        ap: 5.6,
         as: 20,
-        bp: 5.40,
+        bp: 5.4,
         bs: 15,
       })
     })
@@ -1745,8 +1745,8 @@ describe('Market Data Client', () => {
       expect(result.snapshots).toBeDefined()
       expect(result.snapshots).toHaveProperty('AAPL240119C00150000')
       expect(result.snapshots).toHaveProperty('AAPL240119P00150000')
-      expect(result.snapshots!['AAPL240119C00150000']).toHaveProperty('latestTrade')
-      expect(result.snapshots!['AAPL240119C00150000']).toHaveProperty('latestQuote')
+      expect(result.snapshots!.AAPL240119C00150000).toHaveProperty('latestTrade')
+      expect(result.snapshots!.AAPL240119C00150000).toHaveProperty('latestQuote')
     })
   })
 
@@ -1760,8 +1760,8 @@ describe('Market Data Client', () => {
       expect(result.snapshots).toBeDefined()
       expect(result.snapshots).toHaveProperty('AAPL240119C00150000')
       expect(result.snapshots).toHaveProperty('AAPL240119P00150000')
-      expect(result.snapshots!['AAPL240119C00150000']).toHaveProperty('greeks')
-      expect(result.snapshots!['AAPL240119C00150000'].greeks).toMatchObject({
+      expect(result.snapshots!.AAPL240119C00150000).toHaveProperty('greeks')
+      expect(result.snapshots!.AAPL240119C00150000.greeks).toMatchObject({
         delta: 0.45,
         gamma: 0.02,
         theta: -0.05,
@@ -1790,7 +1790,7 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('A')
       expect(result).toHaveProperty('C')
-      expect(result['C']).toBe('CBOE')
+      expect(result.C).toBe('CBOE')
     })
   })
 
@@ -1922,7 +1922,7 @@ describe('Market Data Client', () => {
       expect(result.losers).toHaveLength(1)
       expect(result.gainers![0]).toMatchObject({
         symbol: 'NVDA',
-        price: 850.50,
+        price: 850.5,
         change: 25.75,
         percent_change: 3.12,
       })
@@ -1984,8 +1984,9 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result.corporate_actions).toBeDefined()
       expect(result.corporate_actions).toHaveProperty('AAPL')
-      expect(result.corporate_actions!['AAPL']).toHaveLength(1)
-      expect(result.corporate_actions!['AAPL']![0]).toMatchObject({
+      expect(result.corporate_actions!.AAPL).toHaveLength(1)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(result.corporate_actions!.AAPL![0]).toMatchObject({
         id: 'ca-123456',
         corporate_actions_type: 'dividend',
         symbol: 'AAPL',
@@ -1999,7 +2000,8 @@ describe('Market Data Client', () => {
         symbols: 'AAPL',
       })
 
-      const action = result.corporate_actions!['AAPL']![0]
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+      const action = result.corporate_actions!.AAPL![0]
       expect(action).toHaveProperty('declaration_date')
       expect(action).toHaveProperty('ex_date')
       expect(action).toHaveProperty('record_date')
@@ -2024,7 +2026,7 @@ describe('Market Data Client', () => {
       expect(result.rates).toHaveProperty('EUR/USD')
       expect(result.rates).toHaveProperty('GBP/USD')
       expect(result.rates!['EUR/USD']).toMatchObject({
-        bp: 1.0850,
+        bp: 1.085,
         ap: 1.0855,
         mp: 1.08525,
       })
@@ -2055,10 +2057,10 @@ describe('Market Data Client', () => {
       expect(result.rates).toHaveProperty('GBP/USD')
       expect(result.rates!['EUR/USD']).toHaveLength(1)
       expect(result.rates!['EUR/USD']![0]).toMatchObject({
-        o: 1.0850,
+        o: 1.085,
         h: 1.0875,
         l: 1.0825,
-        c: 1.0860,
+        c: 1.086,
       })
     })
 
@@ -2136,11 +2138,11 @@ describe('Market Data Client', () => {
         })
       )
 
-      await expect(
-        client.stocks.getBars({ symbols: '', timeframe: '1Day' })
-      ).rejects.toMatchObject({
-        message: 'symbols is required',
-      })
+      await expect(client.stocks.getBars({ symbols: '', timeframe: '1Day' })).rejects.toMatchObject(
+        {
+          message: 'symbols is required',
+        }
+      )
     })
 
     it('should throw error on 401 unauthorized response', async () => {
@@ -2162,10 +2164,7 @@ describe('Market Data Client', () => {
 
       server.use(
         http.get(`${BASE_URL}/v2/stocks/bars`, () => {
-          return HttpResponse.json(
-            { code: 40400000, message: 'Symbol not found' },
-            { status: 404 }
-          )
+          return HttpResponse.json({ code: 40400000, message: 'Symbol not found' }, { status: 404 })
         })
       )
 
@@ -2201,10 +2200,7 @@ describe('Market Data Client', () => {
 
       server.use(
         http.get(`${BASE_URL}/v2/stocks/bars`, () => {
-          return HttpResponse.json(
-            { code: 42210000, message: 'Validation error' },
-            { status: 422 }
-          )
+          return HttpResponse.json({ code: 42210000, message: 'Validation error' }, { status: 422 })
         })
       )
 
@@ -2265,10 +2261,7 @@ describe('Market Data Client', () => {
       controller.abort()
 
       await expect(
-        client.stocks.getBars(
-          { symbols: 'AAPL', timeframe: '1Day' },
-          { signal: controller.signal }
-        )
+        client.stocks.getBars({ symbols: 'AAPL', timeframe: '1Day' }, { signal: controller.signal })
       ).rejects.toThrow()
     })
   })
@@ -2789,10 +2782,7 @@ describe('Market Data Client', () => {
         const client = createTestClient()
         const controller = new AbortController()
 
-        const result = await client.options.getConditions(
-          'trade',
-          { signal: controller.signal }
-        )
+        const result = await client.options.getConditions('trade', { signal: controller.signal })
 
         expect(result).toHaveProperty('@')
       })
@@ -2837,10 +2827,7 @@ describe('Market Data Client', () => {
         const client = createTestClient()
         const controller = new AbortController()
 
-        const result = await client.news.get(
-          { symbols: 'AAPL' },
-          { signal: controller.signal }
-        )
+        const result = await client.news.get({ symbols: 'AAPL' }, { signal: controller.signal })
 
         expect(result.news).toBeDefined()
       })
@@ -3029,9 +3016,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.screener.getMovers('stocks')
-        ).rejects.toMatchObject({
+        await expect(client.screener.getMovers('stocks')).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3048,9 +3033,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.corporateActions.get({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.corporateActions.get({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3067,9 +3050,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.forex.getLatestRates({ currency_pairs: '' })
-        ).rejects.toMatchObject({
+        await expect(client.forex.getLatestRates({ currency_pairs: '' })).rejects.toMatchObject({
           message: 'currency_pairs is required',
         })
       })
@@ -3086,9 +3067,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.forex.getRates({ currency_pairs: '' })
-        ).rejects.toMatchObject({
+        await expect(client.forex.getRates({ currency_pairs: '' })).rejects.toMatchObject({
           message: 'currency_pairs is required',
         })
       })
@@ -3105,9 +3084,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.logos.get('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.logos.get('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3124,9 +3101,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getSnapshots({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.options.getSnapshots({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3143,9 +3118,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getChain('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.options.getChain('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3162,9 +3135,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getExchanges()
-        ).rejects.toMatchObject({
+        await expect(client.options.getExchanges()).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3181,9 +3152,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getConditions('trade')
-        ).rejects.toMatchObject({
+        await expect(client.options.getConditions('trade')).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3200,9 +3169,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.news.get()
-        ).rejects.toMatchObject({
+        await expect(client.news.get()).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3219,9 +3186,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.screener.getMostActives()
-        ).rejects.toMatchObject({
+        await expect(client.screener.getMostActives()).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3238,9 +3203,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getSnapshots('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getSnapshots('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3276,9 +3239,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getBars({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.options.getBars({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3295,9 +3256,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getTrades({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.options.getTrades({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3314,9 +3273,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getLatestTrades({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.options.getLatestTrades({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3333,9 +3290,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.options.getLatestQuotes({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.options.getLatestQuotes({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3352,9 +3307,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getBars('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getBars('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3371,9 +3324,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getLatestBars('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getLatestBars('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3390,9 +3341,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getTrades('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getTrades('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3409,9 +3358,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getLatestTrades('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getLatestTrades('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3428,9 +3375,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getQuotes('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getQuotes('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3447,9 +3392,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.crypto.getLatestQuotes('us', { symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.crypto.getLatestQuotes('us', { symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3466,9 +3409,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getSnapshots({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getSnapshots({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3485,9 +3426,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getSnapshot('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getSnapshot('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3504,9 +3443,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getAuctions({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getAuctions({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3523,9 +3460,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getSymbolAuctions('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getSymbolAuctions('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3542,9 +3477,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getExchanges()
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getExchanges()).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3561,9 +3494,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getConditions('trade', { tape: 'A' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getConditions('trade', { tape: 'A' })).rejects.toMatchObject({
           message: 'Internal server error',
         })
       })
@@ -3580,9 +3511,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getLatestTrades({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getLatestTrades({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3599,9 +3528,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getLatestTrade('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getLatestTrade('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3618,9 +3545,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getQuotes({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getQuotes({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3637,9 +3562,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getSymbolQuotes('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getSymbolQuotes('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3656,9 +3579,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getLatestQuotes({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getLatestQuotes({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3675,9 +3596,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getLatestQuote('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getLatestQuote('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3713,9 +3632,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getLatestBars({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getLatestBars({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3732,9 +3649,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getLatestBar('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getLatestBar('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })
@@ -3751,9 +3666,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getTrades({ symbols: '' })
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getTrades({ symbols: '' })).rejects.toMatchObject({
           message: 'symbols is required',
         })
       })
@@ -3770,9 +3683,7 @@ describe('Market Data Client', () => {
 
         const client = createTestClient()
 
-        await expect(
-          client.stocks.getSymbolTrades('INVALIDXYZ')
-        ).rejects.toMatchObject({
+        await expect(client.stocks.getSymbolTrades('INVALIDXYZ')).rejects.toMatchObject({
           message: 'Symbol not found',
         })
       })

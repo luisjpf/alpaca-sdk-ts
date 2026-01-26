@@ -90,47 +90,53 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['getAllAccounts']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/accounts', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/accounts', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get account by ID */
       async get(accountId: string, options?: RequestOptions) {
-        return unwrap(await client.GET('/v1/accounts/{account_id}', {
-          params: { path: { account_id: accountId } },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1/accounts/{account_id}', {
+            params: { path: { account_id: accountId } },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Create a new account */
       async create(account: AccountCreationRequest, options?: RequestOptions) {
-        return unwrap(await client.POST('/v1/accounts', {
-          body: account,
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.POST('/v1/accounts', {
+            body: account,
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Update an account */
-      async update(
-        accountId: string,
-        updates: AccountUpdateRequest,
-        options?: RequestOptions
-      ) {
-        return unwrap(await client.PATCH('/v1/accounts/{account_id}', {
-          params: { path: { account_id: accountId } },
-          body: updates,
-          signal: options?.signal,
-        }))
+      async update(accountId: string, updates: AccountUpdateRequest, options?: RequestOptions) {
+        return unwrap(
+          await client.PATCH('/v1/accounts/{account_id}', {
+            params: { path: { account_id: accountId } },
+            body: updates,
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get trading account details */
       async getTradingAccount(accountId: string, options?: RequestOptions) {
-        return unwrap(await client.GET('/v1/trading/accounts/{account_id}/account', {
-          params: { path: { account_id: accountId } },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1/trading/accounts/{account_id}/account', {
+            params: { path: { account_id: accountId } },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -141,10 +147,12 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['getAccountActivities']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/accounts/activities', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/accounts/activities', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get activities by type */
@@ -153,10 +161,12 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['getAccountActivitiesByType']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/accounts/activities/{activity_type}', {
-          params: { path: { activity_type: activityType }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/accounts/activities/{activity_type}', {
+            params: { path: { activity_type: activityType }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -168,35 +178,33 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['getTransfersForAccount']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/accounts/{account_id}/transfers', {
-          params: { path: { account_id: accountId }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/accounts/{account_id}/transfers', {
+            params: { path: { account_id: accountId }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Create a transfer */
-      async create(
-        accountId: string,
-        transfer: CreateTransferRequest,
-        options?: RequestOptions
-      ) {
-        return unwrap(await client.POST('/v1/accounts/{account_id}/transfers', {
-          params: { path: { account_id: accountId } },
-          body: transfer,
-          signal: options?.signal,
-        }))
+      async create(accountId: string, transfer: CreateTransferRequest, options?: RequestOptions) {
+        return unwrap(
+          await client.POST('/v1/accounts/{account_id}/transfers', {
+            params: { path: { account_id: accountId } },
+            body: transfer,
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Delete/cancel a transfer */
-      async delete(
-        accountId: string,
-        transferId: string,
-        options?: RequestOptions
-      ) {
-        unwrapOptional(await client.DELETE('/v1/accounts/{account_id}/transfers/{transfer_id}', {
-          params: { path: { account_id: accountId, transfer_id: transferId } },
-          signal: options?.signal,
-        }))
+      async delete(accountId: string, transferId: string, options?: RequestOptions) {
+        unwrapOptional(
+          await client.DELETE('/v1/accounts/{account_id}/transfers/{transfer_id}', {
+            params: { path: { account_id: accountId, transfer_id: transferId } },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -204,10 +212,12 @@ export function createBrokerClient(config: BrokerClientConfig) {
     achRelationships: {
       /** Get ACH relationships for an account */
       async list(accountId: string, options?: RequestOptions) {
-        return unwrapList(await client.GET('/v1/accounts/{account_id}/ach_relationships', {
-          params: { path: { account_id: accountId } },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/accounts/{account_id}/ach_relationships', {
+            params: { path: { account_id: accountId } },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Create an ACH relationship */
@@ -216,23 +226,23 @@ export function createBrokerClient(config: BrokerClientConfig) {
         relationship: CreateACHRelationshipRequest,
         options?: RequestOptions
       ) {
-        return unwrap(await client.POST('/v1/accounts/{account_id}/ach_relationships', {
-          params: { path: { account_id: accountId } },
-          body: relationship,
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.POST('/v1/accounts/{account_id}/ach_relationships', {
+            params: { path: { account_id: accountId } },
+            body: relationship,
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Delete an ACH relationship */
-      async delete(
-        accountId: string,
-        achRelationshipId: string,
-        options?: RequestOptions
-      ) {
-        unwrapOptional(await client.DELETE('/v1/accounts/{account_id}/ach_relationships/{ach_relationship_id}', {
-          params: { path: { account_id: accountId, ach_relationship_id: achRelationshipId } },
-          signal: options?.signal,
-        }))
+      async delete(accountId: string, achRelationshipId: string, options?: RequestOptions) {
+        unwrapOptional(
+          await client.DELETE('/v1/accounts/{account_id}/ach_relationships/{ach_relationship_id}', {
+            params: { path: { account_id: accountId, ach_relationship_id: achRelationshipId } },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -246,35 +256,33 @@ export function createBrokerClient(config: BrokerClientConfig) {
           params?: operations['getAllOrdersForAccount']['parameters']['query'],
           options?: RequestOptions
         ) {
-          return unwrapList(await client.GET('/v1/trading/accounts/{account_id}/orders', {
-            params: { path: { account_id: accountId }, query: params },
-            signal: options?.signal,
-          }))
+          return unwrapList(
+            await client.GET('/v1/trading/accounts/{account_id}/orders', {
+              params: { path: { account_id: accountId }, query: params },
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Get order by ID */
-        async get(
-          accountId: string,
-          orderId: string,
-          options?: RequestOptions
-        ) {
-          return unwrap(await client.GET('/v1/trading/accounts/{account_id}/orders/{order_id}', {
-            params: { path: { account_id: accountId, order_id: orderId } },
-            signal: options?.signal,
-          }))
+        async get(accountId: string, orderId: string, options?: RequestOptions) {
+          return unwrap(
+            await client.GET('/v1/trading/accounts/{account_id}/orders/{order_id}', {
+              params: { path: { account_id: accountId, order_id: orderId } },
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Create an order */
-        async create(
-          accountId: string,
-          order: CreateOrderRequest,
-          options?: RequestOptions
-        ) {
-          return unwrap(await client.POST('/v1/trading/accounts/{account_id}/orders', {
-            params: { path: { account_id: accountId } },
-            body: order,
-            signal: options?.signal,
-          }))
+        async create(accountId: string, order: CreateOrderRequest, options?: RequestOptions) {
+          return unwrap(
+            await client.POST('/v1/trading/accounts/{account_id}/orders', {
+              params: { path: { account_id: accountId } },
+              body: order,
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Replace an order */
@@ -284,31 +292,33 @@ export function createBrokerClient(config: BrokerClientConfig) {
           updates: operations['replaceOrderForAccount']['requestBody']['content']['application/json'],
           options?: RequestOptions
         ) {
-          return unwrap(await client.PATCH('/v1/trading/accounts/{account_id}/orders/{order_id}', {
-            params: { path: { account_id: accountId, order_id: orderId } },
-            body: updates,
-            signal: options?.signal,
-          }))
+          return unwrap(
+            await client.PATCH('/v1/trading/accounts/{account_id}/orders/{order_id}', {
+              params: { path: { account_id: accountId, order_id: orderId } },
+              body: updates,
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Cancel an order */
-        async cancel(
-          accountId: string,
-          orderId: string,
-          options?: RequestOptions
-        ) {
-          unwrapOptional(await client.DELETE('/v1/trading/accounts/{account_id}/orders/{order_id}', {
-            params: { path: { account_id: accountId, order_id: orderId } },
-            signal: options?.signal,
-          }))
+        async cancel(accountId: string, orderId: string, options?: RequestOptions) {
+          unwrapOptional(
+            await client.DELETE('/v1/trading/accounts/{account_id}/orders/{order_id}', {
+              params: { path: { account_id: accountId, order_id: orderId } },
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Cancel all orders */
         async cancelAll(accountId: string, options?: RequestOptions) {
-          return unwrapList(await client.DELETE('/v1/trading/accounts/{account_id}/orders', {
-            params: { path: { account_id: accountId } },
-            signal: options?.signal,
-          }))
+          return unwrapList(
+            await client.DELETE('/v1/trading/accounts/{account_id}/orders', {
+              params: { path: { account_id: accountId } },
+              signal: options?.signal,
+            })
+          )
         },
       },
 
@@ -316,22 +326,22 @@ export function createBrokerClient(config: BrokerClientConfig) {
       positions: {
         /** List positions for an account */
         async list(accountId: string, options?: RequestOptions) {
-          return unwrapList(await client.GET('/v1/trading/accounts/{account_id}/positions', {
-            params: { path: { account_id: accountId } },
-            signal: options?.signal,
-          }))
+          return unwrapList(
+            await client.GET('/v1/trading/accounts/{account_id}/positions', {
+              params: { path: { account_id: accountId } },
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Get position by symbol */
-        async get(
-          accountId: string,
-          symbolOrAssetId: string,
-          options?: RequestOptions
-        ) {
-          return unwrap(await client.GET('/v1/trading/accounts/{account_id}/positions/{symbol_or_asset_id}', {
-            params: { path: { account_id: accountId, symbol_or_asset_id: symbolOrAssetId } },
-            signal: options?.signal,
-          }))
+        async get(accountId: string, symbolOrAssetId: string, options?: RequestOptions) {
+          return unwrap(
+            await client.GET('/v1/trading/accounts/{account_id}/positions/{symbol_or_asset_id}', {
+              params: { path: { account_id: accountId, symbol_or_asset_id: symbolOrAssetId } },
+              signal: options?.signal,
+            })
+          )
         },
 
         /** Close a position */
@@ -341,13 +351,18 @@ export function createBrokerClient(config: BrokerClientConfig) {
           params?: operations['closePositionForAccountBySymbol']['parameters']['query'],
           options?: RequestOptions
         ) {
-          return unwrap(await client.DELETE('/v1/trading/accounts/{account_id}/positions/{symbol_or_asset_id}', {
-            params: {
-              path: { account_id: accountId, symbol_or_asset_id: symbolOrAssetId },
-              query: params,
-            },
-            signal: options?.signal,
-          }))
+          return unwrap(
+            await client.DELETE(
+              '/v1/trading/accounts/{account_id}/positions/{symbol_or_asset_id}',
+              {
+                params: {
+                  path: { account_id: accountId, symbol_or_asset_id: symbolOrAssetId },
+                  query: params,
+                },
+                signal: options?.signal,
+              }
+            )
+          )
         },
 
         /** Close all positions */
@@ -356,10 +371,12 @@ export function createBrokerClient(config: BrokerClientConfig) {
           params?: operations['closeAllPositionsForAccount']['parameters']['query'],
           options?: RequestOptions
         ) {
-          return unwrapList(await client.DELETE('/v1/trading/accounts/{account_id}/positions', {
-            params: { path: { account_id: accountId }, query: params },
-            signal: options?.signal,
-          }))
+          return unwrapList(
+            await client.DELETE('/v1/trading/accounts/{account_id}/positions', {
+              params: { path: { account_id: accountId }, query: params },
+              signal: options?.signal,
+            })
+          )
         },
       },
     },
@@ -372,22 +389,22 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['getDocsForAccount']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/accounts/{account_id}/documents', {
-          params: { path: { account_id: accountId }, query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/accounts/{account_id}/documents', {
+            params: { path: { account_id: accountId }, query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Download a document */
-      async download(
-        accountId: string,
-        documentId: string,
-        options?: RequestOptions
-      ) {
-        return unwrap(await client.GET('/v1/accounts/{account_id}/documents/{document_id}/download', {
-          params: { path: { account_id: accountId, document_id: documentId } },
-          signal: options?.signal,
-        }))
+      async download(accountId: string, documentId: string, options?: RequestOptions) {
+        return unwrap(
+          await client.GET('/v1/accounts/{account_id}/documents/{document_id}/download', {
+            params: { path: { account_id: accountId, document_id: documentId } },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -398,18 +415,22 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['getAssets']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/assets', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/assets', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
 
       /** Get asset by symbol or ID */
       async get(symbolOrAssetId: string, options?: RequestOptions) {
-        return unwrap(await client.GET('/v1/assets/{symbol_or_asset_id}', {
-          params: { path: { symbol_or_asset_id: symbolOrAssetId } },
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1/assets/{symbol_or_asset_id}', {
+            params: { path: { symbol_or_asset_id: symbolOrAssetId } },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -420,10 +441,12 @@ export function createBrokerClient(config: BrokerClientConfig) {
         params?: operations['queryMarketCalendar']['parameters']['query'],
         options?: RequestOptions
       ) {
-        return unwrapList(await client.GET('/v1/calendar', {
-          params: { query: params },
-          signal: options?.signal,
-        }))
+        return unwrapList(
+          await client.GET('/v1/calendar', {
+            params: { query: params },
+            signal: options?.signal,
+          })
+        )
       },
     },
 
@@ -431,9 +454,11 @@ export function createBrokerClient(config: BrokerClientConfig) {
     clock: {
       /** Get market clock */
       async get(options?: RequestOptions) {
-        return unwrap(await client.GET('/v1/clock', {
-          signal: options?.signal,
-        }))
+        return unwrap(
+          await client.GET('/v1/clock', {
+            signal: options?.signal,
+          })
+        )
       },
     },
   }

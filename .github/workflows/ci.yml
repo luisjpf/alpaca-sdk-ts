@@ -1,0 +1,190 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test with coverage
+        run: pnpm test:coverage
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: packages/*/coverage/
+
+  coverage-report:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage
+          path: packages/
+
+      - name: Coverage Report - Core
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: '@alpaca-sdk/core'
+          json-summary-path: packages/core/coverage/coverage-summary.json
+          json-final-path: packages/core/coverage/coverage-final.json
+          vite-config-path: packages/core/vitest.config.ts
+
+      - name: Coverage Report - Trading
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: '@alpaca-sdk/trading'
+          json-summary-path: packages/trading/coverage/coverage-summary.json
+          json-final-path: packages/trading/coverage/coverage-final.json
+          vite-config-path: packages/trading/vitest.config.ts
+
+      - name: Coverage Report - Broker
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: '@alpaca-sdk/broker'
+          json-summary-path: packages/broker/coverage/coverage-summary.json
+          json-final-path: packages/broker/coverage/coverage-final.json
+          vite-config-path: packages/broker/vitest.config.ts
+
+      - name: Coverage Report - Market Data
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: '@alpaca-sdk/market-data'
+          json-summary-path: packages/market-data/coverage/coverage-summary.json
+          json-final-path: packages/market-data/coverage/coverage-final.json
+          vite-config-path: packages/market-data/vitest.config.ts
+
+      - name: Coverage Report - Streaming
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: '@alpaca-sdk/streaming'
+          json-summary-path: packages/streaming/coverage/coverage-summary.json
+          json-final-path: packages/streaming/coverage/coverage-final.json
+          vite-config-path: packages/streaming/vitest.config.ts
+
+      - name: Coverage Report - Alpaca SDK
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          name: '@alpaca-sdk/alpaca-sdk'
+          json-summary-path: packages/alpaca-sdk/coverage/coverage-summary.json
+          json-final-path: packages/alpaca-sdk/coverage/coverage-final.json
+          vite-config-path: packages/alpaca-sdk/vitest.config.ts
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run security audit
+        id: audit
+        run: |
+          echo "## Security Audit Results" > audit-results.md
+          echo "" >> audit-results.md
+          if pnpm audit --audit-level=moderate 2>&1 | tee audit-output.txt; then
+            echo "No vulnerabilities found." >> audit-results.md
+            echo "audit_status=pass" >> $GITHUB_OUTPUT
+          else
+            echo "\`\`\`" >> audit-results.md
+            cat audit-output.txt >> audit-results.md
+            echo "\`\`\`" >> audit-results.md
+            echo "audit_status=fail" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Post audit results to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const auditResults = fs.readFileSync('audit-results.md', 'utf8');
+            const auditStatus = '${{ steps.audit.outputs.audit_status }}';
+
+            const emoji = auditStatus === 'pass' ? ':white_check_mark:' : ':warning:';
+            const body = `${emoji} **Security Audit**\n\n${auditResults}`;
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('**Security Audit**')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }

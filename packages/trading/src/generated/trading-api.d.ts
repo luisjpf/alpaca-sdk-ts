@@ -4,4608 +4,4686 @@
  */
 
 export interface paths {
-    "/v2/account": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Account
-         * @description Returns your account details.
-         */
-        get: operations["getAccount"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/orders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get All Orders
-         * @description Retrieves a list of orders for the account, filtered by the supplied query parameters.
-         */
-        get: operations["getAllOrders"];
-        put?: never;
-        /**
-         * Create an Order
-         * @description Places a new order for the given account. An order request may be rejected if the account is not authorized for trading, or if the tradable balance is insufficient to fill the order.
-         */
-        post: operations["postOrder"];
-        /**
-         * Delete All Orders
-         * @description Attempts to cancel all open orders. A response will be provided for each order that is attempted to be cancelled. If an order is no longer cancelable, the server will respond with status 500 and reject the request.
-         */
-        delete: operations["deleteAllOrders"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/orders:by_client_order_id": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Order by Client Order ID
-         * @description Retrieves a single order specified by the client order ID.
-         */
-        get: operations["getOrderByClientOrderId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/orders/{order_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description order id */
-                order_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Order by ID
-         * @description Retrieves a single order for the given order_id.
-         */
-        get: operations["getOrderByOrderID"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete Order by ID
-         * @description Attempts to cancel an Open Order. If the order is no longer cancelable, the request will be rejected with status 422; otherwise accepted with return status 204.
-         */
-        delete: operations["deleteOrderByOrderID"];
-        options?: never;
-        head?: never;
-        /**
-         * Replace Order by ID
-         * @description Replaces a single order with updated parameters. Each parameter overrides the corresponding attribute of the existing order. The other attributes remain the same as the existing order.
-         *
-         *     A success return code from a replaced order does NOT guarantee the existing open order has been replaced. If the existing open order is filled before the replacing (new) order reaches the execution venue, the replacing (new) order is rejected, and these events are sent in the trade_updates stream channel.
-         *
-         *     While an order is being replaced, buying power is reduced by the larger of the two orders that have been placed (the old order being replaced, and the newly placed order to replace it). If you are replacing a buy entry order with a higher limit price than the original order, the buying power is calculated based on the newly placed order. If you are replacing it with a lower limit price, the buying power is calculated based on the old order.
-         *
-         *     Note: Order cannot be replaced when the status is `accepted`, `pending_new`, `pending_cancel` or `pending_replace`.
-         */
-        patch: operations["patchOrderByOrderId"];
-        trace?: never;
-    };
-    "/v2/positions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * All Open Positions
-         * @description The positions API provides information about an account’s current open positions. The response will include information such as cost basis, shares traded, and market value, which will be updated live as price information is updated. Once a position is closed, it will no longer be queryable through this API
-         *
-         *     Retrieves a list of the account’s open positions
-         */
-        get: operations["getAllOpenPositions"];
-        put?: never;
-        post?: never;
-        /**
-         * Close All Positions
-         * @description Closes (liquidates) all of the account’s open long and short positions. A response will be provided for each order that is attempted to be cancelled. If an order is no longer cancelable, the server will respond with status 500 and reject the request.
-         */
-        delete: operations["deleteAllOpenPositions"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/positions/{symbol_or_asset_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description symbol or assetId */
-                symbol_or_asset_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get an Open Position
-         * @description Retrieves the account’s open position for the given symbol or assetId.
-         */
-        get: operations["getOpenPosition"];
-        put?: never;
-        post?: never;
-        /**
-         * Close a Position
-         * @description Closes (liquidates) the account’s open position for the given symbol. Works for both long and short positions.
-         */
-        delete: operations["deleteOpenPosition"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/positions/{symbol_or_contract_id}/exercise": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Exercise an Options Position
-         * @description This endpoint enables users to exercise a held option contract, converting it into the underlying asset based on the specified terms.
-         *     All available held shares of this option contract will be exercised.
-         *     By default, Alpaca will automatically exercise in-the-money (ITM) contracts at expiry.
-         *     Exercise requests will be processed immediately once received. Exercise requests submitted between market close and midnight will be rejected to avoid any confusion about when the exercise will settle.
-         *     To cancel an exercise request or to submit a Do-not-exercise (DNE) instruction, you can use the do-not-exercise endpoint or contact our support team.
-         */
-        post: operations["optionExercise"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/positions/{symbol_or_contract_id}/do-not-exercise": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Do Not Exercise an Options Position
-         * @description This endpoint enables users to submit a do-not-exercise (DNE) instruction for a held option contract, preventing automatic exercise at expiry.
-         *     By default, Alpaca will automatically exercise in-the-money (ITM) contracts at expiry. This endpoint allows users to override that behavior.
-         *     To override this behavior and submit an exercise instruction, please contact our support team.
-         */
-        post: operations["optionDoNotExercise"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/account/portfolio/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Account Portfolio History
-         * @description Returns timeseries data about equity and profit/loss (P/L) of the account in requested timespan.
-         */
-        get: operations["getAccountPortfolioHistory"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/watchlists": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get All Watchlists
-         * @description Returns the list of watchlists registered under the account.
-         */
-        get: operations["getWatchlists"];
-        put?: never;
-        /**
-         * Create Watchlist
-         * @description Create a new watchlist with initial set of assets.
-         */
-        post: operations["postWatchlist"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/watchlists/{watchlist_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description watchlist id */
-                watchlist_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Watchlist by ID
-         * @description Returns a watchlist identified by the ID.
-         */
-        get: operations["getWatchlistById"];
-        /**
-         * Update Watchlist By Id
-         * @description Update the name and/or content of watchlist
-         */
-        put: operations["updateWatchlistById"];
-        /**
-         * Add Asset to Watchlist
-         * @description Append an asset for the symbol to the end of watchlist asset list
-         */
-        post: operations["addAssetToWatchlist"];
-        /**
-         * Delete Watchlist By Id
-         * @description Delete a watchlist. This is a permanent deletion.
-         */
-        delete: operations["deleteWatchlistById"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/watchlists:by_name": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Watchlist by Name
-         * @description You can also call GET, PUT, POST and DELETE with watchlist name with another endpoint /v2/watchlists:by_name and query parameter name=<watchlist_name>, instead of /v2/watchlists/{watchlist_id} endpoints
-         *
-         *     Returns a watchlist by name
-         */
-        get: operations["getWatchlistByName"];
-        /**
-         * Update Watchlist By Name
-         * @description Update the name and/or content of watchlist
-         */
-        put: operations["updateWatchlistByName"];
-        /**
-         * Add Asset to Watchlist By Name
-         * @description Append an asset for the symbol to the end of watchlist asset list
-         */
-        post: operations["addAssetToWatchlistByName"];
-        /**
-         * Delete Watchlist By Name
-         * @description Delete a watchlist. This is a permanent deletion.
-         */
-        delete: operations["deleteWatchlistByName"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/watchlists/{watchlist_id}/{symbol}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Watchlist ID */
-                watchlist_id: string;
-                /** @description symbol name to remove from the watchlist content */
-                symbol: string;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete Symbol from Watchlist
-         * @description Delete one entry for an asset by symbol name
-         */
-        delete: operations["removeAssetFromWatchlist"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/account/configurations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Account Configurations
-         * @description gets the current account configuration values
-         */
-        get: operations["getAccountConfig"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Account Configurations
-         * @description Updates and returns the current account configuration values
-         */
-        patch: operations["patchAccountConfig"];
-        trace?: never;
-    };
-    "/v2/account/activities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Account Activities
-         * @description Returns a list of activities
-         *
-         *     Notes:
-         *     * Pagination is handled using the `page_token` and `page_size` parameters.
-         *     * `page_token` represents the ID of the last item on your current page of results.
-         *        For example, if the ID of the last activity in your first response is `20220203000000000::045b3b8d-c566-4bef-b741-2bf598dd6ae7`, you would pass that value as `page_token` to retrieve the next page of results.
-         */
-        get: operations["getAccountActivities"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/account/activities/{activity_type}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The activity type you want to view entries for. A list of valid activity types can be found at the bottom of this page. */
-                activity_type: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Retrieve Account Activities of Specific Type
-         * @description Returns account activity entries for a specific type of activity.
-         */
-        get: operations["getAccountActivitiesByActivityType"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/calendar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Market Calendar info
-         * @description The calendar API serves the full list of market days from 1970 to 2029. It can also be queried by specifying a start and/or end time to narrow down the results. In addition to the dates, the response also contains the specific open and close times for the market days, taking into account early closures.
-         *
-         *     Returns the market calendar.
-         */
-        get: operations["getCalendar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/clock": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Market Clock info
-         * @description The clock API serves the current market timestamp, whether or not the market is currently open, as well as the times of the next market open and close.
-         *
-         *     Returns the market clock.
-         */
-        get: operations["getClock"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/assets": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Assets
-         * @description The assets API serves as the master list of assets available for trade and data consumption from Alpaca. Assets are sorted by asset class, exchange and symbol.
-         */
-        get: operations["get-v2-assets"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/assets/{symbol_or_asset_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description symbol or assetId. CUSIP is also accepted for US equities. */
-                symbol_or_asset_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get an Asset by ID or Symbol
-         * @description Get the asset model for a given symbol or asset_id. The symbol or asset_id should be passed in as a path parameter.
-         *
-         *     **Note**: For crypto, the symbol has to follow old symbology, e.g. BTCUSD.
-         *
-         *     **Note**: For coin pairs, the symbol should be separated by spare symbol (/), e.g. BTC/USDT. Since spare is a special character in HTTP, use the URL encoded version instead, e.g. /v2/assets/BTC%2FUSDT
-         */
-        get: operations["get-v2-assets-symbol_or_asset_id"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/options/contracts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Option Contracts
-         * @description This endpoint allows you to retrieve a list of option contracts based on various filtering criteria.
-         *     By default only active contracts that expire before the upcoming weekend are returned.
-         */
-        get: operations["get-options-contracts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/options/contracts/{symbol_or_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description symbol or contract ID */
-                symbol_or_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get an option contract by ID or Symbol
-         * @description Get an option contract by symbol or contract ID. The symbol or id should be passed in as a path parameter.
-         */
-        get: operations["get-option-contract-symbol_or_id"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/assets/fixed_income/us_treasuries": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get US treasuries
-         * @description Serves the list of US treasuries available at Alpaca. The response is sorted by ISIN.
-         */
-        get: operations["UsTreasuries"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/assets/fixed_income/us_corporates": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get US corporates
-         * @description Serves the list of US corporates available at Alpaca. The response is sorted by ISIN.
-         */
-        get: operations["UsCorporates"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/corporate_actions/announcements/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The corporate announcement’s id */
-                id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Retrieve a Specific Announcement
-         * @deprecated
-         * @description This endpoint is deprecated, please use [the new corporate actions endpoint](https://docs.alpaca.markets/reference/corporateactions-1) instead.
-         */
-        get: operations["get-v2-corporate_actions-announcements-id"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/corporate_actions/announcements": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Announcements
-         * @deprecated
-         * @description This endpoint is deprecated, please use [the new corporate actions endpoint](https://docs.alpaca.markets/reference/corporateactions-1) instead.
-         */
-        get: operations["get-v2-corporate_actions-announcements"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/wallets": {
-        parameters: {
-            query?: {
-                asset?: string;
-                /** @description Optional network identifier. Use to request wallets for a specific network when asset is a multi-chain crypto asset. If not specified, the default network (ehtereum) will be used. */
-                network?: "ethereum" | "solana";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Crypto Funding Wallets
-         * @description Lists wallets for the account given in the path parameter. If an asset is specified and no wallet for the account and asset pair exists one will be created. If no asset is specified only existing wallets will be listed for the account. An account may have at most one wallet per asset.
-         */
-        get: operations["listCryptoFundingWallets"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/wallets/transfers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Crypto Funding Transfers
-         * @description Returns an array of all transfers associated with the given account across all wallets.
-         */
-        get: operations["listCryptoFundingTransfers"];
-        put?: never;
-        /**
-         * Request a New Withdrawal
-         * @description Creates a withdrawal request. Note that outgoing withdrawals must be sent to a whitelisted address and you must whitelist addresses at least 24 hours in advance. If you attempt to withdraw funds to a non-whitelisted address then the transfer will be rejected.
-         */
-        post: operations["createCryptoTransferForAccount"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/wallets/transfers/{transfer_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The crypto transfer to retrieve */
-                transfer_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Retrieve a Crypto Funding Transfer
-         * @description Returns a specific wallet transfer by passing into the query the transfer_id.
-         */
-        get: operations["getCryptoFundingTransfer"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/wallets/whitelists": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** An array of whitelisted addresses */
-        get: operations["listWhitelistedAddress"];
-        put?: never;
-        /** Request a new whitelisted address */
-        post: operations["createWhitelistedAddress"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/wallets/whitelists/{whitelisted_address_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The whitelisted address to delete */
-                whitelisted_address_id: string;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete a whitelisted address */
-        delete: operations["deleteWhitelistedAddress"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/wallets/fees/estimate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns the estimated gas fee for a proposed transaction. */
-        get: operations["getCryptoTransferEstimate"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/wallets": {
-        parameters: {
-            query?: {
-                asset?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Crypto Funding Wallets
-         * @description Lists wallets for the account given in the path parameter. If an asset is specified and no wallet for the account and asset pair exists one will be created. If no asset is specified only existing wallets will be listed for the account. An account may have at most one wallet per asset
-         */
-        get: operations["listCryptoPerpFundingWallets"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/wallets/transfers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Crypto Funding Transfers
-         * @description Returns an array of all transfers associated with the given account across all wallets
-         */
-        get: operations["listCryptoPerpFundingTransfers"];
-        put?: never;
-        /**
-         * Request a New Withdrawal
-         * @description Creates a withdrawal request. Note that outgoing withdrawals must be sent to a whitelisted address and you must whitelist addresses at least 24 hours in advance. If you attempt to withdraw funds to a non-whitelisted address then the transfer will be rejected
-         */
-        post: operations["createCryptoPerpTransferForAccount"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/wallets/transfers/{transfer_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The crypto transfer to retrieve */
-                transfer_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Retrieve a Crypto Funding Transfer
-         * @description Returns a specific wallet transfer by passing into the query the transfer_id
-         */
-        get: operations["getCryptoPerpFundingTransfer"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/wallets/whitelists": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** An array of whitelisted addresses */
-        get: operations["listWhitelistedPerpAddress"];
-        put?: never;
-        /** Request a new whitelisted address */
-        post: operations["createWhitelistedPerpAddress"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/wallets/whitelists/{whitelisted_address_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The whitelisted address to delete */
-                whitelisted_address_id: string;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete a whitelisted address */
-        delete: operations["deleteWhitelistedPerpAddress"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/wallets/fees/estimate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns the estimated gas fee for a proposed transaction */
-        get: operations["getCryptoPerpTransferEstimate"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/leverage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Account Leverage for an Asset
-         * @description Retrieves the current leverage setting for the crypto perpetuals account, specific to a given underlying asset. To use this endpoint, provide the 'symbol' of the asset as a query parameter. The system will return the asset's symbol and the integer value representing the current leverage applied to it within the account
-         */
-        get: operations["getCryptoPerpAccountLeverage"];
-        put?: never;
-        /**
-         * Set Account Leverage for an Asset
-         * @description Updates the leverage for the crypto perpetuals account for a specific underlying asset. Provide the 'symbol' of the asset and the desired 'leverage' (as an integer) using query parameters. The system will return the asset's symbol and the newly set leverage value upon successful update
-         */
-        post: operations["setCryptoPerpAccountLeverage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v2/perpetuals/account_vitals": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve Account Vitals
-         * @description Fetches key financial metrics for the crypto perpetuals account, providing a snapshot of its current status by detailing the relationship between the user's positions and their collateral. The response includes maintenance margin (USDT), collateral balance (USDT), total collateral (USDT), and profit/loss (USDT)
-         */
-        get: operations["getCryptoPerpAccountVitals"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-}
-export type webhooks = Record<string, never>;
-export interface components {
-    schemas: {
-        /**
-         * Account
-         * @description The account API serves important information related to an account, including account status, funds available for trade, funds available for withdrawal, and various flags relevant to an account’s ability to trade. An account maybe be blocked for just for trades (trades_blocked flag) or for both trades and transfers (account_blocked flag) if Alpaca identifies the account to engaging in any suspicious activity. Also, in accordance with FINRA’s pattern day trading rule, an account may be flagged for pattern day trading (pattern_day_trader flag), which would inhibit an account from placing any further day-trades. Please note that cryptocurrencies are not eligible assets to be used as collateral for margin accounts and will require the asset be traded using cash only.
-         */
-        Account: {
-            /**
-             * Format: uuid
-             * @description Account Id.
-             */
-            id: string;
-            /** @description Account number. */
-            account_number?: string;
-            status: components["schemas"]["AccountStatus"];
-            /**
-             * @description USD
-             * @example USD
-             */
-            currency?: string;
-            /** @description Cash Balance */
-            cash?: string;
-            /** @description Total value of cash + holding positions (This field is deprecated. It is equivalent to the equity field.) */
-            portfolio_value?: string;
-            /** @description Current available non-margin dollar buying power */
-            non_marginable_buying_power?: string;
-            /** @description The fees collected. */
-            accrued_fees?: string;
-            /** @description Cash pending transfer in. */
-            pending_transfer_in?: string;
-            /** @description Cash pending transfer out. */
-            pending_transfer_out?: string;
-            /** @description Whether or not the account has been flagged as a pattern day trader */
-            pattern_day_trader?: boolean;
-            /** @description User setting. If true, the account is not allowed to place orders. */
-            trade_suspended_by_user?: boolean;
-            /** @description If true, the account is not allowed to place orders. */
-            trading_blocked?: boolean;
-            /** @description If true, the account is not allowed to request money transfers. */
-            transfers_blocked?: boolean;
-            /** @description If true, the account activity by user is prohibited. */
-            account_blocked?: boolean;
-            /**
-             * Format: date-time
-             * @description Timestamp this account was created at
-             */
-            created_at?: string;
-            /** @description Flag to denote whether or not the account is permitted to short */
-            shorting_enabled?: boolean;
-            /** @description Real-time MtM value of all long positions held in the account */
-            long_market_value?: string;
-            /** @description Real-time MtM value of all short positions held in the account */
-            short_market_value?: string;
-            /** @description Cash + long_market_value + short_market_value */
-            equity?: string;
-            /** @description Equity as of previous trading day at 16:00:00 ET */
-            last_equity?: string;
-            /** @description Buying power multiplier that represents account margin classification; valid values 1 (standard limited margin account with 1x buying power), 2 (reg T margin account with 2x intraday and overnight buying power; this is the default for all non-PDT accounts with $2,000 or more equity), 4 (PDT account with 4x intraday buying power and 2x reg T overnight buying power) */
-            multiplier?: string;
-            /** @description Current available $ buying power; If multiplier = 4, this is your daytrade buying power which is calculated as (last_equity - (last) maintenance_margin) * 4; If multiplier = 2, buying_power = max(equity – initial_margin,0) * 2; If multiplier = 1, buying_power = cash */
-            buying_power?: string;
-            /** @description Reg T initial margin requirement (continuously updated value) */
-            initial_margin?: string;
-            /** @description Maintenance margin requirement (continuously updated value) */
-            maintenance_margin?: string;
-            /** @description Value of special memorandum account (will be used at a later date to provide additional buying_power) */
-            sma?: string;
-            /** @description The current number of daytrades that have been made in the last 5 trading days (inclusive of today) */
-            daytrade_count?: number;
-            /**
-             * @description The date of the snapshot for `last_*` fields
-             * @example 2021-04-01
-             */
-            balance_asof?: string;
-            /** @description Your maintenance margin requirement on the previous trading day */
-            last_maintenance_margin?: string;
-            /** @description Your buying power for day trades (continuously updated value) */
-            daytrading_buying_power?: string;
-            /** @description Your buying power under Regulation T (your excess equity - equity minus margin value - times your margin multiplier) */
-            regt_buying_power?: string;
-            /** @description Your buying power for options trading */
-            options_buying_power?: string;
-            /**
-             * @description The options trading level that was approved for this account.
-             *     0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.
-             * @example 3
-             * @enum {integer}
-             */
-            options_approved_level?: 0 | 1 | 2 | 3;
-            /**
-             * @description The effective options trading level of the account.
-             *     This is the minimum between account options_approved_level and account configurations max_options_trading_level.
-             *     0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.
-             * @example 3
-             * @enum {integer}
-             */
-            options_trading_level?: 0 | 1 | 2 | 3;
-            /**
-             * @description The intraday adjustment by non_trade_activities such as fund deposit/withdraw.
-             * @example 0
-             */
-            intraday_adjustments?: string;
-            /** @description Pending regulatory fees for the account. */
-            pending_reg_taf_fees?: string;
-        };
-        /**
-         * AccountStatus
-         * @description An enum representing the various possible account status values.
-         *
-         *     Most likely, the account status is ACTIVE unless there is any problem. The account status may get in ACCOUNT_UPDATED when personal information is being updated from the dashboard, in which case you may not be allowed trading for a short period of time until the change is approved.
-         *
-         *     - ONBOARDING
-         *       The account is onboarding.
-         *     - SUBMISSION_FAILED
-         *       The account application submission failed for some reason.
-         *     - SUBMITTED
-         *       The account application has been submitted for review.
-         *     - ACCOUNT_UPDATED
-         *       The account information is being updated.
-         *     - APPROVAL_PENDING
-         *       The final account approval is pending.
-         *     - ACTIVE
-         *       The account is active for trading.
-         *     - REJECTED
-         *       The account application has been rejected.
-         * @example ACTIVE
-         * @enum {string}
-         */
-        AccountStatus: "ONBOARDING" | "SUBMISSION_FAILED" | "SUBMITTED" | "ACCOUNT_UPDATED" | "APPROVAL_PENDING" | "ACTIVE" | "REJECTED";
-        /**
-         * AccountConfigurations
-         * @description The account configuration API provides custom configurations about your trading account settings. These configurations control various allow you to modify settings to suit your trading needs.
-         */
-        AccountConfigurations: {
-            /**
-             * @description both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks.
-             * @enum {string}
-             */
-            dtbp_check?: "both" | "entry" | "exit";
-            /** @description all or none. If none, emails for order fills are not sent. */
-            trade_confirm_email?: string;
-            /** @description If true, new orders are blocked. */
-            suspend_trade?: boolean;
-            /** @description If true, account becomes long-only mode. */
-            no_shorting?: boolean;
-            /** @description If true, account is able to participate in fractional trading */
-            fractional_trading?: boolean;
-            /** @description Can be "1", "2", or "4" */
-            max_margin_multiplier?: string;
-            /**
-             * @description The desired maximum options trading level. 0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.
-             * @enum {integer}
-             */
-            max_options_trading_level?: 0 | 1 | 2 | 3;
-            /**
-             * @description `both`, `entry`, or `exit`. If entry orders will be rejected on entering a position if it could result in PDT being set for the account. exit will reject exiting orders if they would result in PDT being set.
-             * @example entry
-             */
-            pdt_check?: string;
-            /** @description If set to true then Alpaca will accept orders for PTP symbols with no exception. Default is false. */
-            ptp_no_exception_entry?: boolean;
-            /** @description If true, overnight trading is disabled. */
-            disable_overnight_trading?: boolean;
-        };
-        /** AccountTradingActivities */
-        TradingActivities: {
-            activity_type?: components["schemas"]["ActivityType"];
-            /** @description An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results. */
-            id?: string;
-            /** @description The cumulative quantity of shares involved in the execution. */
-            cum_qty?: string;
-            /** @description For partially_filled orders, the quantity of shares that are left to be filled. */
-            leaves_qty?: string;
-            /** @description The per-share price that the trade was executed at. */
-            price?: string;
-            /** @description The number of shares involved in the trade execution. */
-            qty?: string;
-            /** @description buy or sell */
-            side?: string;
-            /**
-             * @description The symbol of the security being traded.
-             * @example AAPL
-             */
-            symbol?: string;
-            /**
-             * Format: date-time
-             * @description The time at which the execution occurred.
-             */
-            transaction_time?: string;
-            /**
-             * Format: uuid
-             * @description The id for the order that filled.
-             */
-            order_id?: string;
-            /**
-             * @description fill or partial_fill
-             * @example fill
-             * @enum {string}
-             */
-            type?: "fill" | "partial_fill";
-            order_status?: components["schemas"]["OrderStatus"];
-        };
-        /** AccountNonTradeActivities */
-        NonTradeActivities: {
-            activity_type?: components["schemas"]["ActivityType"];
-            activity_sub_type?: components["schemas"]["ActivitySubType"];
-            /** @description An ID for the activity, always in “::” format. Can be sent as page_token in requests to facilitate the paging of results. */
-            id?: string;
-            /**
-             * Format: date-time
-             * @description The date on which the activity occurred or on which the transaction associated with the activity settled.
-             */
-            date?: string;
-            /** @description The net amount of money (positive or negative) associated with the activity. */
-            net_amount?: string;
-            /** @description The symbol of the security involved with the activity. Not present for all activity types. */
-            symbol?: string;
-            /** @description The CUSIP of the security involved with the activity. Not present for all activity types. */
-            cusip?: string;
-            /** @description For dividend activities, the number of shares that contributed to the payment. Not present for other activity types. */
-            qty?: string;
-            /** @description For dividend activities, the average amount paid per share. Not present for other activity types. */
-            per_share_amount?: string;
-            /** @description ID used to link activities who share a sibling relationship. */
-            group_id?: string;
-            /**
-             * @description The activity status.
-             * @enum {string}
-             */
-            status?: "executed" | "correct" | "canceled";
-            /**
-             * Format: date-time
-             * @description Valid only for non-trading activity types. Null for trading activites.
-             */
-            created_at?: string;
-        };
-        /**
-         * ActivityType
-         * @description - FILL
-         *       Order fills (both partial and full fills)
-         *
-         *     - TRANS
-         *       Cash transactions (both CSD and CSW)
-         *
-         *     - MISC
-         *       Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL)
-         *
-         *     - ACATC
-         *       ACATS IN/OUT (Cash)
-         *
-         *     - ACATS
-         *       ACATS IN/OUT (Securities)
-         *
-         *     - CFEE
-         *       Crypto fee
-         *
-         *     - CSD
-         *       Cash deposit(+)
-         *
-         *     - CSW
-         *       Cash withdrawal(-)
-         *
-         *     - DIV
-         *       Dividends
-         *
-         *     - DIVCGL
-         *       Dividend (capital gain long term)
-         *
-         *     - DIVCGS
-         *       Dividend (capital gain short term)
-         *
-         *     - DIVFEE
-         *       Dividend fee
-         *
-         *     - DIVFT
-         *       Dividend adjusted (Foreign Tax Withheld)
-         *
-         *     - DIVNRA
-         *       Dividend adjusted (NRA Withheld)
-         *
-         *     - DIVROC
-         *       Dividend return of capital
-         *
-         *     - DIVTW
-         *       Dividend adjusted (Tefra Withheld)
-         *
-         *     - DIVTXEX
-         *       Dividend (tax exempt)
-         *
-         *     - FEE
-         *       Fee denominated in USD
-         *
-         *     - INT
-         *       Interest (credit/margin)
-         *
-         *     - INTNRA
-         *       Interest adjusted (NRA Withheld)
-         *
-         *     - INTTW
-         *       Interest adjusted (Tefra Withheld)
-         *
-         *     - JNL
-         *       Journal entry
-         *
-         *     - JNLC
-         *       Journal entry (cash)
-         *
-         *     - JNLS
-         *       Journal entry (stock)
-         *
-         *     - MA
-         *       Merger/Acquisition
-         *
-         *     - NC
-         *       Name change
-         *
-         *     - OPASN
-         *       Option assignment
-         *
-         *     - OPCA
-         *       Option corporate action
-         *
-         *     - OPCSH
-         *       Option cash deliverable for non-standard contracts
-         *
-         *     - OPEXC
-         *       Option exercise
-         *
-         *     - OPEXP
-         *       Option expiration
-         *
-         *     - OPTRD
-         *       Option trade
-         *
-         *     - PTC
-         *       Pass Thru Charge
-         *
-         *     - PTR
-         *       Pass Thru Rebate
-         *
-         *     - REORG
-         *       Reorg CA
-         *
-         *     - SPIN
-         *       Stock spinoff
-         *
-         *     - SPLIT
-         *       Stock split
-         * @enum {string}
-         */
-        ActivityType: "FILL" | "TRANS" | "MISC" | "ACATC" | "ACATS" | "CFEE" | "CSD" | "CSW" | "DIV" | "DIVCGL" | "DIVCGS" | "DIVFEE" | "DIVFT" | "DIVNRA" | "DIVROC" | "DIVTW" | "DIVTXEX" | "FEE" | "INT" | "INTNRA" | "INTTW" | "JNL" | "JNLC" | "JNLS" | "MA" | "NC" | "OPASN" | "OPCA" | "OPCSH" | "OPEXC" | "OPEXP" | "OPTRD" | "PTC" | "PTR" | "REORG" | "SPIN" | "SPLIT";
-        /**
-         * ActivitySubType
-         * @description Represents a more specific classification to the `activity_type`.
-         *     This field is optional and may not always be populated, depending on the activity type and the available data.
-         *     Each `activity_type` has a set of valid `activity_sub_type` values.
-         *
-         *     Full mapping of `activity_type` to `activity_sub_type`:
-         *
-         *     - **DIV**: Dividend activity sub-types:
-         *       - **CDIV**: Cash Dividend
-         *       - **SDIV**: Stock Dividend
-         *       - **SPD**: Substitute Payment In Lieu Of Dividend
-         *
-         *     - **FEE**: Fee-related activity sub-types:
-         *       - **REG**: Regulatory Fee
-         *       - **TAF**: Trading Activity Fee
-         *       - **LCT**: Local Currency Trading Fee
-         *       - **ORF**: Options Regulatory Fee
-         *       - **OCC**: Options Clearing Corporation Fee
-         *       - **NRC**: Non-Retail Commission Fee
-         *       - **NRV**: Non-Retail Venue Fee
-         *       - **COM**: Commission
-         *       - **CAT**: Consolidated Audit Trail Fee
-         *
-         *     - **INT**: Interest-related activity sub-types:
-         *       - **MGN**: Margin Interest
-         *       - **CDT**: Credit Interest
-         *       - **SWP**: Sweep Interest
-         *       - **QII**: Qualified Interest
-         *
-         *     - **MA**: Merger and Acquisition activity sub-types:
-         *       - **CMA**: Cash Merger
-         *       - **SMA**: Stock Merger
-         *       - **SCMA**: Stock & Cash Merger
-         *
-         *     - **NC**: Name Change activity sub types
-         *       - **SNC**: Symbol Name Change
-         *       - **CNC**: CUSIP Name Change
-         *       - **SCNC**: Symbol & CUSIP Name Change
-         *
-         *     - **OPCA**: Option Corporate Action activity sub-types:
-         *       - **DIV.CDIV**: Cash Dividend
-         *       - **DIV.SDIV**: Stock Dividend
-         *       - **MA.CMA**: Cash Merger
-         *       - **MA.SMA**: Stock Merger
-         *       - **MA.SCMA**: Stock & Cash Merger
-         *       - **NC.CNC**: CUSIP Name Change
-         *       - **NC.SNC**: Symbol Name Change
-         *       - **NC.SCNC**: Symbol & CUSIP Name Change
-         *       - **SPIN**: Spin-off
-         *       - **SPLIT.FSPLIT**: Forward Stock Split
-         *       - **SPLIT.RSPLIT**: Reverse Stock Split
-         *       - **SPLIT.USPLIT**: Unit Split
-         *
-         *     - **REORG**: Reorganization activity sub-types:
-         *       - **WRM**: Worthless Removal
-         *
-         *     - **SPLIT**: Stock Split activity sub-types:
-         *       - **FSPLIT**: Forward Stock Split
-         *       - **RSPLIT**: Reverse Stock Split
-         *       - **USPLIT**: Unit Split
-         *
-         *     - **VOF**: Voluntary Offering activity sub-types:
-         *       - **VTND**: Tender Offer
-         *       - **VWRT**: Warrant Exercise
-         *       - **VRGT**: Rights Offer
-         *       - **VEXH**: Exchange Offer
-         *
-         *     - **WH**: Withholding activity sub-types:
-         *       - **SWH**: State Withholding
-         *       - **FWH**: Federal Withholding
-         *       - **SLWH**: Sales Withholding
-         */
-        ActivitySubType: string;
-        /**
-         * Order
-         * @description The Orders API allows a user to monitor, place and cancel their orders with Alpaca.
-         *
-         *     Each order has a unique identifier provided by the client. This client-side unique order ID will be automatically generated by the system if not provided by the client, and will be returned as part of the order object along with the rest of the fields described below. Once an order is placed, it can be queried using the client-side order ID to check the status.
-         *
-         *     Updates on open orders at Alpaca will also be sent over the streaming interface, which is the recommended method of maintaining order state.
-         */
-        Order: {
-            /** @description Order ID */
-            id?: string;
-            /** @description Client unique order ID */
-            client_order_id?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string | null;
-            /** Format: date-time */
-            submitted_at?: string | null;
-            /** Format: date-time */
-            filled_at?: string | null;
-            /** Format: date-time */
-            expired_at?: string | null;
-            /** Format: date-time */
-            canceled_at?: string | null;
-            /** Format: date-time */
-            failed_at?: string | null;
-            /** Format: date-time */
-            replaced_at?: string | null;
-            /**
-             * Format: uuid
-             * @description The order ID that this order was replaced by
-             */
-            replaced_by?: string | null;
-            /**
-             * Format: uuid
-             * @description The order ID that this order replaces
-             */
-            replaces?: string | null;
-            /**
-             * Format: uuid
-             * @description Asset ID (For options this represents the option contract ID)
-             */
-            asset_id?: string;
-            /** @description Asset symbol, required for all order classes except for `mleg` */
-            symbol?: string;
-            asset_class?: components["schemas"]["AssetClass"];
-            /** @description Ordered notional amount. If entered, qty will be null. Can take up to 9 decimal points. */
-            notional: string | null;
-            /** @description Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points. Required if order class is `mleg`. */
-            qty?: string | null;
-            /** @description Filled quantity */
-            filled_qty?: string;
-            /** @description Filled average price */
-            filled_avg_price?: string | null;
-            order_class?: components["schemas"]["OrderClass"];
-            /**
-             * @deprecated
-             * @description Deprecated in favour of the field "type"
-             */
-            order_type?: string;
-            type: components["schemas"]["OrderType"];
-            side?: components["schemas"]["OrderSide"];
-            time_in_force: components["schemas"]["TimeInForce"];
-            /** @description Limit price */
-            limit_price?: string | null;
-            /** @description Stop price */
-            stop_price?: string | null;
-            status?: components["schemas"]["OrderStatus"];
-            /** @description If true, eligible for execution outside regular trading hours. */
-            extended_hours?: boolean;
-            /** @description When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order. Otherwise, null. Required if order class is `mleg`. */
-            legs?: components["schemas"]["OrderLeg"][] | null;
-            /** @description The percent value away from the high water mark for trailing stop orders. */
-            trail_percent?: string | null;
-            /** @description The dollar value away from the high water mark for trailing stop orders. */
-            trail_price?: string | null;
-            /** @description The highest (lowest) market price seen since the trailing stop order was submitted. */
-            hwm?: string | null;
-            position_intent?: components["schemas"]["PositionIntent"];
-        };
-        /**
-         * Order
-         * @description This is copy of Order response schemas as a workaround of displaying issue of nested Order recursively for legs
-         */
-        OrderLeg: {
-            /** @description Order ID */
-            id?: string;
-            /** @description Client unique order ID */
-            client_order_id?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string | null;
-            /** Format: date-time */
-            submitted_at?: string | null;
-            /** Format: date-time */
-            filled_at?: string | null;
-            /** Format: date-time */
-            expired_at?: string | null;
-            /** Format: date-time */
-            canceled_at?: string | null;
-            /** Format: date-time */
-            failed_at?: string | null;
-            /** Format: date-time */
-            replaced_at?: string | null;
-            /**
-             * Format: uuid
-             * @description The order ID that this order was replaced by
-             */
-            replaced_by?: string | null;
-            /**
-             * Format: uuid
-             * @description The order ID that this order replaces
-             */
-            replaces?: string | null;
-            /**
-             * Format: uuid
-             * @description Asset ID (For options this represents the option contract ID)
-             */
-            asset_id?: string;
-            /** @description Asset symbol */
-            symbol: string;
-            asset_class?: components["schemas"]["AssetClass"];
-            /** @description Ordered notional amount. If entered, qty will be null. Can take up to 9 decimal points. */
-            notional: string | null;
-            /** @description Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points. */
-            qty: string | null;
-            /** @description Filled quantity */
-            filled_qty?: string;
-            /** @description Filled average price */
-            filled_avg_price?: string | null;
-            order_class?: components["schemas"]["OrderClass"];
-            /**
-             * @deprecated
-             * @description Deprecated in favour of the field "type"
-             */
-            order_type?: string;
-            type: components["schemas"]["OrderType"];
-            side: components["schemas"]["OrderSide"];
-            time_in_force: components["schemas"]["TimeInForce"];
-            /** @description Limit price */
-            limit_price?: string | null;
-            /** @description Stop price */
-            stop_price?: string | null;
-            status?: components["schemas"]["OrderStatus"];
-            /** @description If true, eligible for execution outside regular trading hours. */
-            extended_hours?: boolean;
-            /** @description When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order. Otherwise, null. */
-            legs?: unknown[] | null;
-            /** @description The percent value away from the high water mark for trailing stop orders. */
-            trail_percent?: string | null;
-            /** @description The dollar value away from the high water mark for trailing stop orders. */
-            trail_price?: string | null;
-            /** @description The highest (lowest) market price seen since the trailing stop order was submitted. */
-            hwm?: string | null;
-            position_intent?: components["schemas"]["PositionIntent"];
-        };
-        /**
-         * MLegOrderLeg
-         * @description Represents an individual leg of a multi-leg options order.
-         */
-        MLegOrderLeg: {
-            side?: components["schemas"]["OrderSide"];
-            position_intent?: components["schemas"]["PositionIntent"];
-            /** @description symbol or asset ID to identify the asset to trade */
-            symbol: string;
-            /** @description proportional quantity of this leg in relation to the overall multi-leg order qty */
-            ratio_qty: string;
-        };
-        /**
-         * AdvancedInstructions
-         * @description Advanced instructions for Elite Smart Router: https://docs.alpaca.markets/docs/alpaca-elite-smart-router
-         */
-        AdvancedInstructions: {
-            /**
-             * @description The advanced routing algorithm to use for the order
-             * @example DMA
-             * @enum {string}
-             */
-            algorithm?: "DMA" | "TWAP" | "VWAP";
-            /**
-             * @description Target exchange for order execution
-             * @example NYSE
-             * @enum {string}
-             */
-            destination?: "NYSE" | "NASDAQ" | "ARCA";
-            /**
-             * Format: decimal
-             * @description Maximum shares/contracts displayed on the exchange at any time. Must be in round lot increments
-             * @example 100
-             */
-            display_qty?: string;
-            /**
-             * Format: date-time
-             * @description When the algorithm is to start executing. Must be within current market trading hours
-             * @example 2025-07-21T09:30:00-04:00
-             */
-            start_time?: string;
-            /**
-             * Format: date-time
-             * @description When the algorithm is to be done executing. Must be within current market trading hours
-             * @example 2025-07-21T15:30:00-04:00
-             */
-            end_time?: string;
-            /**
-             * Format: decimal
-             * @description Maximum percentage of the ticker's period volume this order might participate in. Must be 0 < max_percentage < 1, with up to 3 decimal points precision.
-             * @example 0.314
-             */
-            max_percentage?: string;
-        };
-        /**
-         * OrderType
-         * @description The order types supported by Alpaca vary based on the order's security type. The following provides a comprehensive breakdown of the supported order types for each category:
-         *      - Equity trading: market, limit, stop, stop_limit, trailing_stop.
-         *      - Options trading: market, limit.
-         *      - Multileg Options trading: market, limit.
-         *      - Crypto trading: market, limit, stop_limit.
-         * @example market
-         * @enum {string}
-         */
-        OrderType: "market" | "limit" | "stop" | "stop_limit" | "trailing_stop";
-        /**
-         * OrderSide
-         * @description Represents which side this order was on:
-         *     - buy
-         *     - sell
-         *     Required for all order classes except for mleg.
-         * @example buy
-         * @enum {string}
-         */
-        OrderSide: "buy" | "sell";
-        /**
-         * OrderClass
-         * @description The order classes supported by Alpaca vary based on the order's security type. The following provides a comprehensive breakdown of the supported order classes for each category:
-         *       - Equity trading: simple (or ""), oco, oto, bracket.
-         *       - Options trading:
-         *         - simple (or "")
-         *         - mleg (required for multi-leg complex option strategies)
-         *       - Crypto trading: simple (or "").
-         * @example bracket
-         * @enum {string}
-         */
-        OrderClass: "simple" | "bracket" | "oco" | "oto" | "mleg" | "";
-        /**
-         * OrderStatus
-         * @description An order executed through Alpaca can experience several status changes during its lifecycle. The most common statuses are described in detail below:
-         *
-         *     - new
-         *       The order has been received by Alpaca, and routed to exchanges for execution. This is the usual initial state of an order.
-         *
-         *     - partially_filled
-         *       The order has been partially filled.
-         *
-         *     - filled
-         *       The order has been filled, and no further updates will occur for the order.
-         *
-         *     - done_for_day
-         *       The order is done executing for the day, and will not receive further updates until the next trading day.
-         *
-         *     - canceled
-         *       The order has been canceled, and no further updates will occur for the order. This can be either due to a cancel request by the user, or the order has been canceled by the exchanges due to its time-in-force.
-         *
-         *     - expired
-         *       The order has expired, and no further updates will occur for the order.
-         *
-         *     - replaced
-         *       The order was replaced by another order, or was updated due to a market event such as corporate action.
-         *
-         *     - pending_cancel
-         *       The order is waiting to be canceled.
-         *
-         *     - pending_replace
-         *       The order is waiting to be replaced by another order. The order will reject cancel request while in this state.
-         *
-         *     Less common states are described below. Note that these states only occur on very rare occasions, and most users will likely never see their orders reach these states:
-         *
-         *     - accepted
-         *       The order has been received by Alpaca, but hasn’t yet been routed to the execution venue. This could be seen often out side of trading session hours.
-         *
-         *     - pending_new
-         *       The order has been received by Alpaca, and routed to the exchanges, but has not yet been accepted for execution. This state only occurs on rare occasions.
-         *
-         *     - accepted_for_bidding
-         *       The order has been received by exchanges, and is evaluated for pricing. This state only occurs on rare occasions.
-         *
-         *     - stopped
-         *       The order has been stopped, and a trade is guaranteed for the order, usually at a stated price or better, but has not yet occurred. This state only occurs on rare occasions.
-         *
-         *     - rejected
-         *       The order has been rejected, and no further updates will occur for the order. This state occurs on rare occasions and may occur based on various conditions decided by the exchanges.
-         *
-         *     - suspended
-         *       The order has been suspended, and is not eligible for trading. This state only occurs on rare occasions.
-         *
-         *     - calculated
-         *       The order has been completed for the day (either filled or done for day), but remaining settlement calculations are still pending. This state only occurs on rare occasions.
-         *
-         *
-         *     An order may be canceled through the API up until the point it reaches a state of either filled, canceled, or expired.
-         * @example new
-         * @enum {string}
-         */
-        OrderStatus: "new" | "partially_filled" | "filled" | "done_for_day" | "canceled" | "expired" | "replaced" | "pending_cancel" | "pending_replace" | "accepted" | "pending_new" | "accepted_for_bidding" | "stopped" | "rejected" | "suspended" | "calculated";
-        /**
-         * TimeInForce
-         * @description The Time-In-Force values supported by Alpaca vary based on the order's security type. Here is a breakdown of the supported TIFs for each specific security type:
-         *     - Equity trading: day, gtc, opg, cls, ioc, fok.
-         *     - Options trading: day.
-         *     - Crypto trading: gtc, ioc.
-         *
-         *     Below are the descriptions of each TIF:
-         *     - day:
-         *       A day order is eligible for execution only on the day it is live. By default, the order is only valid during Regular Trading Hours (9:30am - 4:00pm ET). If unfilled after the closing auction, it is automatically canceled. If submitted after the close, it is queued and submitted the following trading day. However, if marked as eligible for extended hours, the order can also execute during supported extended hours.
-         *
-         *     - gtc:
-         *       The order is good until canceled. Non-marketable GTC limit orders are subject to price adjustments to offset corporate actions affecting the issue. We do not currently support Do Not Reduce(DNR) orders to opt out of such price adjustments.
-         *
-         *     - opg:
-         *       Use this TIF with a market/limit order type to submit “market on open” (MOO) and “limit on open” (LOO) orders. This order is eligible to execute only in the market opening auction. Any unfilled orders after the open will be cancelled. OPG orders submitted after 9:28am but before 7:00pm ET will be rejected. OPG orders submitted after 7:00pm will be queued and routed to the following day’s opening auction. On open/on close orders are routed to the primary exchange. Such orders do not necessarily execute exactly at 9:30am / 4:00pm ET but execute per the exchange’s auction rules.
-         *
-         *     - cls:
-         *       Use this TIF with a market/limit order type to submit “market on close” (MOC) and “limit on close” (LOC) orders. This order is eligible to execute only in the market closing auction. Any unfilled orders after the close will be cancelled. CLS orders submitted after 3:50pm but before 7:00pm ET will be rejected. CLS orders submitted after 7:00pm will be queued and routed to the following day’s closing auction. Only available with API v2.
-         *
-         *     - ioc:
-         *       An Immediate Or Cancel (IOC) order requires all or part of the order to be executed immediately. Any unfilled portion of the order is canceled. Only available with API v2. Most market makers who receive IOC orders will attempt to fill the order on a principal basis only, and cancel any unfilled balance. On occasion, this can result in the entire order being cancelled if the market maker does not have any existing inventory of the security in question.
-         *
-         *     - fok:
-         *       A Fill or Kill (FOK) order is only executed if the entire order quantity can be filled, otherwise the order is canceled. Only available with API v2.
-         * @example day
-         * @enum {string}
-         */
-        TimeInForce: "day" | "gtc" | "opg" | "cls" | "ioc" | "fok";
-        /**
-         * PositionIntent
-         * @description Represents the desired position strategy.
-         * @example buy_to_open
-         * @enum {string}
-         */
-        PositionIntent: "buy_to_open" | "buy_to_close" | "sell_to_open" | "sell_to_close";
-        /**
-         * Assets
-         * @description The assets API serves as the master list of assets available for trade and data consumption from Alpaca. Assets are sorted by asset class, exchange and symbol. Some assets are only available for data consumption via Polygon, and are not tradable with Alpaca. These assets will be marked with the flag tradable=false.
-         */
-        Assets: {
-            /**
-             * Format: uuid
-             * @description Asset ID
-             */
-            id: string;
-            class: components["schemas"]["AssetClass"];
-            /**
-             * @description The CUSIP identifier for the asset (US Equities only).
-             *     To request a specific CUSIP, please reach out to Alpaca support.
-             * @example 987654321
-             */
-            cusip?: string | null;
-            exchange: components["schemas"]["Exchange"];
-            /**
-             * @description The symbol of the asset
-             * @example AAPL
-             */
-            symbol: string;
-            /** @description The official name of the asset */
-            name: string;
-            /**
-             * @description active or inactive
-             * @example active
-             * @enum {string}
-             */
-            status: "active" | "inactive";
-            /** @description Asset is tradable on Alpaca or not */
-            tradable: boolean;
-            /** @description Asset is marginable or not */
-            marginable: boolean;
-            /** @description Asset is shortable or not */
-            shortable: boolean;
-            /** @description Asset is easy-to-borrow or not (filtering for easy_to_borrow = True is the best way to check whether the name is currently available to short at Alpaca). */
-            easy_to_borrow: boolean;
-            /** @description Asset is fractionable or not */
-            fractionable: boolean;
-            /**
-             * @deprecated
-             * @description **deprecated**: Please use margin_requirement_long or margin_requirement_short instead. Note that these fields are of type string.
-             *     Shows the margin requirement percentage for the asset (equities only).
-             */
-            maintenance_margin_requirement?: number;
-            /** @description The margin requirement percentage for the asset's long positions (equities only). */
-            margin_requirement_long?: string;
-            /** @description The margin requirement percentage for the asset's short positions (equities only). */
-            margin_requirement_short?: string;
-            /**
-             * @description One of `ptp_no_exception`, `ptp_with_exception`, `ipo`, `has_options`, or `options_late_close`. We will include unique characteristics of the asset here.
-             * @example [
-             *       "ptp_no_exception",
-             *       "ipo"
-             *     ]
-             */
-            attributes?: ("ptp_no_exception" | "ptp_with_exception" | "ipo" | "has_options" | "options_late_close")[];
-        };
-        /**
-         * AssetClass
-         * @description This represents the category to which the asset belongs to. It serves to identify the nature of the financial instrument, with options including "us_equity" for U.S. equities, "us_option" for U.S. options, and "crypto" for cryptocurrencies.
-         * @example us_equity
-         * @enum {string}
-         */
-        AssetClass: "us_equity" | "us_option" | "crypto";
-        OptionContract: {
-            /**
-             * @description The unique identifier of the option contract.
-             * @example 98359ef7-5124-49f3-85ea-5cf02df6defa
-             */
-            id: string;
-            /**
-             * @description The symbol representing the option contract.
-             * @example AAPL250620C00100000
-             */
-            symbol: string;
-            /**
-             * @description The name of the option contract.
-             * @example AAPL Jun 20 2025 100 Call
-             */
-            name: string;
-            /**
-             * @description The status of the option contract.
-             * @example active
-             * @enum {string}
-             */
-            status: "active" | "inactive";
-            /**
-             * @description Indicates whether the option contract is tradable.
-             * @example true
-             */
-            tradable: boolean;
-            /**
-             * Format: date
-             * @description The expiration date of the option contract.
-             * @example 2025-06-20
-             */
-            expiration_date: string;
-            /**
-             * @description The root symbol of the option contract.
-             * @example AAPL
-             */
-            root_symbol?: string;
-            /**
-             * @description The underlying symbol of the option contract.
-             * @example AAPL
-             */
-            underlying_symbol: string;
-            /**
-             * @description The unique identifier of the underlying asset.
-             * @example b0b6dd9d-8b9b-48a9-ba46-b9d54906e415
-             */
-            underlying_asset_id: string;
-            /**
-             * @description The type of the option contract.
-             * @example call
-             * @enum {string}
-             */
-            type: "call" | "put";
-            /**
-             * @description The style of the option contract.
-             * @example american
-             * @enum {string}
-             */
-            style: "american" | "european";
-            /**
-             * @description The strike price of the option contract.
-             * @example 100
-             */
-            strike_price: string;
-            /**
-             * @description The multiplier of the option contract is crucial for calculating both the trade premium and the extended strike price. In standard contracts, the multiplier is always set to 100.
-             *     For instance, if a contract is traded at $1.50 and the multiplier is 100, the total amount debited when buying the contract would be $150.00.
-             *     Similarly, when exercising a call contract, the total cost will be equal to the strike price times the multiplier.
-             * @example 100
-             */
-            multiplier: string;
-            /**
-             * @description Represents the number of underlying shares to be delivered in case the contract is exercised/assigned. For standard contracts, this is always 100.
-             *     This field should **not** be used as a multiplier, specially for non-standard contracts.
-             * @example 100
-             */
-            size: string;
-            /**
-             * @description The open interest of the option contract.
-             * @example 237
-             */
-            open_interest?: string;
-            /**
-             * Format: date
-             * @description The date of the open interest data.
-             * @example 2023-12-11
-             */
-            open_interest_date?: string;
-            /**
-             * @description The close price of the option contract.
-             * @example 148.38
-             */
-            close_price?: string;
-            /**
-             * Format: date
-             * @description The date of the close price data.
-             * @example 2023-12-11
-             */
-            close_price_date?: string;
-            /**
-             * @description Represents the deliverables tied to the option contract. While standard contracts entail a single deliverable, non-standard ones can encompass multiple deliverables, each potentially customized with distinct parameters.
-             *     This array is included in the list contracts response only if the query parameter show_deliverables=true is provided.
-             */
-            deliverables?: components["schemas"]["OptionDeliverable"][];
-        };
-        OptionDeliverable: {
-            /**
-             * @description Type of deliverable, indicating whether it's cash or equity. For standard contracts, it is always "equity".
-             * @example equity
-             * @enum {string}
-             */
-            type: "cash" | "equity";
-            /**
-             * @description Symbol of the deliverable. For standard contracts, this is equivalent to the underlying symbol of the contract.
-             * @example AAPL
-             */
-            symbol: string;
-            /**
-             * @description Unique identifier of the deliverable asset. For standard contracts, this is equivalent to underlying_asset_id of the contracts.
-             *     This field is not returned for cash deliverables.
-             * @example b0b6dd9d-8b9b-48a9-ba46-b9d54906e415
-             */
-            asset_id?: string;
-            /**
-             * @description The deliverable amount. For cash deliverables, this is the cash amount.
-             *     For standard contract, this is always 100.
-             *     This field can be null in case the deliverable settlement is delayed and the amount is yet to be determined.
-             * @example 100
-             */
-            amount: string;
-            /**
-             * @description Cost allocation percentage of the deliverable.
-             *     This is used to determine the cost basis of the equity shares received from the exercise, specially for non-standard contracts with multiple deliverables.
-             * @example 100
-             */
-            allocation_percentage: string;
-            /**
-             * @description Indicates when the deliverable will be settled if the contract is exercised/assigned.
-             * @example T+2
-             * @enum {string}
-             */
-            settlement_type: "T+0" | "T+1" | "T+2" | "T+3" | "T+4" | "T+5";
-            /**
-             * @description Indicates the settlement method that will be used:
-             *     - **BTOB**: Broker to Broker
-             *     - **CADF**: Cash Difference
-             *     - **CAFX**: Cash Fixed
-             *     - **CCC**: Correspondent Clearing Corp
-             * @example CCC
-             * @enum {string}
-             */
-            settlement_method: "BTOB" | "CADF" | "CAFX" | "CCC";
-            /**
-             * @description If true, the settlement of the deliverable will be delayed.
-             *     For instance, in the event of a contract with a delayed deliverable being exercised, both the availability of the deliverable and its settlement may be postponed beyond the typical timeframe.
-             * @example false
-             */
-            delayed_settlement: boolean;
-        };
-        /**
-         * Position
-         * @description The positions API provides information about an account’s current open positions. The response will include information such as cost basis, shares traded, and market value, which will be updated live as price information is updated. Once a position is closed, it will no longer be queryable through this API.
-         */
-        Position: {
-            /**
-             * Format: uuid
-             * @description Asset ID (For options this represents the option contract ID)
-             */
-            asset_id: string;
-            /**
-             * @description Symbol name of the asset
-             * @example AAPL
-             */
-            symbol: string;
-            exchange: components["schemas"]["ExchangeForPosition"];
-            asset_class: components["schemas"]["AssetClass"];
-            /** @description Average entry price of the position */
-            avg_entry_price: string;
-            /** @description The number of shares */
-            qty: string;
-            /** @description Total number of shares available minus open orders / locked for options covered call */
-            qty_available?: string;
-            /** @description “long” */
-            side: string;
-            /** @description Total dollar amount of the position */
-            market_value: string;
-            /** @description Total cost basis in dollar */
-            cost_basis: string;
-            /** @description Unrealized profit/loss in dollars */
-            unrealized_pl: string;
-            /** @description Unrealized profit/loss percent (by a factor of 1) */
-            unrealized_plpc: string;
-            /** @description Unrealized profit/loss in dollars for the day */
-            unrealized_intraday_pl: string;
-            /** @description Unrealized profit/loss percent (by a factor of 1) */
-            unrealized_intraday_plpc: string;
-            /** @description Current asset price per share */
-            current_price: string;
-            /** @description Last day’s asset price per share based on the closing value of the last trading day */
-            lastday_price: string;
-            /** @description Percent change from last day price (by a factor of 1) */
-            change_today: string;
-            asset_marginable: boolean;
-        };
-        /**
-         * Watchlist
-         * @description The watchlist API provides CRUD operation for the account’s watchlist. An account can have multiple watchlists and each is uniquely identified by id but can also be addressed by user-defined name. Each watchlist is an ordered list of assets.
-         */
-        Watchlist: {
-            /**
-             * Format: uuid
-             * @description watchlist id
-             */
-            id: string;
-            /**
-             * Format: uuid
-             * @description account ID
-             */
-            account_id: string;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            /** @description user-defined watchlist name (up to 64 characters) */
-            name: string;
-            /** @description the content of this watchlist, in the order as registered by the client */
-            assets?: components["schemas"]["Assets"][];
-        };
-        /**
-         * Watchlist
-         * @description The watchlist API provides CRUD operation for the account’s watchlist. An account can have multiple watchlists and each is uniquely identified by id but can also be addressed by user-defined name.
-         */
-        WatchlistWithoutAsset: {
-            /**
-             * Format: uuid
-             * @description watchlist id
-             */
-            id: string;
-            /**
-             * Format: uuid
-             * @description account ID
-             */
-            account_id: string;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            /** @description user-defined watchlist name (up to 64 characters) */
-            name: string;
-        };
-        /** Calendar */
-        Calendar: {
-            /** @description Date string in “%Y-%m-%d” format */
-            date: string;
-            /** @description The time the market opens at on this date in “%H:%M” format */
-            open: string;
-            /** @description The time the market closes at on this date in “%H:%M” format */
-            close: string;
-            /** @description Date string in “%Y-%m-%d” format. representing the settlement date for the trade date. */
-            settlement_date: string;
-        };
-        /** Clock */
-        Clock: {
-            /**
-             * Format: date-time
-             * @description Current timestamp
-             */
-            timestamp?: string;
-            /** @description Whether or not the market is open */
-            is_open?: boolean;
-            /**
-             * Format: date-time
-             * @description Next Market open timestamp
-             */
-            next_open?: string;
-            /**
-             * Format: date-time
-             * @description Next market close timestamp
-             */
-            next_close?: string;
-        };
-        /**
-         * PortfolioHistory
-         * @description Timeseries data for equity and profit loss information of the account.
-         */
-        PortfolioHistory: {
-            /**
-             * @description Time of each data element, left-labeled (the beginning of time window).
-             *
-             *     The values returned are in [UNIX epoch format](https://en.wikipedia.org/wiki/Unix_time).
-             */
-            timestamp: number[];
-            /** @description equity value of the account in dollar amount as of the end of each time window */
-            equity: number[];
-            /** @description profit/loss in dollar from the base value */
-            profit_loss: number[];
-            /**
-             * @description profit/loss in percentage from the base value
-             * @example [
-             *       0.001,
-             *       0.002
-             *     ]
-             */
-            profit_loss_pct: number[];
-            /** @description basis in dollar of the profit loss calculation */
-            base_value: number;
-            /**
-             * Format: date
-             * @description If included, then it indicates that the base_value is the account's closing
-             *     equity value at this trading date.
-             *
-             *     If not specified, then the baseline calculation is done against the earliest returned data item. This could happen for
-             *     accounts without prior closing balances (e.g. new account) or for queries with 1D timeframes, where the first data point
-             *     is used as a reference point.
-             * @example 2023-10-20
-             */
-            base_value_asof?: string;
-            /**
-             * @description time window size of each data element
-             * @example 15Min
-             */
-            timeframe: string;
-            /** @description accumulated value in dollar amount as of the end of each time window */
-            cashflow?: Record<string, never>;
-        };
-        /**
-         * Exchange
-         * @description Represents the current exchanges Alpaca supports. List is currently:
-         *
-         *     - AMEX
-         *     - ARCA
-         *     - BATS
-         *     - NYSE
-         *     - NASDAQ
-         *     - NYSEARCA
-         *     - OTC
-         * @example NYSE
-         * @enum {string}
-         */
-        Exchange: "AMEX" | "ARCA" | "BATS" | "NYSE" | "NASDAQ" | "NYSEARCA" | "OTC";
-        /**
-         * Exchange
-         * @description Represents the current exchanges Alpaca supports. List is currently:
-         *
-         *     - AMEX
-         *     - ARCA
-         *     - BATS
-         *     - NYSE
-         *     - NASDAQ
-         *     - NYSEARCA
-         *     - OTC
-         *
-         *     Can be empty if not applicable (e.g., for options contracts)
-         * @example NYSE
-         * @enum {string}
-         */
-        ExchangeForPosition: "AMEX" | "ARCA" | "BATS" | "NYSE" | "NASDAQ" | "NYSEARCA" | "OTC" | null;
-        /**
-         * CanceledOrderResponse
-         * @description Represents the result of a request to cancel and order
-         */
-        CanceledOrderResponse: {
-            /**
-             * Format: uuid
-             * @description orderId
-             */
-            id?: string;
-            /**
-             * @description http response code
-             * @example 200
-             */
-            status?: number;
-        };
-        /**
-         * PatchOrderRequest
-         * @description Represents a request to patch an order.
-         */
-        PatchOrderRequest: {
-            /**
-             * @description number of shares to trade.
-             *
-             *     You can only patch full shares for now.
-             *
-             *     Qty of equity fractional/notional orders are not allowed to change.
-             * @example 4
-             */
-            qty?: string;
-            time_in_force?: components["schemas"]["TimeInForce"];
-            /**
-             * @description Required if original order's `type` field was `limit` or `stop_limit`.
-             *     In case of `mleg`, the limit_price parameter is expressed with the following notation:
-             *     - A positive value indicates a debit, representing a cost or payment to be made.
-             *     - A negative value signifies a credit, reflecting an amount to be received.
-             * @example 3.14
-             */
-            limit_price?: string;
-            /**
-             * @description required if original order type is limit or stop_limit
-             * @example 3.14
-             */
-            stop_price?: string;
-            /**
-             * @description the new value of the trail_price or trail_percent value (works only for type=“trailing_stop”)
-             * @example 3.14
-             */
-            trail?: string;
-            /** @description A unique identifier for the new order. Automatically generated if not sent. (<= 128 characters) */
-            client_order_id?: string;
-            advanced_instructions?: components["schemas"]["AdvancedInstructions"];
-        };
-        /**
-         * PositionClosedReponse
-         * @description Represents the result of asking the api to close a position.
-         */
-        PositionClosedReponse: {
-            /** @description Symbol name of the asset */
-            symbol: string;
-            /** @description Http status code for the attempt to close this position */
-            status: string;
-            body?: components["schemas"]["Order"];
-        };
-        /**
-         * PostWatchlistRequest
-         * @description Request format used for creating a new watchlist or updating an existing watchlist with a set of assets and name.
-         */
-        UpdateWatchlistRequest: {
-            name: string;
-            symbols?: (string | null)[];
-        };
-        /**
-         * AddAssetToWatchlistRequest
-         * @description Append an asset for the symbol to the end of watchlist asset list
-         */
-        AddAssetToWatchlistRequest: {
-            /**
-             * @description symbol name to append to watchlist
-             * @example AAPL
-             */
-            symbol?: string;
-        };
-        CryptoWallet: {
-            chain?: string;
-            address?: string;
-            /**
-             * Format: date-time
-             * @description Timestamp (RFC3339) of account creation.
-             */
-            created_at?: string;
-        };
-        /** @description Transfers allow you to transfer assets into your end customer's account (deposits) or out (withdrawal). */
-        CryptoTransfer: {
-            /**
-             * Format: uuid
-             * @description The crypto transfer ID
-             */
-            id?: string;
-            /** @description On-chain transaction hash (e.g. 0xabc...xyz) */
-            tx_hash?: string;
-            direction?: components["schemas"]["TransferDirection"];
-            status?: components["schemas"]["CryptoTransferStatus"];
-            /** @description Amount of transfer denominated in the underlying crypto asset */
-            amount?: string;
-            /** @description Equivalent USD value at time of transfer */
-            usd_value?: string;
-            network_fee?: string;
-            fees?: string;
-            /** @description Underlying network for given transfer */
-            chain?: string;
-            /** @description Symbol of crypto asset for given transfer (e.g. BTC ) */
-            asset?: string;
-            /** @description Originating address of the transfer */
-            from_address?: string;
-            /** @description Destination address of the transfer */
-            to_address?: string;
-            /**
-             * Format: date-time
-             * @description Timedate when transfer was created
-             */
-            created_at?: string;
-        };
-        /**
-         * @example PROCESSING
-         * @enum {string}
-         */
-        CryptoTransferStatus: "PROCESSING" | "FAILED" | "COMPLETE";
-        WhitelistedAddress: {
-            /** @description Unique ID for whitelisted address */
-            id?: string;
-            /** @description Underlying network this address represents */
-            chain?: string;
-            /** @description Symbol of underlying asset for the whitelisted address */
-            asset?: string;
-            /** @description The whitelisted address */
-            address?: string;
-            /**
-             * @description Status of whitelisted address which is either ACTIVE or PENDING. Whitelisted addresses will be subjected to a 24 waiting period. After the waiting period is over the status will become ACTIVE.
-             * @enum {string}
-             */
-            status?: "APPROVED" | "PENDING";
-            /**
-             * Format: date-time
-             * @description Timestamp (RFC3339) of account creation.
-             */
-            created_at?: string;
-        };
-        /** CreateCryptoTransferRequest */
-        CreateCryptoTransferRequest: {
-            /** @description The amount, denoted in the specified asset, to be withdrawn from the user’s wallet */
-            amount: string;
-            /** @description The destination wallet address */
-            address: string;
-            asset: string;
-        };
-        /**
-         * @example INCOMING
-         * @enum {string}
-         */
-        TransferDirection: "INCOMING" | "OUTGOING";
-        /** Error */
-        Error: {
-            code: number;
-            message: string;
-        };
-        /**
-         * @description Use this token in your next API call to paginate through the dataset and retrieve the next page of results. A null token indicates there are no more data to fetch.
-         * @example MTAwMA==
-         */
-        NextPageToken: string | null;
-        /**
-         * @description The subtype of the treasury.
-         * @enum {string}
-         */
-        treasury_subtype: "bond" | "bill" | "note" | "strips" | "tips" | "floating";
-        /**
-         * @description Status of the bond
-         * @enum {string}
-         */
-        bond_status: "outstanding" | "matured" | "pre_issuance";
-        /**
-         * @description The type of the coupon rate
-         * @enum {string}
-         */
-        coupon_type: "fixed" | "floating" | "zero";
-        /**
-         * @description How often the coupon is paid
-         * @enum {string}
-         */
-        coupon_frequency: "annual" | "semi_annual" | "quarterly" | "monthly" | "zero";
-        /** @description A US treasury */
-        us_treasury: {
-            /** @description CUSIP is a nine-character alphanumeric code that uniquely identifies the security */
-            cusip: string;
-            /** @description International Securities Identification Number */
-            isin: string;
-            bond_status: components["schemas"]["bond_status"];
-            /** @description Whether the treasury is tradable */
-            tradable: boolean;
-            subtype: components["schemas"]["treasury_subtype"];
-            /**
-             * Format: date
-             * @description The date on which the bond was issued
-             */
-            issue_date: string;
-            /**
-             * Format: date
-             * @description The date on which the bond matures
-             */
-            maturity_date: string;
-            /** @description Description of the treasury */
-            description: string;
-            /** @description Short description of the treasury */
-            description_short: string;
-            /**
-             * Format: double
-             * @description The price of the last transaction of a security before the market closes for normal trading, shown as a percentage of par value
-             */
-            close_price?: number;
-            /**
-             * Format: date
-             * @description The date of the close price
-             */
-            close_price_date?: string;
-            /**
-             * Format: double
-             * @description Yield to maturity of the treasury after the last close
-             */
-            close_yield_to_maturity?: number;
-            /**
-             * Format: double
-             * @description Yield to worst of the treasury after the last close
-             */
-            close_yield_to_worst?: number;
-            /**
-             * Format: double
-             * @description The annual interest rate paid on the bond as a percentage of par value
-             */
-            coupon: number;
-            coupon_type: components["schemas"]["coupon_type"];
-            coupon_frequency: components["schemas"]["coupon_frequency"];
-            /**
-             * Format: date
-             * @description The date of the first coupon payment
-             */
-            first_coupon_date?: string;
-            /**
-             * Format: date
-             * @description The date of the next coupon payment
-             */
-            next_coupon_date?: string;
-            /**
-             * Format: date
-             * @description The date of the last coupon payment
-             */
-            last_coupon_date?: string;
-        };
-        us_treasuries_resp: {
-            us_treasuries: components["schemas"]["us_treasury"][];
-        };
-        /**
-         * @description The day count convention used to calculate accrued interest.
-         *
-         *     - `A/360`: calculates the daily interest using a 360-day year and then multiplies that by the actual number of days in each time period.
-         *     - `A/365`: calculates the daily interest using a 365-day year and then multiplies that by the actual number of days in each time period.
-         *     - `30/360`: calculates the daily interest using a 360-day year and then multiplies that by 30 (standardized month).
-         *     - `30/365`: calculates the daily interest using a 365-day year and then multiplies that by 30 (standardized month).
-         *     - `A/A`: calculates the daily interest using the actual number of days in the year and then multiplies that by the actual number of days in each time period.
-         *     - `30E/360`: number of days equals to the actual number of days (for February). If the start date or the end date of the period is the 31st of a month, that date is set to the 30th. The number of days in a year is 360.
-         *     - `B/252`: calculates the daily interest using a 252-business-day year and then multiplies that by the actual number of days in each time period.
-         *     - `A/364`: calculates the daily interest using a 364-day year and then multiplies that by the actual number of days in each time period.
-         * @enum {string}
-         */
-        day_count: "A/360" | "A/365" | "30/360" | "30/365" | "A/A" | "30E/360" | "B/252" | "A/364";
-        /**
-         * @description A Standard & Poor's rating outlook indicates S&P's view regarding the potential direction of a long-term credit rating over the intermediate term (2 years for investment grade, 1 year for speculative grade)
-         * @enum {string}
-         */
-        sp_outlook: "positive" | "negative" | "developing" | "stable" | "not_rated" | "not_meaningful";
-        /**
-         * @description The type of call on the bond refers to one of a variety of circumstances under which a callable bond may be called.
-         * @enum {string}
-         */
-        call_type: "ordinary" | "make_whole" | "regulatory" | "special";
-        /** @description A US corporate */
-        us_corporate: {
-            /** @description CUSIP is a nine-character alphanumeric code that uniquely identifies the security */
-            cusip: string;
-            /** @description International Securities Identification Number */
-            isin: string;
-            bond_status: components["schemas"]["bond_status"];
-            /** @description Whether the treasury is tradable */
-            tradable: boolean;
-            /** @description Whether the corporate is marginable */
-            marginable: boolean;
-            /**
-             * Format: date
-             * @description The date on which the corporate was reissued
-             */
-            reissue_date?: string;
-            /** @description The total size amount of the corporate reissue in the issuing currency */
-            reissue_size?: number;
-            /**
-             * Format: double
-             * @description The price at which the corporate was reissued as a percentage of par value
-             */
-            reissue_price?: number;
-            /**
-             * Format: date
-             * @description The date on which the bond was issued
-             */
-            issue_date: string;
-            /**
-             * Format: date
-             * @description The date on which the bond matures
-             */
-            maturity_date?: string;
-            /** @description The country where the corporate is domiciled in the 2-alpha country code format (e.g., US, CA) */
-            country_domicile: string;
-            /** @description The ticker symbol of the corporate */
-            ticker: string;
-            /** @description The seniority of the corporate bond */
-            seniority: string;
-            /** @description The name of the issuer of the corporate bond */
-            issuer: string;
-            /** @description The sector of the corporate bond */
-            sector: string;
-            /** @description Description of the corporate bond */
-            description: string;
-            /** @description Short description of the corporate bond */
-            description_short: string;
-            /**
-             * Format: double
-             * @description The annual interest rate paid on the bond as a percentage of par value
-             */
-            coupon: number;
-            coupon_type: components["schemas"]["coupon_type"];
-            coupon_frequency: components["schemas"]["coupon_frequency"];
-            /**
-             * Format: date
-             * @description The date of the first coupon payment
-             */
-            first_coupon_date?: string;
-            /**
-             * Format: date
-             * @description The date of the next coupon payment
-             */
-            next_coupon_date?: string;
-            /**
-             * Format: date
-             * @description The date of the last coupon payment
-             */
-            last_coupon_date?: string;
-            /** @description A flag representing whether a bond is perpetual */
-            perpetual: boolean;
-            day_count: components["schemas"]["day_count"];
-            /**
-             * Format: date
-             * @description The dated date marks the beginning of the period for which interest starts accruing on the bond
-             */
-            dated_date: string;
-            /** @description The total size amount of the bond issue in the issuing currency */
-            issue_size: number;
-            /**
-             * Format: double
-             * @description The price at which the bond was originally issued as a percentage of par value
-             */
-            issue_price: number;
-            /** @description The smallest unit of the bond that can be purchased at its initial offering */
-            issue_minimum_denomination: number;
-            /** @description The amount that the issuer of the bond will pay back to the bondholder upon maturity */
-            par_value: number;
-            /** @description Whether the bond is callable, meaning the issuer has the right, but not the obligation to redeem the bond — in other words, pay out the bondholder — before its maturity date at a set price (the call price) */
-            callable: boolean;
-            /**
-             * Format: date
-             * @description The date of the next possible call on the bond.
-             */
-            next_call_date?: string;
-            /**
-             * Format: double
-             * @description The price at which a callable bond can be redeemed by the issuer on the next call date, as a percentage of par.
-             */
-            next_call_price?: number;
-            /** @description Whether the bond is puttable, meaning the bondholder has the right, but not the obligation to sell the bond back to the issuer at a set price (the put price) on specified dates before maturity */
-            puttable: boolean;
-            /** @description A flag indicating whether the bond is convertible */
-            convertible: boolean;
-            /** @description Indicates whether the security falls under Regulation S, a rule that provides an exemption from the registration requirements for securities offerings made outside the United States */
-            reg_s: boolean;
-            /** @description Standard & Poor's rating for the bond in the standard AAA - D format */
-            sp_rating?: string;
-            /**
-             * Format: date
-             * @description The date in the timezone of the issuing country of the most recent Standard & Poor's rating for the bond in YYYY-MM-DD format
-             */
-            sp_rating_date?: string;
-            /** @description S&P's CreditWatch highlights S&P's opinion regarding the potential direction of a short-term or long-term rating */
-            sp_creditwatch?: string;
-            /**
-             * Format: date
-             * @description The date of the most recent Standard & Poor's CreditWatch for the bond in YYYY-MM-DD format
-             */
-            sp_creditwatch_date?: string;
-            sp_outlook?: components["schemas"]["sp_outlook"];
-            /**
-             * Format: date
-             * @description The date of the most recent Standard & Poor's outlook for the bond in YYYY-MM-DD format
-             */
-            sp_outlook_date?: string;
-            /** @description Score (from 1-5 if the bond is priced, or null if the bond is not tradable) reflecting the historical depth of executable liquidity to buy with minimum trading sizes less than or equal to $1,000.00 */
-            liquidity_micro_buy?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to sell with minimum trading sizes less than or equal to $1,000.00 */
-            liquidity_micro_sell?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy or sell with minimum trading sizes less than or equal to $1,000.00 */
-            liquidity_micro_aggregate?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy with minimum trading sizes less than or equal to $10,000.00 */
-            liquidity_retail_buy?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to sell with minimum trading sizes less than or equal to 10,000 */
-            liquidity_retail_sell?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy or sell with minimum trading sizes less than or equal to 10,000 */
-            liquidity_retail_aggregate?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy (no minimum trading sizes) */
-            liquidity_institutional_buy?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to sell (no minimum trading sizes) */
-            liquidity_institutional_sell?: number;
-            /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy or sell (no minimum trading sizes) */
-            liquidity_institutional_aggregate?: number;
-            /**
-             * Format: double
-             * @description The price of the last transaction of a security before the market closes for normal trading, shown as a percentage of par value
-             */
-            close_price?: number;
-            /**
-             * Format: date
-             * @description The date of the close price
-             */
-            close_price_date?: string;
-            /**
-             * Format: double
-             * @description Yield to maturity of the treasury after the last close
-             */
-            close_yield_to_maturity?: number;
-            /**
-             * Format: double
-             * @description Yield to worst of the treasury after the last close
-             */
-            close_yield_to_worst?: number;
-            /**
-             * Format: double
-             * @description The interest that has accumulated on a bond in dollars per bond between the last interest payment and the present date that has not yet been paid to the bondholder
-             */
-            accrued_interest?: number;
-            call_type?: components["schemas"]["call_type"];
-        };
-        us_corporates_resp: {
-            us_corporates: components["schemas"]["us_corporate"][];
-        };
-    };
-    responses: {
-        /** @description One of the request parameters is invalid. See the returned message for details. */
-        400: {
-            headers: {
-                "X-RateLimit-Limit": components["headers"]["ratelimit_limit"];
-                "X-RateLimit-Remaining": components["headers"]["ratelimit_remaining"];
-                "X-RateLimit-Reset": components["headers"]["ratelimit_reset"];
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        /** @description Authentication headers are missing or invalid. Make sure you authenticate your request with a valid API key. */
-        401: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        /** @description The requested resource is forbidden. */
-        403: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        /** @description Too many requests. You hit the rate limit. Use the X-RateLimit-... response headers to make sure you're under the rate limit. */
-        429: {
-            headers: {
-                "X-RateLimit-Limit": components["headers"]["ratelimit_limit"];
-                "X-RateLimit-Remaining": components["headers"]["ratelimit_remaining"];
-                "X-RateLimit-Reset": components["headers"]["ratelimit_reset"];
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        /** @description Internal server error. We recommend retrying these later. If the issue persists, please contact us on Slack or on the Community Forum. */
-        500: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-    };
+  '/v2/account': {
     parameters: {
-        /** @description Used for pagination, this token retrieves the next page of results. It is obtained from the response of the preceding page when additional pages are available. */
-        PageToken: string;
-    };
-    requestBodies: never;
-    headers: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Account
+     * @description Returns your account details.
+     */
+    get: operations['getAccount']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/orders': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get All Orders
+     * @description Retrieves a list of orders for the account, filtered by the supplied query parameters.
+     */
+    get: operations['getAllOrders']
+    put?: never
+    /**
+     * Create an Order
+     * @description Places a new order for the given account. An order request may be rejected if the account is not authorized for trading, or if the tradable balance is insufficient to fill the order.
+     */
+    post: operations['postOrder']
+    /**
+     * Delete All Orders
+     * @description Attempts to cancel all open orders. A response will be provided for each order that is attempted to be cancelled. If an order is no longer cancelable, the server will respond with status 500 and reject the request.
+     */
+    delete: operations['deleteAllOrders']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/orders:by_client_order_id': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Order by Client Order ID
+     * @description Retrieves a single order specified by the client order ID.
+     */
+    get: operations['getOrderByClientOrderId']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/orders/{order_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description order id */
+        order_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Get Order by ID
+     * @description Retrieves a single order for the given order_id.
+     */
+    get: operations['getOrderByOrderID']
+    put?: never
+    post?: never
+    /**
+     * Delete Order by ID
+     * @description Attempts to cancel an Open Order. If the order is no longer cancelable, the request will be rejected with status 422; otherwise accepted with return status 204.
+     */
+    delete: operations['deleteOrderByOrderID']
+    options?: never
+    head?: never
+    /**
+     * Replace Order by ID
+     * @description Replaces a single order with updated parameters. Each parameter overrides the corresponding attribute of the existing order. The other attributes remain the same as the existing order.
+     *
+     *     A success return code from a replaced order does NOT guarantee the existing open order has been replaced. If the existing open order is filled before the replacing (new) order reaches the execution venue, the replacing (new) order is rejected, and these events are sent in the trade_updates stream channel.
+     *
+     *     While an order is being replaced, buying power is reduced by the larger of the two orders that have been placed (the old order being replaced, and the newly placed order to replace it). If you are replacing a buy entry order with a higher limit price than the original order, the buying power is calculated based on the newly placed order. If you are replacing it with a lower limit price, the buying power is calculated based on the old order.
+     *
+     *     Note: Order cannot be replaced when the status is `accepted`, `pending_new`, `pending_cancel` or `pending_replace`.
+     */
+    patch: operations['patchOrderByOrderId']
+    trace?: never
+  }
+  '/v2/positions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * All Open Positions
+     * @description The positions API provides information about an account’s current open positions. The response will include information such as cost basis, shares traded, and market value, which will be updated live as price information is updated. Once a position is closed, it will no longer be queryable through this API
+     *
+     *     Retrieves a list of the account’s open positions
+     */
+    get: operations['getAllOpenPositions']
+    put?: never
+    post?: never
+    /**
+     * Close All Positions
+     * @description Closes (liquidates) all of the account’s open long and short positions. A response will be provided for each order that is attempted to be cancelled. If an order is no longer cancelable, the server will respond with status 500 and reject the request.
+     */
+    delete: operations['deleteAllOpenPositions']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/positions/{symbol_or_asset_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description symbol or assetId */
+        symbol_or_asset_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Get an Open Position
+     * @description Retrieves the account’s open position for the given symbol or assetId.
+     */
+    get: operations['getOpenPosition']
+    put?: never
+    post?: never
+    /**
+     * Close a Position
+     * @description Closes (liquidates) the account’s open position for the given symbol. Works for both long and short positions.
+     */
+    delete: operations['deleteOpenPosition']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/positions/{symbol_or_contract_id}/exercise': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Exercise an Options Position
+     * @description This endpoint enables users to exercise a held option contract, converting it into the underlying asset based on the specified terms.
+     *     All available held shares of this option contract will be exercised.
+     *     By default, Alpaca will automatically exercise in-the-money (ITM) contracts at expiry.
+     *     Exercise requests will be processed immediately once received. Exercise requests submitted between market close and midnight will be rejected to avoid any confusion about when the exercise will settle.
+     *     To cancel an exercise request or to submit a Do-not-exercise (DNE) instruction, you can use the do-not-exercise endpoint or contact our support team.
+     */
+    post: operations['optionExercise']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/positions/{symbol_or_contract_id}/do-not-exercise': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Do Not Exercise an Options Position
+     * @description This endpoint enables users to submit a do-not-exercise (DNE) instruction for a held option contract, preventing automatic exercise at expiry.
+     *     By default, Alpaca will automatically exercise in-the-money (ITM) contracts at expiry. This endpoint allows users to override that behavior.
+     *     To override this behavior and submit an exercise instruction, please contact our support team.
+     */
+    post: operations['optionDoNotExercise']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/account/portfolio/history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Account Portfolio History
+     * @description Returns timeseries data about equity and profit/loss (P/L) of the account in requested timespan.
+     */
+    get: operations['getAccountPortfolioHistory']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/watchlists': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get All Watchlists
+     * @description Returns the list of watchlists registered under the account.
+     */
+    get: operations['getWatchlists']
+    put?: never
+    /**
+     * Create Watchlist
+     * @description Create a new watchlist with initial set of assets.
+     */
+    post: operations['postWatchlist']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/watchlists/{watchlist_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description watchlist id */
+        watchlist_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Get Watchlist by ID
+     * @description Returns a watchlist identified by the ID.
+     */
+    get: operations['getWatchlistById']
+    /**
+     * Update Watchlist By Id
+     * @description Update the name and/or content of watchlist
+     */
+    put: operations['updateWatchlistById']
+    /**
+     * Add Asset to Watchlist
+     * @description Append an asset for the symbol to the end of watchlist asset list
+     */
+    post: operations['addAssetToWatchlist']
+    /**
+     * Delete Watchlist By Id
+     * @description Delete a watchlist. This is a permanent deletion.
+     */
+    delete: operations['deleteWatchlistById']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/watchlists:by_name': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Watchlist by Name
+     * @description You can also call GET, PUT, POST and DELETE with watchlist name with another endpoint /v2/watchlists:by_name and query parameter name=<watchlist_name>, instead of /v2/watchlists/{watchlist_id} endpoints
+     *
+     *     Returns a watchlist by name
+     */
+    get: operations['getWatchlistByName']
+    /**
+     * Update Watchlist By Name
+     * @description Update the name and/or content of watchlist
+     */
+    put: operations['updateWatchlistByName']
+    /**
+     * Add Asset to Watchlist By Name
+     * @description Append an asset for the symbol to the end of watchlist asset list
+     */
+    post: operations['addAssetToWatchlistByName']
+    /**
+     * Delete Watchlist By Name
+     * @description Delete a watchlist. This is a permanent deletion.
+     */
+    delete: operations['deleteWatchlistByName']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/watchlists/{watchlist_id}/{symbol}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Watchlist ID */
+        watchlist_id: string
+        /** @description symbol name to remove from the watchlist content */
+        symbol: string
+      }
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Delete Symbol from Watchlist
+     * @description Delete one entry for an asset by symbol name
+     */
+    delete: operations['removeAssetFromWatchlist']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/account/configurations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Account Configurations
+     * @description gets the current account configuration values
+     */
+    get: operations['getAccountConfig']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /**
+     * Account Configurations
+     * @description Updates and returns the current account configuration values
+     */
+    patch: operations['patchAccountConfig']
+    trace?: never
+  }
+  '/v2/account/activities': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Account Activities
+     * @description Returns a list of activities
+     *
+     *     Notes:
+     *     * Pagination is handled using the `page_token` and `page_size` parameters.
+     *     * `page_token` represents the ID of the last item on your current page of results.
+     *        For example, if the ID of the last activity in your first response is `20220203000000000::045b3b8d-c566-4bef-b741-2bf598dd6ae7`, you would pass that value as `page_token` to retrieve the next page of results.
+     */
+    get: operations['getAccountActivities']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/account/activities/{activity_type}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The activity type you want to view entries for. A list of valid activity types can be found at the bottom of this page. */
+        activity_type: string
+      }
+      cookie?: never
+    }
+    /**
+     * Retrieve Account Activities of Specific Type
+     * @description Returns account activity entries for a specific type of activity.
+     */
+    get: operations['getAccountActivitiesByActivityType']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/calendar': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Market Calendar info
+     * @description The calendar API serves the full list of market days from 1970 to 2029. It can also be queried by specifying a start and/or end time to narrow down the results. In addition to the dates, the response also contains the specific open and close times for the market days, taking into account early closures.
+     *
+     *     Returns the market calendar.
+     */
+    get: operations['getCalendar']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/clock': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Market Clock info
+     * @description The clock API serves the current market timestamp, whether or not the market is currently open, as well as the times of the next market open and close.
+     *
+     *     Returns the market clock.
+     */
+    get: operations['getClock']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/assets': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Assets
+     * @description The assets API serves as the master list of assets available for trade and data consumption from Alpaca. Assets are sorted by asset class, exchange and symbol.
+     */
+    get: operations['get-v2-assets']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/assets/{symbol_or_asset_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description symbol or assetId. CUSIP is also accepted for US equities. */
+        symbol_or_asset_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Get an Asset by ID or Symbol
+     * @description Get the asset model for a given symbol or asset_id. The symbol or asset_id should be passed in as a path parameter.
+     *
+     *     **Note**: For crypto, the symbol has to follow old symbology, e.g. BTCUSD.
+     *
+     *     **Note**: For coin pairs, the symbol should be separated by spare symbol (/), e.g. BTC/USDT. Since spare is a special character in HTTP, use the URL encoded version instead, e.g. /v2/assets/BTC%2FUSDT
+     */
+    get: operations['get-v2-assets-symbol_or_asset_id']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/options/contracts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Option Contracts
+     * @description This endpoint allows you to retrieve a list of option contracts based on various filtering criteria.
+     *     By default only active contracts that expire before the upcoming weekend are returned.
+     */
+    get: operations['get-options-contracts']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/options/contracts/{symbol_or_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description symbol or contract ID */
+        symbol_or_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Get an option contract by ID or Symbol
+     * @description Get an option contract by symbol or contract ID. The symbol or id should be passed in as a path parameter.
+     */
+    get: operations['get-option-contract-symbol_or_id']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/assets/fixed_income/us_treasuries': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get US treasuries
+     * @description Serves the list of US treasuries available at Alpaca. The response is sorted by ISIN.
+     */
+    get: operations['UsTreasuries']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/assets/fixed_income/us_corporates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get US corporates
+     * @description Serves the list of US corporates available at Alpaca. The response is sorted by ISIN.
+     */
+    get: operations['UsCorporates']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/corporate_actions/announcements/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The corporate announcement’s id */
+        id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Retrieve a Specific Announcement
+     * @deprecated
+     * @description This endpoint is deprecated, please use [the new corporate actions endpoint](https://docs.alpaca.markets/reference/corporateactions-1) instead.
+     */
+    get: operations['get-v2-corporate_actions-announcements-id']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/corporate_actions/announcements': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Announcements
+     * @deprecated
+     * @description This endpoint is deprecated, please use [the new corporate actions endpoint](https://docs.alpaca.markets/reference/corporateactions-1) instead.
+     */
+    get: operations['get-v2-corporate_actions-announcements']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/wallets': {
+    parameters: {
+      query?: {
+        asset?: string
+        /** @description Optional network identifier. Use to request wallets for a specific network when asset is a multi-chain crypto asset. If not specified, the default network (ehtereum) will be used. */
+        network?: 'ethereum' | 'solana'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Crypto Funding Wallets
+     * @description Lists wallets for the account given in the path parameter. If an asset is specified and no wallet for the account and asset pair exists one will be created. If no asset is specified only existing wallets will be listed for the account. An account may have at most one wallet per asset.
+     */
+    get: operations['listCryptoFundingWallets']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/wallets/transfers': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Crypto Funding Transfers
+     * @description Returns an array of all transfers associated with the given account across all wallets.
+     */
+    get: operations['listCryptoFundingTransfers']
+    put?: never
+    /**
+     * Request a New Withdrawal
+     * @description Creates a withdrawal request. Note that outgoing withdrawals must be sent to a whitelisted address and you must whitelist addresses at least 24 hours in advance. If you attempt to withdraw funds to a non-whitelisted address then the transfer will be rejected.
+     */
+    post: operations['createCryptoTransferForAccount']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/wallets/transfers/{transfer_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The crypto transfer to retrieve */
+        transfer_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Retrieve a Crypto Funding Transfer
+     * @description Returns a specific wallet transfer by passing into the query the transfer_id.
+     */
+    get: operations['getCryptoFundingTransfer']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/wallets/whitelists': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** An array of whitelisted addresses */
+    get: operations['listWhitelistedAddress']
+    put?: never
+    /** Request a new whitelisted address */
+    post: operations['createWhitelistedAddress']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/wallets/whitelists/{whitelisted_address_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The whitelisted address to delete */
+        whitelisted_address_id: string
+      }
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete a whitelisted address */
+    delete: operations['deleteWhitelistedAddress']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/wallets/fees/estimate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Returns the estimated gas fee for a proposed transaction. */
+    get: operations['getCryptoTransferEstimate']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/wallets': {
+    parameters: {
+      query?: {
+        asset?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Crypto Funding Wallets
+     * @description Lists wallets for the account given in the path parameter. If an asset is specified and no wallet for the account and asset pair exists one will be created. If no asset is specified only existing wallets will be listed for the account. An account may have at most one wallet per asset
+     */
+    get: operations['listCryptoPerpFundingWallets']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/wallets/transfers': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Crypto Funding Transfers
+     * @description Returns an array of all transfers associated with the given account across all wallets
+     */
+    get: operations['listCryptoPerpFundingTransfers']
+    put?: never
+    /**
+     * Request a New Withdrawal
+     * @description Creates a withdrawal request. Note that outgoing withdrawals must be sent to a whitelisted address and you must whitelist addresses at least 24 hours in advance. If you attempt to withdraw funds to a non-whitelisted address then the transfer will be rejected
+     */
+    post: operations['createCryptoPerpTransferForAccount']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/wallets/transfers/{transfer_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The crypto transfer to retrieve */
+        transfer_id: string
+      }
+      cookie?: never
+    }
+    /**
+     * Retrieve a Crypto Funding Transfer
+     * @description Returns a specific wallet transfer by passing into the query the transfer_id
+     */
+    get: operations['getCryptoPerpFundingTransfer']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/wallets/whitelists': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** An array of whitelisted addresses */
+    get: operations['listWhitelistedPerpAddress']
+    put?: never
+    /** Request a new whitelisted address */
+    post: operations['createWhitelistedPerpAddress']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/wallets/whitelists/{whitelisted_address_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The whitelisted address to delete */
+        whitelisted_address_id: string
+      }
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete a whitelisted address */
+    delete: operations['deleteWhitelistedPerpAddress']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/wallets/fees/estimate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Returns the estimated gas fee for a proposed transaction */
+    get: operations['getCryptoPerpTransferEstimate']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/leverage': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get Account Leverage for an Asset
+     * @description Retrieves the current leverage setting for the crypto perpetuals account, specific to a given underlying asset. To use this endpoint, provide the 'symbol' of the asset as a query parameter. The system will return the asset's symbol and the integer value representing the current leverage applied to it within the account
+     */
+    get: operations['getCryptoPerpAccountLeverage']
+    put?: never
+    /**
+     * Set Account Leverage for an Asset
+     * @description Updates the leverage for the crypto perpetuals account for a specific underlying asset. Provide the 'symbol' of the asset and the desired 'leverage' (as an integer) using query parameters. The system will return the asset's symbol and the newly set leverage value upon successful update
+     */
+    post: operations['setCryptoPerpAccountLeverage']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/v2/perpetuals/account_vitals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Account Vitals
+     * @description Fetches key financial metrics for the crypto perpetuals account, providing a snapshot of its current status by detailing the relationship between the user's positions and their collateral. The response includes maintenance margin (USDT), collateral balance (USDT), total collateral (USDT), and profit/loss (USDT)
+     */
+    get: operations['getCryptoPerpAccountVitals']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+}
+export type webhooks = Record<string, never>
+export interface components {
+  schemas: {
+    /**
+     * Account
+     * @description The account API serves important information related to an account, including account status, funds available for trade, funds available for withdrawal, and various flags relevant to an account’s ability to trade. An account maybe be blocked for just for trades (trades_blocked flag) or for both trades and transfers (account_blocked flag) if Alpaca identifies the account to engaging in any suspicious activity. Also, in accordance with FINRA’s pattern day trading rule, an account may be flagged for pattern day trading (pattern_day_trader flag), which would inhibit an account from placing any further day-trades. Please note that cryptocurrencies are not eligible assets to be used as collateral for margin accounts and will require the asset be traded using cash only.
+     */
+    Account: {
+      /**
+       * Format: uuid
+       * @description Account Id.
+       */
+      id: string
+      /** @description Account number. */
+      account_number?: string
+      status: components['schemas']['AccountStatus']
+      /**
+       * @description USD
+       * @example USD
+       */
+      currency?: string
+      /** @description Cash Balance */
+      cash?: string
+      /** @description Total value of cash + holding positions (This field is deprecated. It is equivalent to the equity field.) */
+      portfolio_value?: string
+      /** @description Current available non-margin dollar buying power */
+      non_marginable_buying_power?: string
+      /** @description The fees collected. */
+      accrued_fees?: string
+      /** @description Cash pending transfer in. */
+      pending_transfer_in?: string
+      /** @description Cash pending transfer out. */
+      pending_transfer_out?: string
+      /** @description Whether or not the account has been flagged as a pattern day trader */
+      pattern_day_trader?: boolean
+      /** @description User setting. If true, the account is not allowed to place orders. */
+      trade_suspended_by_user?: boolean
+      /** @description If true, the account is not allowed to place orders. */
+      trading_blocked?: boolean
+      /** @description If true, the account is not allowed to request money transfers. */
+      transfers_blocked?: boolean
+      /** @description If true, the account activity by user is prohibited. */
+      account_blocked?: boolean
+      /**
+       * Format: date-time
+       * @description Timestamp this account was created at
+       */
+      created_at?: string
+      /** @description Flag to denote whether or not the account is permitted to short */
+      shorting_enabled?: boolean
+      /** @description Real-time MtM value of all long positions held in the account */
+      long_market_value?: string
+      /** @description Real-time MtM value of all short positions held in the account */
+      short_market_value?: string
+      /** @description Cash + long_market_value + short_market_value */
+      equity?: string
+      /** @description Equity as of previous trading day at 16:00:00 ET */
+      last_equity?: string
+      /** @description Buying power multiplier that represents account margin classification; valid values 1 (standard limited margin account with 1x buying power), 2 (reg T margin account with 2x intraday and overnight buying power; this is the default for all non-PDT accounts with $2,000 or more equity), 4 (PDT account with 4x intraday buying power and 2x reg T overnight buying power) */
+      multiplier?: string
+      /** @description Current available $ buying power; If multiplier = 4, this is your daytrade buying power which is calculated as (last_equity - (last) maintenance_margin) * 4; If multiplier = 2, buying_power = max(equity – initial_margin,0) * 2; If multiplier = 1, buying_power = cash */
+      buying_power?: string
+      /** @description Reg T initial margin requirement (continuously updated value) */
+      initial_margin?: string
+      /** @description Maintenance margin requirement (continuously updated value) */
+      maintenance_margin?: string
+      /** @description Value of special memorandum account (will be used at a later date to provide additional buying_power) */
+      sma?: string
+      /** @description The current number of daytrades that have been made in the last 5 trading days (inclusive of today) */
+      daytrade_count?: number
+      /**
+       * @description The date of the snapshot for `last_*` fields
+       * @example 2021-04-01
+       */
+      balance_asof?: string
+      /** @description Your maintenance margin requirement on the previous trading day */
+      last_maintenance_margin?: string
+      /** @description Your buying power for day trades (continuously updated value) */
+      daytrading_buying_power?: string
+      /** @description Your buying power under Regulation T (your excess equity - equity minus margin value - times your margin multiplier) */
+      regt_buying_power?: string
+      /** @description Your buying power for options trading */
+      options_buying_power?: string
+      /**
+       * @description The options trading level that was approved for this account.
+       *     0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.
+       * @example 3
+       * @enum {integer}
+       */
+      options_approved_level?: 0 | 1 | 2 | 3
+      /**
+       * @description The effective options trading level of the account.
+       *     This is the minimum between account options_approved_level and account configurations max_options_trading_level.
+       *     0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.
+       * @example 3
+       * @enum {integer}
+       */
+      options_trading_level?: 0 | 1 | 2 | 3
+      /**
+       * @description The intraday adjustment by non_trade_activities such as fund deposit/withdraw.
+       * @example 0
+       */
+      intraday_adjustments?: string
+      /** @description Pending regulatory fees for the account. */
+      pending_reg_taf_fees?: string
+    }
+    /**
+     * AccountStatus
+     * @description An enum representing the various possible account status values.
+     *
+     *     Most likely, the account status is ACTIVE unless there is any problem. The account status may get in ACCOUNT_UPDATED when personal information is being updated from the dashboard, in which case you may not be allowed trading for a short period of time until the change is approved.
+     *
+     *     - ONBOARDING
+     *       The account is onboarding.
+     *     - SUBMISSION_FAILED
+     *       The account application submission failed for some reason.
+     *     - SUBMITTED
+     *       The account application has been submitted for review.
+     *     - ACCOUNT_UPDATED
+     *       The account information is being updated.
+     *     - APPROVAL_PENDING
+     *       The final account approval is pending.
+     *     - ACTIVE
+     *       The account is active for trading.
+     *     - REJECTED
+     *       The account application has been rejected.
+     * @example ACTIVE
+     * @enum {string}
+     */
+    AccountStatus:
+      | 'ONBOARDING'
+      | 'SUBMISSION_FAILED'
+      | 'SUBMITTED'
+      | 'ACCOUNT_UPDATED'
+      | 'APPROVAL_PENDING'
+      | 'ACTIVE'
+      | 'REJECTED'
+    /**
+     * AccountConfigurations
+     * @description The account configuration API provides custom configurations about your trading account settings. These configurations control various allow you to modify settings to suit your trading needs.
+     */
+    AccountConfigurations: {
+      /**
+       * @description both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks.
+       * @enum {string}
+       */
+      dtbp_check?: 'both' | 'entry' | 'exit'
+      /** @description all or none. If none, emails for order fills are not sent. */
+      trade_confirm_email?: string
+      /** @description If true, new orders are blocked. */
+      suspend_trade?: boolean
+      /** @description If true, account becomes long-only mode. */
+      no_shorting?: boolean
+      /** @description If true, account is able to participate in fractional trading */
+      fractional_trading?: boolean
+      /** @description Can be "1", "2", or "4" */
+      max_margin_multiplier?: string
+      /**
+       * @description The desired maximum options trading level. 0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.
+       * @enum {integer}
+       */
+      max_options_trading_level?: 0 | 1 | 2 | 3
+      /**
+       * @description `both`, `entry`, or `exit`. If entry orders will be rejected on entering a position if it could result in PDT being set for the account. exit will reject exiting orders if they would result in PDT being set.
+       * @example entry
+       */
+      pdt_check?: string
+      /** @description If set to true then Alpaca will accept orders for PTP symbols with no exception. Default is false. */
+      ptp_no_exception_entry?: boolean
+      /** @description If true, overnight trading is disabled. */
+      disable_overnight_trading?: boolean
+    }
+    /** AccountTradingActivities */
+    TradingActivities: {
+      activity_type?: components['schemas']['ActivityType']
+      /** @description An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results. */
+      id?: string
+      /** @description The cumulative quantity of shares involved in the execution. */
+      cum_qty?: string
+      /** @description For partially_filled orders, the quantity of shares that are left to be filled. */
+      leaves_qty?: string
+      /** @description The per-share price that the trade was executed at. */
+      price?: string
+      /** @description The number of shares involved in the trade execution. */
+      qty?: string
+      /** @description buy or sell */
+      side?: string
+      /**
+       * @description The symbol of the security being traded.
+       * @example AAPL
+       */
+      symbol?: string
+      /**
+       * Format: date-time
+       * @description The time at which the execution occurred.
+       */
+      transaction_time?: string
+      /**
+       * Format: uuid
+       * @description The id for the order that filled.
+       */
+      order_id?: string
+      /**
+       * @description fill or partial_fill
+       * @example fill
+       * @enum {string}
+       */
+      type?: 'fill' | 'partial_fill'
+      order_status?: components['schemas']['OrderStatus']
+    }
+    /** AccountNonTradeActivities */
+    NonTradeActivities: {
+      activity_type?: components['schemas']['ActivityType']
+      activity_sub_type?: components['schemas']['ActivitySubType']
+      /** @description An ID for the activity, always in “::” format. Can be sent as page_token in requests to facilitate the paging of results. */
+      id?: string
+      /**
+       * Format: date-time
+       * @description The date on which the activity occurred or on which the transaction associated with the activity settled.
+       */
+      date?: string
+      /** @description The net amount of money (positive or negative) associated with the activity. */
+      net_amount?: string
+      /** @description The symbol of the security involved with the activity. Not present for all activity types. */
+      symbol?: string
+      /** @description The CUSIP of the security involved with the activity. Not present for all activity types. */
+      cusip?: string
+      /** @description For dividend activities, the number of shares that contributed to the payment. Not present for other activity types. */
+      qty?: string
+      /** @description For dividend activities, the average amount paid per share. Not present for other activity types. */
+      per_share_amount?: string
+      /** @description ID used to link activities who share a sibling relationship. */
+      group_id?: string
+      /**
+       * @description The activity status.
+       * @enum {string}
+       */
+      status?: 'executed' | 'correct' | 'canceled'
+      /**
+       * Format: date-time
+       * @description Valid only for non-trading activity types. Null for trading activites.
+       */
+      created_at?: string
+    }
+    /**
+     * ActivityType
+     * @description - FILL
+     *       Order fills (both partial and full fills)
+     *
+     *     - TRANS
+     *       Cash transactions (both CSD and CSW)
+     *
+     *     - MISC
+     *       Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL)
+     *
+     *     - ACATC
+     *       ACATS IN/OUT (Cash)
+     *
+     *     - ACATS
+     *       ACATS IN/OUT (Securities)
+     *
+     *     - CFEE
+     *       Crypto fee
+     *
+     *     - CSD
+     *       Cash deposit(+)
+     *
+     *     - CSW
+     *       Cash withdrawal(-)
+     *
+     *     - DIV
+     *       Dividends
+     *
+     *     - DIVCGL
+     *       Dividend (capital gain long term)
+     *
+     *     - DIVCGS
+     *       Dividend (capital gain short term)
+     *
+     *     - DIVFEE
+     *       Dividend fee
+     *
+     *     - DIVFT
+     *       Dividend adjusted (Foreign Tax Withheld)
+     *
+     *     - DIVNRA
+     *       Dividend adjusted (NRA Withheld)
+     *
+     *     - DIVROC
+     *       Dividend return of capital
+     *
+     *     - DIVTW
+     *       Dividend adjusted (Tefra Withheld)
+     *
+     *     - DIVTXEX
+     *       Dividend (tax exempt)
+     *
+     *     - FEE
+     *       Fee denominated in USD
+     *
+     *     - INT
+     *       Interest (credit/margin)
+     *
+     *     - INTNRA
+     *       Interest adjusted (NRA Withheld)
+     *
+     *     - INTTW
+     *       Interest adjusted (Tefra Withheld)
+     *
+     *     - JNL
+     *       Journal entry
+     *
+     *     - JNLC
+     *       Journal entry (cash)
+     *
+     *     - JNLS
+     *       Journal entry (stock)
+     *
+     *     - MA
+     *       Merger/Acquisition
+     *
+     *     - NC
+     *       Name change
+     *
+     *     - OPASN
+     *       Option assignment
+     *
+     *     - OPCA
+     *       Option corporate action
+     *
+     *     - OPCSH
+     *       Option cash deliverable for non-standard contracts
+     *
+     *     - OPEXC
+     *       Option exercise
+     *
+     *     - OPEXP
+     *       Option expiration
+     *
+     *     - OPTRD
+     *       Option trade
+     *
+     *     - PTC
+     *       Pass Thru Charge
+     *
+     *     - PTR
+     *       Pass Thru Rebate
+     *
+     *     - REORG
+     *       Reorg CA
+     *
+     *     - SPIN
+     *       Stock spinoff
+     *
+     *     - SPLIT
+     *       Stock split
+     * @enum {string}
+     */
+    ActivityType:
+      | 'FILL'
+      | 'TRANS'
+      | 'MISC'
+      | 'ACATC'
+      | 'ACATS'
+      | 'CFEE'
+      | 'CSD'
+      | 'CSW'
+      | 'DIV'
+      | 'DIVCGL'
+      | 'DIVCGS'
+      | 'DIVFEE'
+      | 'DIVFT'
+      | 'DIVNRA'
+      | 'DIVROC'
+      | 'DIVTW'
+      | 'DIVTXEX'
+      | 'FEE'
+      | 'INT'
+      | 'INTNRA'
+      | 'INTTW'
+      | 'JNL'
+      | 'JNLC'
+      | 'JNLS'
+      | 'MA'
+      | 'NC'
+      | 'OPASN'
+      | 'OPCA'
+      | 'OPCSH'
+      | 'OPEXC'
+      | 'OPEXP'
+      | 'OPTRD'
+      | 'PTC'
+      | 'PTR'
+      | 'REORG'
+      | 'SPIN'
+      | 'SPLIT'
+    /**
+     * ActivitySubType
+     * @description Represents a more specific classification to the `activity_type`.
+     *     This field is optional and may not always be populated, depending on the activity type and the available data.
+     *     Each `activity_type` has a set of valid `activity_sub_type` values.
+     *
+     *     Full mapping of `activity_type` to `activity_sub_type`:
+     *
+     *     - **DIV**: Dividend activity sub-types:
+     *       - **CDIV**: Cash Dividend
+     *       - **SDIV**: Stock Dividend
+     *       - **SPD**: Substitute Payment In Lieu Of Dividend
+     *
+     *     - **FEE**: Fee-related activity sub-types:
+     *       - **REG**: Regulatory Fee
+     *       - **TAF**: Trading Activity Fee
+     *       - **LCT**: Local Currency Trading Fee
+     *       - **ORF**: Options Regulatory Fee
+     *       - **OCC**: Options Clearing Corporation Fee
+     *       - **NRC**: Non-Retail Commission Fee
+     *       - **NRV**: Non-Retail Venue Fee
+     *       - **COM**: Commission
+     *       - **CAT**: Consolidated Audit Trail Fee
+     *
+     *     - **INT**: Interest-related activity sub-types:
+     *       - **MGN**: Margin Interest
+     *       - **CDT**: Credit Interest
+     *       - **SWP**: Sweep Interest
+     *       - **QII**: Qualified Interest
+     *
+     *     - **MA**: Merger and Acquisition activity sub-types:
+     *       - **CMA**: Cash Merger
+     *       - **SMA**: Stock Merger
+     *       - **SCMA**: Stock & Cash Merger
+     *
+     *     - **NC**: Name Change activity sub types
+     *       - **SNC**: Symbol Name Change
+     *       - **CNC**: CUSIP Name Change
+     *       - **SCNC**: Symbol & CUSIP Name Change
+     *
+     *     - **OPCA**: Option Corporate Action activity sub-types:
+     *       - **DIV.CDIV**: Cash Dividend
+     *       - **DIV.SDIV**: Stock Dividend
+     *       - **MA.CMA**: Cash Merger
+     *       - **MA.SMA**: Stock Merger
+     *       - **MA.SCMA**: Stock & Cash Merger
+     *       - **NC.CNC**: CUSIP Name Change
+     *       - **NC.SNC**: Symbol Name Change
+     *       - **NC.SCNC**: Symbol & CUSIP Name Change
+     *       - **SPIN**: Spin-off
+     *       - **SPLIT.FSPLIT**: Forward Stock Split
+     *       - **SPLIT.RSPLIT**: Reverse Stock Split
+     *       - **SPLIT.USPLIT**: Unit Split
+     *
+     *     - **REORG**: Reorganization activity sub-types:
+     *       - **WRM**: Worthless Removal
+     *
+     *     - **SPLIT**: Stock Split activity sub-types:
+     *       - **FSPLIT**: Forward Stock Split
+     *       - **RSPLIT**: Reverse Stock Split
+     *       - **USPLIT**: Unit Split
+     *
+     *     - **VOF**: Voluntary Offering activity sub-types:
+     *       - **VTND**: Tender Offer
+     *       - **VWRT**: Warrant Exercise
+     *       - **VRGT**: Rights Offer
+     *       - **VEXH**: Exchange Offer
+     *
+     *     - **WH**: Withholding activity sub-types:
+     *       - **SWH**: State Withholding
+     *       - **FWH**: Federal Withholding
+     *       - **SLWH**: Sales Withholding
+     */
+    ActivitySubType: string
+    /**
+     * Order
+     * @description The Orders API allows a user to monitor, place and cancel their orders with Alpaca.
+     *
+     *     Each order has a unique identifier provided by the client. This client-side unique order ID will be automatically generated by the system if not provided by the client, and will be returned as part of the order object along with the rest of the fields described below. Once an order is placed, it can be queried using the client-side order ID to check the status.
+     *
+     *     Updates on open orders at Alpaca will also be sent over the streaming interface, which is the recommended method of maintaining order state.
+     */
+    Order: {
+      /** @description Order ID */
+      id?: string
+      /** @description Client unique order ID */
+      client_order_id?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string | null
+      /** Format: date-time */
+      submitted_at?: string | null
+      /** Format: date-time */
+      filled_at?: string | null
+      /** Format: date-time */
+      expired_at?: string | null
+      /** Format: date-time */
+      canceled_at?: string | null
+      /** Format: date-time */
+      failed_at?: string | null
+      /** Format: date-time */
+      replaced_at?: string | null
+      /**
+       * Format: uuid
+       * @description The order ID that this order was replaced by
+       */
+      replaced_by?: string | null
+      /**
+       * Format: uuid
+       * @description The order ID that this order replaces
+       */
+      replaces?: string | null
+      /**
+       * Format: uuid
+       * @description Asset ID (For options this represents the option contract ID)
+       */
+      asset_id?: string
+      /** @description Asset symbol, required for all order classes except for `mleg` */
+      symbol?: string
+      asset_class?: components['schemas']['AssetClass']
+      /** @description Ordered notional amount. If entered, qty will be null. Can take up to 9 decimal points. */
+      notional: string | null
+      /** @description Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points. Required if order class is `mleg`. */
+      qty?: string | null
+      /** @description Filled quantity */
+      filled_qty?: string
+      /** @description Filled average price */
+      filled_avg_price?: string | null
+      order_class?: components['schemas']['OrderClass']
+      /**
+       * @deprecated
+       * @description Deprecated in favour of the field "type"
+       */
+      order_type?: string
+      type: components['schemas']['OrderType']
+      side?: components['schemas']['OrderSide']
+      time_in_force: components['schemas']['TimeInForce']
+      /** @description Limit price */
+      limit_price?: string | null
+      /** @description Stop price */
+      stop_price?: string | null
+      status?: components['schemas']['OrderStatus']
+      /** @description If true, eligible for execution outside regular trading hours. */
+      extended_hours?: boolean
+      /** @description When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order. Otherwise, null. Required if order class is `mleg`. */
+      legs?: components['schemas']['OrderLeg'][] | null
+      /** @description The percent value away from the high water mark for trailing stop orders. */
+      trail_percent?: string | null
+      /** @description The dollar value away from the high water mark for trailing stop orders. */
+      trail_price?: string | null
+      /** @description The highest (lowest) market price seen since the trailing stop order was submitted. */
+      hwm?: string | null
+      position_intent?: components['schemas']['PositionIntent']
+    }
+    /**
+     * Order
+     * @description This is copy of Order response schemas as a workaround of displaying issue of nested Order recursively for legs
+     */
+    OrderLeg: {
+      /** @description Order ID */
+      id?: string
+      /** @description Client unique order ID */
+      client_order_id?: string
+      /** Format: date-time */
+      created_at?: string
+      /** Format: date-time */
+      updated_at?: string | null
+      /** Format: date-time */
+      submitted_at?: string | null
+      /** Format: date-time */
+      filled_at?: string | null
+      /** Format: date-time */
+      expired_at?: string | null
+      /** Format: date-time */
+      canceled_at?: string | null
+      /** Format: date-time */
+      failed_at?: string | null
+      /** Format: date-time */
+      replaced_at?: string | null
+      /**
+       * Format: uuid
+       * @description The order ID that this order was replaced by
+       */
+      replaced_by?: string | null
+      /**
+       * Format: uuid
+       * @description The order ID that this order replaces
+       */
+      replaces?: string | null
+      /**
+       * Format: uuid
+       * @description Asset ID (For options this represents the option contract ID)
+       */
+      asset_id?: string
+      /** @description Asset symbol */
+      symbol: string
+      asset_class?: components['schemas']['AssetClass']
+      /** @description Ordered notional amount. If entered, qty will be null. Can take up to 9 decimal points. */
+      notional: string | null
+      /** @description Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points. */
+      qty: string | null
+      /** @description Filled quantity */
+      filled_qty?: string
+      /** @description Filled average price */
+      filled_avg_price?: string | null
+      order_class?: components['schemas']['OrderClass']
+      /**
+       * @deprecated
+       * @description Deprecated in favour of the field "type"
+       */
+      order_type?: string
+      type: components['schemas']['OrderType']
+      side: components['schemas']['OrderSide']
+      time_in_force: components['schemas']['TimeInForce']
+      /** @description Limit price */
+      limit_price?: string | null
+      /** @description Stop price */
+      stop_price?: string | null
+      status?: components['schemas']['OrderStatus']
+      /** @description If true, eligible for execution outside regular trading hours. */
+      extended_hours?: boolean
+      /** @description When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order. Otherwise, null. */
+      legs?: unknown[] | null
+      /** @description The percent value away from the high water mark for trailing stop orders. */
+      trail_percent?: string | null
+      /** @description The dollar value away from the high water mark for trailing stop orders. */
+      trail_price?: string | null
+      /** @description The highest (lowest) market price seen since the trailing stop order was submitted. */
+      hwm?: string | null
+      position_intent?: components['schemas']['PositionIntent']
+    }
+    /**
+     * MLegOrderLeg
+     * @description Represents an individual leg of a multi-leg options order.
+     */
+    MLegOrderLeg: {
+      side?: components['schemas']['OrderSide']
+      position_intent?: components['schemas']['PositionIntent']
+      /** @description symbol or asset ID to identify the asset to trade */
+      symbol: string
+      /** @description proportional quantity of this leg in relation to the overall multi-leg order qty */
+      ratio_qty: string
+    }
+    /**
+     * AdvancedInstructions
+     * @description Advanced instructions for Elite Smart Router: https://docs.alpaca.markets/docs/alpaca-elite-smart-router
+     */
+    AdvancedInstructions: {
+      /**
+       * @description The advanced routing algorithm to use for the order
+       * @example DMA
+       * @enum {string}
+       */
+      algorithm?: 'DMA' | 'TWAP' | 'VWAP'
+      /**
+       * @description Target exchange for order execution
+       * @example NYSE
+       * @enum {string}
+       */
+      destination?: 'NYSE' | 'NASDAQ' | 'ARCA'
+      /**
+       * Format: decimal
+       * @description Maximum shares/contracts displayed on the exchange at any time. Must be in round lot increments
+       * @example 100
+       */
+      display_qty?: string
+      /**
+       * Format: date-time
+       * @description When the algorithm is to start executing. Must be within current market trading hours
+       * @example 2025-07-21T09:30:00-04:00
+       */
+      start_time?: string
+      /**
+       * Format: date-time
+       * @description When the algorithm is to be done executing. Must be within current market trading hours
+       * @example 2025-07-21T15:30:00-04:00
+       */
+      end_time?: string
+      /**
+       * Format: decimal
+       * @description Maximum percentage of the ticker's period volume this order might participate in. Must be 0 < max_percentage < 1, with up to 3 decimal points precision.
+       * @example 0.314
+       */
+      max_percentage?: string
+    }
+    /**
+     * OrderType
+     * @description The order types supported by Alpaca vary based on the order's security type. The following provides a comprehensive breakdown of the supported order types for each category:
+     *      - Equity trading: market, limit, stop, stop_limit, trailing_stop.
+     *      - Options trading: market, limit.
+     *      - Multileg Options trading: market, limit.
+     *      - Crypto trading: market, limit, stop_limit.
+     * @example market
+     * @enum {string}
+     */
+    OrderType: 'market' | 'limit' | 'stop' | 'stop_limit' | 'trailing_stop'
+    /**
+     * OrderSide
+     * @description Represents which side this order was on:
+     *     - buy
+     *     - sell
+     *     Required for all order classes except for mleg.
+     * @example buy
+     * @enum {string}
+     */
+    OrderSide: 'buy' | 'sell'
+    /**
+     * OrderClass
+     * @description The order classes supported by Alpaca vary based on the order's security type. The following provides a comprehensive breakdown of the supported order classes for each category:
+     *       - Equity trading: simple (or ""), oco, oto, bracket.
+     *       - Options trading:
+     *         - simple (or "")
+     *         - mleg (required for multi-leg complex option strategies)
+     *       - Crypto trading: simple (or "").
+     * @example bracket
+     * @enum {string}
+     */
+    OrderClass: 'simple' | 'bracket' | 'oco' | 'oto' | 'mleg' | ''
+    /**
+     * OrderStatus
+     * @description An order executed through Alpaca can experience several status changes during its lifecycle. The most common statuses are described in detail below:
+     *
+     *     - new
+     *       The order has been received by Alpaca, and routed to exchanges for execution. This is the usual initial state of an order.
+     *
+     *     - partially_filled
+     *       The order has been partially filled.
+     *
+     *     - filled
+     *       The order has been filled, and no further updates will occur for the order.
+     *
+     *     - done_for_day
+     *       The order is done executing for the day, and will not receive further updates until the next trading day.
+     *
+     *     - canceled
+     *       The order has been canceled, and no further updates will occur for the order. This can be either due to a cancel request by the user, or the order has been canceled by the exchanges due to its time-in-force.
+     *
+     *     - expired
+     *       The order has expired, and no further updates will occur for the order.
+     *
+     *     - replaced
+     *       The order was replaced by another order, or was updated due to a market event such as corporate action.
+     *
+     *     - pending_cancel
+     *       The order is waiting to be canceled.
+     *
+     *     - pending_replace
+     *       The order is waiting to be replaced by another order. The order will reject cancel request while in this state.
+     *
+     *     Less common states are described below. Note that these states only occur on very rare occasions, and most users will likely never see their orders reach these states:
+     *
+     *     - accepted
+     *       The order has been received by Alpaca, but hasn’t yet been routed to the execution venue. This could be seen often out side of trading session hours.
+     *
+     *     - pending_new
+     *       The order has been received by Alpaca, and routed to the exchanges, but has not yet been accepted for execution. This state only occurs on rare occasions.
+     *
+     *     - accepted_for_bidding
+     *       The order has been received by exchanges, and is evaluated for pricing. This state only occurs on rare occasions.
+     *
+     *     - stopped
+     *       The order has been stopped, and a trade is guaranteed for the order, usually at a stated price or better, but has not yet occurred. This state only occurs on rare occasions.
+     *
+     *     - rejected
+     *       The order has been rejected, and no further updates will occur for the order. This state occurs on rare occasions and may occur based on various conditions decided by the exchanges.
+     *
+     *     - suspended
+     *       The order has been suspended, and is not eligible for trading. This state only occurs on rare occasions.
+     *
+     *     - calculated
+     *       The order has been completed for the day (either filled or done for day), but remaining settlement calculations are still pending. This state only occurs on rare occasions.
+     *
+     *
+     *     An order may be canceled through the API up until the point it reaches a state of either filled, canceled, or expired.
+     * @example new
+     * @enum {string}
+     */
+    OrderStatus:
+      | 'new'
+      | 'partially_filled'
+      | 'filled'
+      | 'done_for_day'
+      | 'canceled'
+      | 'expired'
+      | 'replaced'
+      | 'pending_cancel'
+      | 'pending_replace'
+      | 'accepted'
+      | 'pending_new'
+      | 'accepted_for_bidding'
+      | 'stopped'
+      | 'rejected'
+      | 'suspended'
+      | 'calculated'
+    /**
+     * TimeInForce
+     * @description The Time-In-Force values supported by Alpaca vary based on the order's security type. Here is a breakdown of the supported TIFs for each specific security type:
+     *     - Equity trading: day, gtc, opg, cls, ioc, fok.
+     *     - Options trading: day.
+     *     - Crypto trading: gtc, ioc.
+     *
+     *     Below are the descriptions of each TIF:
+     *     - day:
+     *       A day order is eligible for execution only on the day it is live. By default, the order is only valid during Regular Trading Hours (9:30am - 4:00pm ET). If unfilled after the closing auction, it is automatically canceled. If submitted after the close, it is queued and submitted the following trading day. However, if marked as eligible for extended hours, the order can also execute during supported extended hours.
+     *
+     *     - gtc:
+     *       The order is good until canceled. Non-marketable GTC limit orders are subject to price adjustments to offset corporate actions affecting the issue. We do not currently support Do Not Reduce(DNR) orders to opt out of such price adjustments.
+     *
+     *     - opg:
+     *       Use this TIF with a market/limit order type to submit “market on open” (MOO) and “limit on open” (LOO) orders. This order is eligible to execute only in the market opening auction. Any unfilled orders after the open will be cancelled. OPG orders submitted after 9:28am but before 7:00pm ET will be rejected. OPG orders submitted after 7:00pm will be queued and routed to the following day’s opening auction. On open/on close orders are routed to the primary exchange. Such orders do not necessarily execute exactly at 9:30am / 4:00pm ET but execute per the exchange’s auction rules.
+     *
+     *     - cls:
+     *       Use this TIF with a market/limit order type to submit “market on close” (MOC) and “limit on close” (LOC) orders. This order is eligible to execute only in the market closing auction. Any unfilled orders after the close will be cancelled. CLS orders submitted after 3:50pm but before 7:00pm ET will be rejected. CLS orders submitted after 7:00pm will be queued and routed to the following day’s closing auction. Only available with API v2.
+     *
+     *     - ioc:
+     *       An Immediate Or Cancel (IOC) order requires all or part of the order to be executed immediately. Any unfilled portion of the order is canceled. Only available with API v2. Most market makers who receive IOC orders will attempt to fill the order on a principal basis only, and cancel any unfilled balance. On occasion, this can result in the entire order being cancelled if the market maker does not have any existing inventory of the security in question.
+     *
+     *     - fok:
+     *       A Fill or Kill (FOK) order is only executed if the entire order quantity can be filled, otherwise the order is canceled. Only available with API v2.
+     * @example day
+     * @enum {string}
+     */
+    TimeInForce: 'day' | 'gtc' | 'opg' | 'cls' | 'ioc' | 'fok'
+    /**
+     * PositionIntent
+     * @description Represents the desired position strategy.
+     * @example buy_to_open
+     * @enum {string}
+     */
+    PositionIntent: 'buy_to_open' | 'buy_to_close' | 'sell_to_open' | 'sell_to_close'
+    /**
+     * Assets
+     * @description The assets API serves as the master list of assets available for trade and data consumption from Alpaca. Assets are sorted by asset class, exchange and symbol. Some assets are only available for data consumption via Polygon, and are not tradable with Alpaca. These assets will be marked with the flag tradable=false.
+     */
+    Assets: {
+      /**
+       * Format: uuid
+       * @description Asset ID
+       */
+      id: string
+      class: components['schemas']['AssetClass']
+      /**
+       * @description The CUSIP identifier for the asset (US Equities only).
+       *     To request a specific CUSIP, please reach out to Alpaca support.
+       * @example 987654321
+       */
+      cusip?: string | null
+      exchange: components['schemas']['Exchange']
+      /**
+       * @description The symbol of the asset
+       * @example AAPL
+       */
+      symbol: string
+      /** @description The official name of the asset */
+      name: string
+      /**
+       * @description active or inactive
+       * @example active
+       * @enum {string}
+       */
+      status: 'active' | 'inactive'
+      /** @description Asset is tradable on Alpaca or not */
+      tradable: boolean
+      /** @description Asset is marginable or not */
+      marginable: boolean
+      /** @description Asset is shortable or not */
+      shortable: boolean
+      /** @description Asset is easy-to-borrow or not (filtering for easy_to_borrow = True is the best way to check whether the name is currently available to short at Alpaca). */
+      easy_to_borrow: boolean
+      /** @description Asset is fractionable or not */
+      fractionable: boolean
+      /**
+       * @deprecated
+       * @description **deprecated**: Please use margin_requirement_long or margin_requirement_short instead. Note that these fields are of type string.
+       *     Shows the margin requirement percentage for the asset (equities only).
+       */
+      maintenance_margin_requirement?: number
+      /** @description The margin requirement percentage for the asset's long positions (equities only). */
+      margin_requirement_long?: string
+      /** @description The margin requirement percentage for the asset's short positions (equities only). */
+      margin_requirement_short?: string
+      /**
+       * @description One of `ptp_no_exception`, `ptp_with_exception`, `ipo`, `has_options`, or `options_late_close`. We will include unique characteristics of the asset here.
+       * @example [
+       *       "ptp_no_exception",
+       *       "ipo"
+       *     ]
+       */
+      attributes?: (
+        | 'ptp_no_exception'
+        | 'ptp_with_exception'
+        | 'ipo'
+        | 'has_options'
+        | 'options_late_close'
+      )[]
+    }
+    /**
+     * AssetClass
+     * @description This represents the category to which the asset belongs to. It serves to identify the nature of the financial instrument, with options including "us_equity" for U.S. equities, "us_option" for U.S. options, and "crypto" for cryptocurrencies.
+     * @example us_equity
+     * @enum {string}
+     */
+    AssetClass: 'us_equity' | 'us_option' | 'crypto'
+    OptionContract: {
+      /**
+       * @description The unique identifier of the option contract.
+       * @example 98359ef7-5124-49f3-85ea-5cf02df6defa
+       */
+      id: string
+      /**
+       * @description The symbol representing the option contract.
+       * @example AAPL250620C00100000
+       */
+      symbol: string
+      /**
+       * @description The name of the option contract.
+       * @example AAPL Jun 20 2025 100 Call
+       */
+      name: string
+      /**
+       * @description The status of the option contract.
+       * @example active
+       * @enum {string}
+       */
+      status: 'active' | 'inactive'
+      /**
+       * @description Indicates whether the option contract is tradable.
+       * @example true
+       */
+      tradable: boolean
+      /**
+       * Format: date
+       * @description The expiration date of the option contract.
+       * @example 2025-06-20
+       */
+      expiration_date: string
+      /**
+       * @description The root symbol of the option contract.
+       * @example AAPL
+       */
+      root_symbol?: string
+      /**
+       * @description The underlying symbol of the option contract.
+       * @example AAPL
+       */
+      underlying_symbol: string
+      /**
+       * @description The unique identifier of the underlying asset.
+       * @example b0b6dd9d-8b9b-48a9-ba46-b9d54906e415
+       */
+      underlying_asset_id: string
+      /**
+       * @description The type of the option contract.
+       * @example call
+       * @enum {string}
+       */
+      type: 'call' | 'put'
+      /**
+       * @description The style of the option contract.
+       * @example american
+       * @enum {string}
+       */
+      style: 'american' | 'european'
+      /**
+       * @description The strike price of the option contract.
+       * @example 100
+       */
+      strike_price: string
+      /**
+       * @description The multiplier of the option contract is crucial for calculating both the trade premium and the extended strike price. In standard contracts, the multiplier is always set to 100.
+       *     For instance, if a contract is traded at $1.50 and the multiplier is 100, the total amount debited when buying the contract would be $150.00.
+       *     Similarly, when exercising a call contract, the total cost will be equal to the strike price times the multiplier.
+       * @example 100
+       */
+      multiplier: string
+      /**
+       * @description Represents the number of underlying shares to be delivered in case the contract is exercised/assigned. For standard contracts, this is always 100.
+       *     This field should **not** be used as a multiplier, specially for non-standard contracts.
+       * @example 100
+       */
+      size: string
+      /**
+       * @description The open interest of the option contract.
+       * @example 237
+       */
+      open_interest?: string
+      /**
+       * Format: date
+       * @description The date of the open interest data.
+       * @example 2023-12-11
+       */
+      open_interest_date?: string
+      /**
+       * @description The close price of the option contract.
+       * @example 148.38
+       */
+      close_price?: string
+      /**
+       * Format: date
+       * @description The date of the close price data.
+       * @example 2023-12-11
+       */
+      close_price_date?: string
+      /**
+       * @description Represents the deliverables tied to the option contract. While standard contracts entail a single deliverable, non-standard ones can encompass multiple deliverables, each potentially customized with distinct parameters.
+       *     This array is included in the list contracts response only if the query parameter show_deliverables=true is provided.
+       */
+      deliverables?: components['schemas']['OptionDeliverable'][]
+    }
+    OptionDeliverable: {
+      /**
+       * @description Type of deliverable, indicating whether it's cash or equity. For standard contracts, it is always "equity".
+       * @example equity
+       * @enum {string}
+       */
+      type: 'cash' | 'equity'
+      /**
+       * @description Symbol of the deliverable. For standard contracts, this is equivalent to the underlying symbol of the contract.
+       * @example AAPL
+       */
+      symbol: string
+      /**
+       * @description Unique identifier of the deliverable asset. For standard contracts, this is equivalent to underlying_asset_id of the contracts.
+       *     This field is not returned for cash deliverables.
+       * @example b0b6dd9d-8b9b-48a9-ba46-b9d54906e415
+       */
+      asset_id?: string
+      /**
+       * @description The deliverable amount. For cash deliverables, this is the cash amount.
+       *     For standard contract, this is always 100.
+       *     This field can be null in case the deliverable settlement is delayed and the amount is yet to be determined.
+       * @example 100
+       */
+      amount: string
+      /**
+       * @description Cost allocation percentage of the deliverable.
+       *     This is used to determine the cost basis of the equity shares received from the exercise, specially for non-standard contracts with multiple deliverables.
+       * @example 100
+       */
+      allocation_percentage: string
+      /**
+       * @description Indicates when the deliverable will be settled if the contract is exercised/assigned.
+       * @example T+2
+       * @enum {string}
+       */
+      settlement_type: 'T+0' | 'T+1' | 'T+2' | 'T+3' | 'T+4' | 'T+5'
+      /**
+       * @description Indicates the settlement method that will be used:
+       *     - **BTOB**: Broker to Broker
+       *     - **CADF**: Cash Difference
+       *     - **CAFX**: Cash Fixed
+       *     - **CCC**: Correspondent Clearing Corp
+       * @example CCC
+       * @enum {string}
+       */
+      settlement_method: 'BTOB' | 'CADF' | 'CAFX' | 'CCC'
+      /**
+       * @description If true, the settlement of the deliverable will be delayed.
+       *     For instance, in the event of a contract with a delayed deliverable being exercised, both the availability of the deliverable and its settlement may be postponed beyond the typical timeframe.
+       * @example false
+       */
+      delayed_settlement: boolean
+    }
+    /**
+     * Position
+     * @description The positions API provides information about an account’s current open positions. The response will include information such as cost basis, shares traded, and market value, which will be updated live as price information is updated. Once a position is closed, it will no longer be queryable through this API.
+     */
+    Position: {
+      /**
+       * Format: uuid
+       * @description Asset ID (For options this represents the option contract ID)
+       */
+      asset_id: string
+      /**
+       * @description Symbol name of the asset
+       * @example AAPL
+       */
+      symbol: string
+      exchange: components['schemas']['ExchangeForPosition']
+      asset_class: components['schemas']['AssetClass']
+      /** @description Average entry price of the position */
+      avg_entry_price: string
+      /** @description The number of shares */
+      qty: string
+      /** @description Total number of shares available minus open orders / locked for options covered call */
+      qty_available?: string
+      /** @description “long” */
+      side: string
+      /** @description Total dollar amount of the position */
+      market_value: string
+      /** @description Total cost basis in dollar */
+      cost_basis: string
+      /** @description Unrealized profit/loss in dollars */
+      unrealized_pl: string
+      /** @description Unrealized profit/loss percent (by a factor of 1) */
+      unrealized_plpc: string
+      /** @description Unrealized profit/loss in dollars for the day */
+      unrealized_intraday_pl: string
+      /** @description Unrealized profit/loss percent (by a factor of 1) */
+      unrealized_intraday_plpc: string
+      /** @description Current asset price per share */
+      current_price: string
+      /** @description Last day’s asset price per share based on the closing value of the last trading day */
+      lastday_price: string
+      /** @description Percent change from last day price (by a factor of 1) */
+      change_today: string
+      asset_marginable: boolean
+    }
+    /**
+     * Watchlist
+     * @description The watchlist API provides CRUD operation for the account’s watchlist. An account can have multiple watchlists and each is uniquely identified by id but can also be addressed by user-defined name. Each watchlist is an ordered list of assets.
+     */
+    Watchlist: {
+      /**
+       * Format: uuid
+       * @description watchlist id
+       */
+      id: string
+      /**
+       * Format: uuid
+       * @description account ID
+       */
+      account_id: string
+      /** Format: date-time */
+      created_at: string
+      /** Format: date-time */
+      updated_at: string
+      /** @description user-defined watchlist name (up to 64 characters) */
+      name: string
+      /** @description the content of this watchlist, in the order as registered by the client */
+      assets?: components['schemas']['Assets'][]
+    }
+    /**
+     * Watchlist
+     * @description The watchlist API provides CRUD operation for the account’s watchlist. An account can have multiple watchlists and each is uniquely identified by id but can also be addressed by user-defined name.
+     */
+    WatchlistWithoutAsset: {
+      /**
+       * Format: uuid
+       * @description watchlist id
+       */
+      id: string
+      /**
+       * Format: uuid
+       * @description account ID
+       */
+      account_id: string
+      /** Format: date-time */
+      created_at: string
+      /** Format: date-time */
+      updated_at: string
+      /** @description user-defined watchlist name (up to 64 characters) */
+      name: string
+    }
+    /** Calendar */
+    Calendar: {
+      /** @description Date string in “%Y-%m-%d” format */
+      date: string
+      /** @description The time the market opens at on this date in “%H:%M” format */
+      open: string
+      /** @description The time the market closes at on this date in “%H:%M” format */
+      close: string
+      /** @description Date string in “%Y-%m-%d” format. representing the settlement date for the trade date. */
+      settlement_date: string
+    }
+    /** Clock */
+    Clock: {
+      /**
+       * Format: date-time
+       * @description Current timestamp
+       */
+      timestamp?: string
+      /** @description Whether or not the market is open */
+      is_open?: boolean
+      /**
+       * Format: date-time
+       * @description Next Market open timestamp
+       */
+      next_open?: string
+      /**
+       * Format: date-time
+       * @description Next market close timestamp
+       */
+      next_close?: string
+    }
+    /**
+     * PortfolioHistory
+     * @description Timeseries data for equity and profit loss information of the account.
+     */
+    PortfolioHistory: {
+      /**
+       * @description Time of each data element, left-labeled (the beginning of time window).
+       *
+       *     The values returned are in [UNIX epoch format](https://en.wikipedia.org/wiki/Unix_time).
+       */
+      timestamp: number[]
+      /** @description equity value of the account in dollar amount as of the end of each time window */
+      equity: number[]
+      /** @description profit/loss in dollar from the base value */
+      profit_loss: number[]
+      /**
+       * @description profit/loss in percentage from the base value
+       * @example [
+       *       0.001,
+       *       0.002
+       *     ]
+       */
+      profit_loss_pct: number[]
+      /** @description basis in dollar of the profit loss calculation */
+      base_value: number
+      /**
+       * Format: date
+       * @description If included, then it indicates that the base_value is the account's closing
+       *     equity value at this trading date.
+       *
+       *     If not specified, then the baseline calculation is done against the earliest returned data item. This could happen for
+       *     accounts without prior closing balances (e.g. new account) or for queries with 1D timeframes, where the first data point
+       *     is used as a reference point.
+       * @example 2023-10-20
+       */
+      base_value_asof?: string
+      /**
+       * @description time window size of each data element
+       * @example 15Min
+       */
+      timeframe: string
+      /** @description accumulated value in dollar amount as of the end of each time window */
+      cashflow?: Record<string, never>
+    }
+    /**
+     * Exchange
+     * @description Represents the current exchanges Alpaca supports. List is currently:
+     *
+     *     - AMEX
+     *     - ARCA
+     *     - BATS
+     *     - NYSE
+     *     - NASDAQ
+     *     - NYSEARCA
+     *     - OTC
+     * @example NYSE
+     * @enum {string}
+     */
+    Exchange: 'AMEX' | 'ARCA' | 'BATS' | 'NYSE' | 'NASDAQ' | 'NYSEARCA' | 'OTC'
+    /**
+     * Exchange
+     * @description Represents the current exchanges Alpaca supports. List is currently:
+     *
+     *     - AMEX
+     *     - ARCA
+     *     - BATS
+     *     - NYSE
+     *     - NASDAQ
+     *     - NYSEARCA
+     *     - OTC
+     *
+     *     Can be empty if not applicable (e.g., for options contracts)
+     * @example NYSE
+     * @enum {string}
+     */
+    ExchangeForPosition: 'AMEX' | 'ARCA' | 'BATS' | 'NYSE' | 'NASDAQ' | 'NYSEARCA' | 'OTC' | null
+    /**
+     * CanceledOrderResponse
+     * @description Represents the result of a request to cancel and order
+     */
+    CanceledOrderResponse: {
+      /**
+       * Format: uuid
+       * @description orderId
+       */
+      id?: string
+      /**
+       * @description http response code
+       * @example 200
+       */
+      status?: number
+    }
+    /**
+     * PatchOrderRequest
+     * @description Represents a request to patch an order.
+     */
+    PatchOrderRequest: {
+      /**
+       * @description number of shares to trade.
+       *
+       *     You can only patch full shares for now.
+       *
+       *     Qty of equity fractional/notional orders are not allowed to change.
+       * @example 4
+       */
+      qty?: string
+      time_in_force?: components['schemas']['TimeInForce']
+      /**
+       * @description Required if original order's `type` field was `limit` or `stop_limit`.
+       *     In case of `mleg`, the limit_price parameter is expressed with the following notation:
+       *     - A positive value indicates a debit, representing a cost or payment to be made.
+       *     - A negative value signifies a credit, reflecting an amount to be received.
+       * @example 3.14
+       */
+      limit_price?: string
+      /**
+       * @description required if original order type is limit or stop_limit
+       * @example 3.14
+       */
+      stop_price?: string
+      /**
+       * @description the new value of the trail_price or trail_percent value (works only for type=“trailing_stop”)
+       * @example 3.14
+       */
+      trail?: string
+      /** @description A unique identifier for the new order. Automatically generated if not sent. (<= 128 characters) */
+      client_order_id?: string
+      advanced_instructions?: components['schemas']['AdvancedInstructions']
+    }
+    /**
+     * PositionClosedReponse
+     * @description Represents the result of asking the api to close a position.
+     */
+    PositionClosedReponse: {
+      /** @description Symbol name of the asset */
+      symbol: string
+      /** @description Http status code for the attempt to close this position */
+      status: string
+      body?: components['schemas']['Order']
+    }
+    /**
+     * PostWatchlistRequest
+     * @description Request format used for creating a new watchlist or updating an existing watchlist with a set of assets and name.
+     */
+    UpdateWatchlistRequest: {
+      name: string
+      symbols?: (string | null)[]
+    }
+    /**
+     * AddAssetToWatchlistRequest
+     * @description Append an asset for the symbol to the end of watchlist asset list
+     */
+    AddAssetToWatchlistRequest: {
+      /**
+       * @description symbol name to append to watchlist
+       * @example AAPL
+       */
+      symbol?: string
+    }
+    CryptoWallet: {
+      chain?: string
+      address?: string
+      /**
+       * Format: date-time
+       * @description Timestamp (RFC3339) of account creation.
+       */
+      created_at?: string
+    }
+    /** @description Transfers allow you to transfer assets into your end customer's account (deposits) or out (withdrawal). */
+    CryptoTransfer: {
+      /**
+       * Format: uuid
+       * @description The crypto transfer ID
+       */
+      id?: string
+      /** @description On-chain transaction hash (e.g. 0xabc...xyz) */
+      tx_hash?: string
+      direction?: components['schemas']['TransferDirection']
+      status?: components['schemas']['CryptoTransferStatus']
+      /** @description Amount of transfer denominated in the underlying crypto asset */
+      amount?: string
+      /** @description Equivalent USD value at time of transfer */
+      usd_value?: string
+      network_fee?: string
+      fees?: string
+      /** @description Underlying network for given transfer */
+      chain?: string
+      /** @description Symbol of crypto asset for given transfer (e.g. BTC ) */
+      asset?: string
+      /** @description Originating address of the transfer */
+      from_address?: string
+      /** @description Destination address of the transfer */
+      to_address?: string
+      /**
+       * Format: date-time
+       * @description Timedate when transfer was created
+       */
+      created_at?: string
+    }
+    /**
+     * @example PROCESSING
+     * @enum {string}
+     */
+    CryptoTransferStatus: 'PROCESSING' | 'FAILED' | 'COMPLETE'
+    WhitelistedAddress: {
+      /** @description Unique ID for whitelisted address */
+      id?: string
+      /** @description Underlying network this address represents */
+      chain?: string
+      /** @description Symbol of underlying asset for the whitelisted address */
+      asset?: string
+      /** @description The whitelisted address */
+      address?: string
+      /**
+       * @description Status of whitelisted address which is either ACTIVE or PENDING. Whitelisted addresses will be subjected to a 24 waiting period. After the waiting period is over the status will become ACTIVE.
+       * @enum {string}
+       */
+      status?: 'APPROVED' | 'PENDING'
+      /**
+       * Format: date-time
+       * @description Timestamp (RFC3339) of account creation.
+       */
+      created_at?: string
+    }
+    /** CreateCryptoTransferRequest */
+    CreateCryptoTransferRequest: {
+      /** @description The amount, denoted in the specified asset, to be withdrawn from the user’s wallet */
+      amount: string
+      /** @description The destination wallet address */
+      address: string
+      asset: string
+    }
+    /**
+     * @example INCOMING
+     * @enum {string}
+     */
+    TransferDirection: 'INCOMING' | 'OUTGOING'
+    /** Error */
+    Error: {
+      code: number
+      message: string
+    }
+    /**
+     * @description Use this token in your next API call to paginate through the dataset and retrieve the next page of results. A null token indicates there are no more data to fetch.
+     * @example MTAwMA==
+     */
+    NextPageToken: string | null
+    /**
+     * @description The subtype of the treasury.
+     * @enum {string}
+     */
+    treasury_subtype: 'bond' | 'bill' | 'note' | 'strips' | 'tips' | 'floating'
+    /**
+     * @description Status of the bond
+     * @enum {string}
+     */
+    bond_status: 'outstanding' | 'matured' | 'pre_issuance'
+    /**
+     * @description The type of the coupon rate
+     * @enum {string}
+     */
+    coupon_type: 'fixed' | 'floating' | 'zero'
+    /**
+     * @description How often the coupon is paid
+     * @enum {string}
+     */
+    coupon_frequency: 'annual' | 'semi_annual' | 'quarterly' | 'monthly' | 'zero'
+    /** @description A US treasury */
+    us_treasury: {
+      /** @description CUSIP is a nine-character alphanumeric code that uniquely identifies the security */
+      cusip: string
+      /** @description International Securities Identification Number */
+      isin: string
+      bond_status: components['schemas']['bond_status']
+      /** @description Whether the treasury is tradable */
+      tradable: boolean
+      subtype: components['schemas']['treasury_subtype']
+      /**
+       * Format: date
+       * @description The date on which the bond was issued
+       */
+      issue_date: string
+      /**
+       * Format: date
+       * @description The date on which the bond matures
+       */
+      maturity_date: string
+      /** @description Description of the treasury */
+      description: string
+      /** @description Short description of the treasury */
+      description_short: string
+      /**
+       * Format: double
+       * @description The price of the last transaction of a security before the market closes for normal trading, shown as a percentage of par value
+       */
+      close_price?: number
+      /**
+       * Format: date
+       * @description The date of the close price
+       */
+      close_price_date?: string
+      /**
+       * Format: double
+       * @description Yield to maturity of the treasury after the last close
+       */
+      close_yield_to_maturity?: number
+      /**
+       * Format: double
+       * @description Yield to worst of the treasury after the last close
+       */
+      close_yield_to_worst?: number
+      /**
+       * Format: double
+       * @description The annual interest rate paid on the bond as a percentage of par value
+       */
+      coupon: number
+      coupon_type: components['schemas']['coupon_type']
+      coupon_frequency: components['schemas']['coupon_frequency']
+      /**
+       * Format: date
+       * @description The date of the first coupon payment
+       */
+      first_coupon_date?: string
+      /**
+       * Format: date
+       * @description The date of the next coupon payment
+       */
+      next_coupon_date?: string
+      /**
+       * Format: date
+       * @description The date of the last coupon payment
+       */
+      last_coupon_date?: string
+    }
+    us_treasuries_resp: {
+      us_treasuries: components['schemas']['us_treasury'][]
+    }
+    /**
+     * @description The day count convention used to calculate accrued interest.
+     *
+     *     - `A/360`: calculates the daily interest using a 360-day year and then multiplies that by the actual number of days in each time period.
+     *     - `A/365`: calculates the daily interest using a 365-day year and then multiplies that by the actual number of days in each time period.
+     *     - `30/360`: calculates the daily interest using a 360-day year and then multiplies that by 30 (standardized month).
+     *     - `30/365`: calculates the daily interest using a 365-day year and then multiplies that by 30 (standardized month).
+     *     - `A/A`: calculates the daily interest using the actual number of days in the year and then multiplies that by the actual number of days in each time period.
+     *     - `30E/360`: number of days equals to the actual number of days (for February). If the start date or the end date of the period is the 31st of a month, that date is set to the 30th. The number of days in a year is 360.
+     *     - `B/252`: calculates the daily interest using a 252-business-day year and then multiplies that by the actual number of days in each time period.
+     *     - `A/364`: calculates the daily interest using a 364-day year and then multiplies that by the actual number of days in each time period.
+     * @enum {string}
+     */
+    day_count: 'A/360' | 'A/365' | '30/360' | '30/365' | 'A/A' | '30E/360' | 'B/252' | 'A/364'
+    /**
+     * @description A Standard & Poor's rating outlook indicates S&P's view regarding the potential direction of a long-term credit rating over the intermediate term (2 years for investment grade, 1 year for speculative grade)
+     * @enum {string}
+     */
+    sp_outlook: 'positive' | 'negative' | 'developing' | 'stable' | 'not_rated' | 'not_meaningful'
+    /**
+     * @description The type of call on the bond refers to one of a variety of circumstances under which a callable bond may be called.
+     * @enum {string}
+     */
+    call_type: 'ordinary' | 'make_whole' | 'regulatory' | 'special'
+    /** @description A US corporate */
+    us_corporate: {
+      /** @description CUSIP is a nine-character alphanumeric code that uniquely identifies the security */
+      cusip: string
+      /** @description International Securities Identification Number */
+      isin: string
+      bond_status: components['schemas']['bond_status']
+      /** @description Whether the treasury is tradable */
+      tradable: boolean
+      /** @description Whether the corporate is marginable */
+      marginable: boolean
+      /**
+       * Format: date
+       * @description The date on which the corporate was reissued
+       */
+      reissue_date?: string
+      /** @description The total size amount of the corporate reissue in the issuing currency */
+      reissue_size?: number
+      /**
+       * Format: double
+       * @description The price at which the corporate was reissued as a percentage of par value
+       */
+      reissue_price?: number
+      /**
+       * Format: date
+       * @description The date on which the bond was issued
+       */
+      issue_date: string
+      /**
+       * Format: date
+       * @description The date on which the bond matures
+       */
+      maturity_date?: string
+      /** @description The country where the corporate is domiciled in the 2-alpha country code format (e.g., US, CA) */
+      country_domicile: string
+      /** @description The ticker symbol of the corporate */
+      ticker: string
+      /** @description The seniority of the corporate bond */
+      seniority: string
+      /** @description The name of the issuer of the corporate bond */
+      issuer: string
+      /** @description The sector of the corporate bond */
+      sector: string
+      /** @description Description of the corporate bond */
+      description: string
+      /** @description Short description of the corporate bond */
+      description_short: string
+      /**
+       * Format: double
+       * @description The annual interest rate paid on the bond as a percentage of par value
+       */
+      coupon: number
+      coupon_type: components['schemas']['coupon_type']
+      coupon_frequency: components['schemas']['coupon_frequency']
+      /**
+       * Format: date
+       * @description The date of the first coupon payment
+       */
+      first_coupon_date?: string
+      /**
+       * Format: date
+       * @description The date of the next coupon payment
+       */
+      next_coupon_date?: string
+      /**
+       * Format: date
+       * @description The date of the last coupon payment
+       */
+      last_coupon_date?: string
+      /** @description A flag representing whether a bond is perpetual */
+      perpetual: boolean
+      day_count: components['schemas']['day_count']
+      /**
+       * Format: date
+       * @description The dated date marks the beginning of the period for which interest starts accruing on the bond
+       */
+      dated_date: string
+      /** @description The total size amount of the bond issue in the issuing currency */
+      issue_size: number
+      /**
+       * Format: double
+       * @description The price at which the bond was originally issued as a percentage of par value
+       */
+      issue_price: number
+      /** @description The smallest unit of the bond that can be purchased at its initial offering */
+      issue_minimum_denomination: number
+      /** @description The amount that the issuer of the bond will pay back to the bondholder upon maturity */
+      par_value: number
+      /** @description Whether the bond is callable, meaning the issuer has the right, but not the obligation to redeem the bond — in other words, pay out the bondholder — before its maturity date at a set price (the call price) */
+      callable: boolean
+      /**
+       * Format: date
+       * @description The date of the next possible call on the bond.
+       */
+      next_call_date?: string
+      /**
+       * Format: double
+       * @description The price at which a callable bond can be redeemed by the issuer on the next call date, as a percentage of par.
+       */
+      next_call_price?: number
+      /** @description Whether the bond is puttable, meaning the bondholder has the right, but not the obligation to sell the bond back to the issuer at a set price (the put price) on specified dates before maturity */
+      puttable: boolean
+      /** @description A flag indicating whether the bond is convertible */
+      convertible: boolean
+      /** @description Indicates whether the security falls under Regulation S, a rule that provides an exemption from the registration requirements for securities offerings made outside the United States */
+      reg_s: boolean
+      /** @description Standard & Poor's rating for the bond in the standard AAA - D format */
+      sp_rating?: string
+      /**
+       * Format: date
+       * @description The date in the timezone of the issuing country of the most recent Standard & Poor's rating for the bond in YYYY-MM-DD format
+       */
+      sp_rating_date?: string
+      /** @description S&P's CreditWatch highlights S&P's opinion regarding the potential direction of a short-term or long-term rating */
+      sp_creditwatch?: string
+      /**
+       * Format: date
+       * @description The date of the most recent Standard & Poor's CreditWatch for the bond in YYYY-MM-DD format
+       */
+      sp_creditwatch_date?: string
+      sp_outlook?: components['schemas']['sp_outlook']
+      /**
+       * Format: date
+       * @description The date of the most recent Standard & Poor's outlook for the bond in YYYY-MM-DD format
+       */
+      sp_outlook_date?: string
+      /** @description Score (from 1-5 if the bond is priced, or null if the bond is not tradable) reflecting the historical depth of executable liquidity to buy with minimum trading sizes less than or equal to $1,000.00 */
+      liquidity_micro_buy?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to sell with minimum trading sizes less than or equal to $1,000.00 */
+      liquidity_micro_sell?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy or sell with minimum trading sizes less than or equal to $1,000.00 */
+      liquidity_micro_aggregate?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy with minimum trading sizes less than or equal to $10,000.00 */
+      liquidity_retail_buy?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to sell with minimum trading sizes less than or equal to 10,000 */
+      liquidity_retail_sell?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy or sell with minimum trading sizes less than or equal to 10,000 */
+      liquidity_retail_aggregate?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy (no minimum trading sizes) */
+      liquidity_institutional_buy?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to sell (no minimum trading sizes) */
+      liquidity_institutional_sell?: number
+      /** @description Score (from 1-5 or null if the bond is not priced/tradable) reflecting the historical depth of executable liquidity to buy or sell (no minimum trading sizes) */
+      liquidity_institutional_aggregate?: number
+      /**
+       * Format: double
+       * @description The price of the last transaction of a security before the market closes for normal trading, shown as a percentage of par value
+       */
+      close_price?: number
+      /**
+       * Format: date
+       * @description The date of the close price
+       */
+      close_price_date?: string
+      /**
+       * Format: double
+       * @description Yield to maturity of the treasury after the last close
+       */
+      close_yield_to_maturity?: number
+      /**
+       * Format: double
+       * @description Yield to worst of the treasury after the last close
+       */
+      close_yield_to_worst?: number
+      /**
+       * Format: double
+       * @description The interest that has accumulated on a bond in dollars per bond between the last interest payment and the present date that has not yet been paid to the bondholder
+       */
+      accrued_interest?: number
+      call_type?: components['schemas']['call_type']
+    }
+    us_corporates_resp: {
+      us_corporates: components['schemas']['us_corporate'][]
+    }
+  }
+  responses: {
+    /** @description One of the request parameters is invalid. See the returned message for details. */
+    400: {
+      headers: {
+        'X-RateLimit-Limit': components['headers']['ratelimit_limit']
+        'X-RateLimit-Remaining': components['headers']['ratelimit_remaining']
+        'X-RateLimit-Reset': components['headers']['ratelimit_reset']
+        [name: string]: unknown
+      }
+      content?: never
+    }
+    /** @description Authentication headers are missing or invalid. Make sure you authenticate your request with a valid API key. */
+    401: {
+      headers: {
+        [name: string]: unknown
+      }
+      content?: never
+    }
+    /** @description The requested resource is forbidden. */
+    403: {
+      headers: {
+        [name: string]: unknown
+      }
+      content?: never
+    }
+    /** @description Too many requests. You hit the rate limit. Use the X-RateLimit-... response headers to make sure you're under the rate limit. */
+    429: {
+      headers: {
+        'X-RateLimit-Limit': components['headers']['ratelimit_limit']
+        'X-RateLimit-Remaining': components['headers']['ratelimit_remaining']
+        'X-RateLimit-Reset': components['headers']['ratelimit_reset']
+        [name: string]: unknown
+      }
+      content?: never
+    }
+    /** @description Internal server error. We recommend retrying these later. If the issue persists, please contact us on Slack or on the Community Forum. */
+    500: {
+      headers: {
+        [name: string]: unknown
+      }
+      content?: never
+    }
+  }
+  parameters: {
+    /** @description Used for pagination, this token retrieves the next page of results. It is obtained from the response of the preceding page when additional pages are available. */
+    PageToken: string
+  }
+  requestBodies: never
+  headers: {
+    /**
+     * @description Request limit per minute.
+     * @example 100
+     */
+    ratelimit_limit: number
+    /**
+     * @description Request limit per minute remaining.
+     * @example 90
+     */
+    ratelimit_remaining: number
+    /**
+     * @description The UNIX epoch when the remaining quota changes.
+     * @example 1674044551
+     */
+    ratelimit_reset: number
+  }
+  pathItems: never
+}
+export type $defs = Record<string, never>
+export interface operations {
+  getAccount: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          /**
+           * @example {
+           *       "id": "1d9eed04-be39-4e01-9b84-a48ac5bbafcf",
+           *       "admin_configurations": {},
+           *       "user_configurations": null,
+           *       "account_number": "PALPACA_123",
+           *       "status": "ACTIVE",
+           *       "crypto_status": "ACTIVE",
+           *       "currency": "USD",
+           *       "buying_power": "245432.61",
+           *       "regt_buying_power": "245432.61",
+           *       "daytrading_buying_power": "0",
+           *       "options_buying_power": "122716.305",
+           *       "effective_buying_power": "245432.61",
+           *       "non_marginable_buying_power": "122086.5",
+           *       "bod_dtbp": 0,
+           *       "cash": "122086.5",
+           *       "accrued_fees": "0",
+           *       "pending_transfer_in": "0",
+           *       "portfolio_value": "123346.11",
+           *       "pattern_day_trader": true,
+           *       "trading_blocked": false,
+           *       "transfers_blocked": false,
+           *       "account_blocked": false,
+           *       "created_at": "2023-01-01T18:20:20.272275Z",
+           *       "trade_suspended_by_user": false,
+           *       "multiplier": "2",
+           *       "shorting_enabled": true,
+           *       "equity": "123346.11",
+           *       "last_equity": "122011.09751111286868",
+           *       "long_market_value": "1259.61",
+           *       "short_market_value": "0",
+           *       "position_market_value": "1259.61",
+           *       "initial_margin": "629.8",
+           *       "maintenance_margin": "377.88",
+           *       "last_maintenance_margin": "480.73",
+           *       "sma": "123369.74",
+           *       "daytrade_count": 0,
+           *       "balance_asof": "2023-09-27",
+           *       "crypto_tier": 1,
+           *       "options_trading_level": 2,
+           *       "intraday_adjustments": "0",
+           *       "pending_reg_taf_fees": "0"
+           *     }
+           */
+          'application/json': components['schemas']['Account']
+        }
+      }
+    }
+  }
+  getAllOrders: {
+    parameters: {
+      query?: {
+        /** @description Order status to be queried. open, closed or all. Defaults to open. */
+        status?: 'open' | 'closed' | 'all'
+        /** @description The maximum number of orders in response. Defaults to 50 and max is 500. */
+        limit?: number
+        /** @description The response will include only ones submitted after this timestamp (exclusive.) */
+        after?: string
+        /** @description The response will include only ones submitted until this timestamp (exclusive.) */
+        until?: string
+        /** @description The chronological order of response based on the submission time. asc or desc. Defaults to desc. */
+        direction?: 'asc' | 'desc'
+        /** @description If true, the result will roll up multi-leg orders under the legs field of primary order. */
+        nested?: boolean
+        /** @description A comma-separated list of symbols to filter by (ex. “AAPL,TSLA,MSFT”). A currency pair is required for crypto orders (ex. “BTCUSD,BCHUSD,LTCUSD,ETCUSD”). */
+        symbols?: string
+        /** @description Filters down to orders that have a matching side field set. */
+        side?: string
+        /** @description A comma seperated list of asset classes, the response will include only orders in the specified asset classes. By specifying `us_option` as the class, you can query option orders by underlying symbol using the symbols parameter. */
+        asset_class?: ('us_equity' | 'us_option' | 'crypto' | 'all')[]
         /**
-         * @description Request limit per minute.
+         * @description Return orders submitted before the order with this ID (exclusive).
+         *     Mutually exclusive with `after_order_id`. Do not combine with `after`/`until`.
+         */
+        before_order_id?: string
+        /**
+         * @description Return orders submitted after the order with this ID (exclusive).
+         *     Mutually exclusive with `before_order_id`. Do not combine with `after`/`until`.
+         */
+        after_order_id?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /**
+       * @description Successful response
+       *
+       *     An array of Order objects
+       */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Order'][]
+        }
+      }
+    }
+  }
+  postOrder: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description symbol, asset ID, or currency pair to identify the asset to trade, required for all order classes except for `mleg`. */
+          symbol?: string
+          /** @description number of shares to trade. Can be fractionable for only market and day order types. Required for `mleg` order class, represents the number of units to trade of this strategy. */
+          qty?: string
+          /** @description dollar amount to trade. Cannot work with `qty`. Can only work for market order types and day for time in force. */
+          notional?: string
+          side?: components['schemas']['OrderSide']
+          type: components['schemas']['OrderType']
+          time_in_force: components['schemas']['TimeInForce']
+          /**
+           * @description Required if type is `limit` or `stop_limit`.
+           *     In case of `mleg`, the limit_price parameter is expressed with the following notation:
+           *     - A positive value indicates a debit, representing a cost or payment to be made.
+           *     - A negative value signifies a credit, reflecting an amount to be received.
+           */
+          limit_price?: string
+          /** @description required if type is `stop` or `stop_limit` */
+          stop_price?: string
+          /** @description this or `trail_percent` is required if type is `trailing_stop` */
+          trail_price?: string
+          /** @description this or `trail_price` is required if type is `trailing_stop` */
+          trail_percent?: string
+          /** @description (default) false. If true, order will be eligible to execute in premarket/afterhours. Only works with type limit and time_in_force day. */
+          extended_hours?: boolean
+          /** @description A unique identifier for the order. Automatically generated if not sent. (<= 128 characters) */
+          client_order_id?: string
+          order_class?: components['schemas']['OrderClass']
+          /** @description list of order legs (<= 4) */
+          legs?: components['schemas']['MLegOrderLeg'][]
+          /** @description Takes in a string/number value for limit_price */
+          take_profit?: {
+            /**
+             * Format: decimal
+             * @example 3.14
+             */
+            limit_price?: string
+          }
+          /** @description Takes in string/number values for stop_price and limit_price */
+          stop_loss?: {
+            /**
+             * Format: decimal
+             * @example 3.14
+             */
+            stop_price?: string
+            /**
+             * Format: decimal
+             * @example 3.14
+             */
+            limit_price?: string
+          }
+          position_intent?: components['schemas']['PositionIntent']
+          advanced_instructions?: components['schemas']['AdvancedInstructions']
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Order']
+        }
+      }
+      /**
+       * @description Forbidden
+       *
+       *     Buying power or shares is not sufficient.
+       */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /**
+       * @description Unprocessable
+       *
+       *     Input parameters are not recognized.
+       */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  deleteAllOrders: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /**
+       * @description Multi-Status with body.
+       *
+       *     an array of objects that include the order id and http status code for each status request.
+       */
+      207: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CanceledOrderResponse'][]
+        }
+      }
+      /** @description Failed to cancel order. */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getOrderByClientOrderId: {
+    parameters: {
+      query: {
+        /** @description The client-assigned order ID. */
+        client_order_id: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved the order matching the client_order_id. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Order']
+        }
+      }
+    }
+  }
+  getOrderByOrderID: {
+    parameters: {
+      query?: {
+        /** @description If true, the result will roll up multi-leg orders under the legs field of primary order. */
+        nested?: boolean
+      }
+      header?: never
+      path: {
+        /** @description order id */
+        order_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Order']
+        }
+      }
+    }
+  }
+  deleteOrderByOrderID: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description order id */
+        order_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The order status is not cancelable. */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  patchOrderByOrderId: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description order id */
+        order_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PatchOrderRequest']
+      }
+    }
+    responses: {
+      /**
+       * @description Successful response
+       *
+       *     The new Order object with the new order ID.
+       */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Order']
+        }
+      }
+    }
+  }
+  getAllOpenPositions: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Position'][]
+        }
+      }
+    }
+  }
+  deleteAllOpenPositions: {
+    parameters: {
+      query?: {
+        /** @description If true is specified, cancel all open orders before liquidating all positions. */
+        cancel_orders?: boolean
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /**
+       * @description Multi-Status with body.
+       *
+       *     an array of PositionClosed responses
+       */
+      207: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PositionClosedReponse'][]
+        }
+      }
+      /** @description Failed to liquidate */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getOpenPosition: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description symbol or assetId */
+        symbol_or_asset_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Position']
+        }
+      }
+    }
+  }
+  deleteOpenPosition: {
+    parameters: {
+      query?: {
+        /** @description the number of shares to liquidate. Can accept up to 9 decimal points. Cannot work with percentage */
+        qty?: number
+        /** @description percentage of position to liquidate. Must be between 0 and 100. Would only sell fractional if position is originally fractional. Can accept up to 9 decimal points. Cannot work with qty */
+        percentage?: number
+      }
+      header?: never
+      path: {
+        /** @description symbol or assetId */
+        symbol_or_asset_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /**
+       * @description Successful response
+       *
+       *     Returns the order created to close out this position
+       */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Order']
+        }
+      }
+    }
+  }
+  optionExercise: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Option contract symbol or ID. */
+        symbol_or_contract_id: string
+      }
+      cookie?: never
+    }
+    /** @description Empty request body */
+    requestBody?: {
+      content: {
+        '*/*'?: never
+      }
+    }
+    responses: {
+      /**
+       * @description Successful Response
+       *
+       *     Exercise instruction successfully submitted.
+       */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /**
+       * @description Forbidden
+       *
+       *     Available position quantity is not sufficient.
+       */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error']
+        }
+      }
+      /**
+       * @description Invalid Parameters.
+       *
+       *     One or more parameters provided are invalid.
+       */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
+  optionDoNotExercise: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Option contract symbol or ID. */
+        symbol_or_contract_id: string
+      }
+      cookie?: never
+    }
+    /** @description Empty request body */
+    requestBody?: {
+      content: {
+        '*/*'?: never
+      }
+    }
+    responses: {
+      /**
+       * @description Successful Response
+       *
+       *     Do-not-exercise instruction successfully submitted.
+       */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /**
+       * @description Forbidden
+       *
+       *     Available position quantity is not sufficient or no position found.
+       */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error']
+        }
+      }
+      /**
+       * @description Invalid Parameters.
+       *
+       *     One or more parameters provided are invalid.
+       */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
+  getAccountPortfolioHistory: {
+    parameters: {
+      query?: {
+        /**
+         * @description The duration of the data in `number` + `unit` format, such as 1D, where `unit` can be D for day, W for week, M for month and A for year. Defaults to 1M.
+         *
+         *     Only two of `start`, `end` and `period` can be specified at the same time.
+         *
+         *     For intraday timeframes (\<1D) only 30 days or less can be queried, for 1D resolutions there is no such limit, data is available since the
+         *     creation of the account.
+         */
+        period?: string
+        /**
+         * @description The resolution of time window. 1Min, 5Min, 15Min, 1H, or 1D. If omitted, 1Min for less than 7 days period,
+         *     15Min for less than 30 days, or otherwise 1D.
+         *
+         *     For queries with longer than 30 days of `period`, the system only accepts 1D as `timeframe`.
+         */
+        timeframe?: string
+        /**
+         * @description For intraday resolutions (<1D) this specfies which timestamps to return data points for:
+         *
+         *     Allowed values are:
+         *     - **market_hours**
+         *
+         *       Only timestamps for the core requity trading hours are returned (usually 9:30am to 4:00pm, trading days only)
+         *
+         *     - **extended_hours**
+         *
+         *       Returns timestamps for the whole session including extended hours (usually 4:00am to 8:00pm, trading days only)
+         *
+         *     - **continuous**
+         *
+         *       Returns price data points 24/7 (for off-session times too). To calculate the equity values we are using the following prices:
+         *
+         *       Between 4:00am and 10:00pm on trading days the valuation will be calculated based on the last trade (extended hours and normal hours respectively).
+         *
+         *       After 10:00pm, until the next session open the equities will be valued at their official closing price on the primary exchange.
+         */
+        intraday_reporting?: 'market_hours' | 'extended_hours' | 'continuous'
+        /**
+         * @description The timestamp the data is returned starting from in RFC3339 format (including timezone specification). Defaults to `end` minus `period`
+         *
+         *     If provided, the `start` value is always normalized to the `America/New_York` timezone and adjusted to the nearest `timeframe` interval, e.g. seconds are always truncated and the time is rounded backwards to the nearest ineterval of `1Min`, `5Min`, `15Min`, or `1H`.
+         *
+         *     If `timeframe=1D` and `start` is not a valid trading date, find the next available trading date. For example, if `start` occurs on Saturday or Sunday after converting to the America/New_York timezone, `start` is adjusted to the first weekday that is not a market holiday (e.g. Monday).
+         *
+         *     If `timeframe` is less than `1D` and `intraday_reporting` is not `continuous`, `start` always reflects the beginning of a market session. If `start` is between midnight and the end (inclusive) of an active trading day, `start` is set to the beginning of the session on the specified day. Otherwise, if `start` occurs outside of the market session, the next avaialble market date is used.
+         *
+         *     For example, when `intraday_reporting=market_hours` and `start=2023-10-19T23:59:59-04:00`, the provided `start` date occurs outside of the regular market session. The effective `start` timestamp is adjusted to the beginning of the next session: `2023-10-20T09:30:00-04:00`
+         *
+         *     `start` may be be combined with one of `end` or `period`.
+         *
+         *     Providing all of `start`, `end`, and `period` is invalid.
+         */
+        start?: string
+        /**
+         * @description `pnl_reset` defines how we are calculating the baseline values for Profit And Loss (pnl) for queries with `timeframe` less than 1D (intraday queries).
+         *
+         *     The default behavior for intraday queries is that we reset the pnl value to the previous day's closing equity for each **trading** day.
+         *
+         *     In case of crypto (given it's continous nature), this might not be desired: specifying "no_reset" disables this behavior and all pnl values
+         *     returned will be relative to the closing equity of the previous trading day.
+         *
+         *     For 1D resolution all PnL values are calculated relative to the `base_value`, we are not reseting the base value.
+         */
+        pnl_reset?: 'no_reset' | 'per_day'
+        /**
+         * @description The timestamp the data is returned up to in RFC3339 format (including timezone specification). Defaults to the current time.
+         *
+         *     If provided, the `end` value is always normalized to the `America/New_York` timezone and adjusted to the nearest `timeframe` interval, e.g. seconds are always truncated and the time is rounded backwards to the nearest ineterval of `1Min`, `5Min`, `15Min`, or `1H`.
+         *
+         *     When `intraday_reporting` is either `market_hours` or `extended_hours`, the `end` value is adjusted to not occur after session close on the specified day. For example if the `intraday_reporting` is `extended_hours`, and the timestamp specified is `2023-10-19T21:33:00-04:00`, `end` is adjusted to `2023-10-19T20:00:00-04:00`.
+         *
+         *     `end` may be combined with `start` or `period`.
+         *
+         *     Providing all of `start`, `end`, and `period` is invalid.
+         */
+        end?: string
+        /**
+         * @description **deprecated**: Users are strongly advised to **rely on the `intraday_reporting` query parameter** for better control
+         *     of the reporting range.
+         *
+         *     If true, include extended hours in the result. This is effective only for timeframe less than 1D.
+         */
+        extended_hours?: string
+        /** @description The cashflow activities to include in the report. One of 'ALL', 'NONE', or a comma-separated list of activity types. */
+        cashflow_types?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PortfolioHistory']
+        }
+      }
+    }
+  }
+  getWatchlists: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WatchlistWithoutAsset'][]
+        }
+      }
+    }
+  }
+  postWatchlist: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateWatchlistRequest']
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  getWatchlistById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description watchlist id */
+        watchlist_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  updateWatchlistById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description watchlist id */
+        watchlist_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['UpdateWatchlistRequest']
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  addAssetToWatchlist: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description watchlist id */
+        watchlist_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': {
+          /** @description the symbol name to add to the watchlist */
+          symbol?: string
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  deleteWatchlistById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description watchlist id */
+        watchlist_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Watchlist not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getWatchlistByName: {
+    parameters: {
+      query: {
+        /** @description name of the watchlist */
+        name: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  updateWatchlistByName: {
+    parameters: {
+      query: {
+        /** @description name of the watchlist */
+        name: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['UpdateWatchlistRequest']
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  addAssetToWatchlistByName: {
+    parameters: {
+      query: {
+        /** @description name of the watchlist */
+        name: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': {
+          /** @description the symbol name to add to the watchlist */
+          symbol?: string
+        }
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  deleteWatchlistByName: {
+    parameters: {
+      query: {
+        /** @description name of the watchlist */
+        name: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  removeAssetFromWatchlist: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Watchlist ID */
+        watchlist_id: string
+        /** @description symbol name to remove from the watchlist content */
+        symbol: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns the updated watchlist */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Watchlist']
+        }
+      }
+    }
+  }
+  getAccountConfig: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountConfigurations']
+        }
+      }
+    }
+  }
+  patchAccountConfig: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['AccountConfigurations']
+      }
+    }
+    responses: {
+      /** @description Successful response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountConfigurations']
+        }
+      }
+    }
+  }
+  getAccountActivities: {
+    parameters: {
+      query?: {
+        /** @description A comma-separated list of activity types used to filter the results. */
+        activity_types?: components['schemas']['ActivityType'][]
+        /** @description The activity category. Cannot be used with "activity_types" parameter. */
+        category?: 'trade_activity' | 'non_trade_activity'
+        /** @description Filter activities by the activity date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
+        date?: string
+        /** @description Get activities created before this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
+        until?: string
+        /** @description Get activities created after this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
+        after?: string
+        /** @description The chronological order of response based on the activity datetime. */
+        direction?: 'asc' | 'desc'
+        /** @description The maximum number of entries to return in the response. */
+        page_size?: number
+        /** @description Token used for pagination. Provide the ID of the last activity from the last page to retrieve the next set of results. */
+        page_token?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description returns an array of Account activities */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': (
+            | components['schemas']['TradingActivities']
+            | components['schemas']['NonTradeActivities']
+          )[]
+        }
+      }
+    }
+  }
+  getAccountActivitiesByActivityType: {
+    parameters: {
+      query?: {
+        /** @description Filter activities by the activity date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
+        date?: string
+        /** @description Get activities created before this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
+        until?: string
+        /** @description Get activities created after this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
+        after?: string
+        /** @description The chronological order of response based on the activity datetime. */
+        direction?: 'asc' | 'desc'
+        /** @description The maximum number of entries to return in the response. */
+        page_size?: number
+        /** @description Token used for pagination. Provide the ID of the last activity from the last page to retrieve the next set of results. */
+        page_token?: string
+      }
+      header?: never
+      path: {
+        /** @description The activity type you want to view entries for. A list of valid activity types can be found at the bottom of this page. */
+        activity_type: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description returns an array of Account activities */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': (
+            | components['schemas']['TradingActivities']
+            | components['schemas']['NonTradeActivities']
+          )[]
+        }
+      }
+    }
+  }
+  getCalendar: {
+    parameters: {
+      query?: {
+        /** @description The first date to retrieve data for (inclusive) */
+        start?: string
+        /** @description The last date to retrieve data for (inclusive) */
+        end?: string
+        /** @description Indicates what start and end mean. Enum: ‘TRADING’ or ‘SETTLEMENT’. Default value is ‘TRADING’. If TRADING is specified, returns a calendar whose trading date matches start, end. If SETTLEMENT is specified, returns the calendar whose settlement date matches start and end. */
+        date_type?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Calendar'][]
+        }
+      }
+    }
+  }
+  getClock: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Clock']
+        }
+      }
+    }
+  }
+  'get-v2-assets': {
+    parameters: {
+      query?: {
+        /** @description e.g. “active”. By default, all statuses are included. */
+        status?: string
+        /** @description Defaults to us_equity. */
+        asset_class?: string
+        /** @description Optional AMEX, ARCA, BATS, NYSE, NASDAQ, NYSEARCA or OTC */
+        exchange?: string
+        /**
+         * @description Comma separated values to query for more than one attribute. Assets which have any of the given attributes will be included.
+         *     Supported values are `ptp_no_exception`, `ptp_with_exception`, `ipo`, `has_options`, `options_late_close`.
+         */
+        attributes?: (
+          | 'ptp_no_exception'
+          | 'ptp_with_exception'
+          | 'ipo'
+          | 'has_options'
+          | 'options_late_close'
+        )[]
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An array of asset objects */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Assets'][]
+        }
+      }
+    }
+  }
+  'get-v2-assets-symbol_or_asset_id': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description symbol or assetId. CUSIP is also accepted for US equities. */
+        symbol_or_asset_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An Asset object */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Assets']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  'get-options-contracts': {
+    parameters: {
+      query?: {
+        /**
+         * @description Filter contracts by one or more underlying symbols.
+         * @example AAPL,SPY
+         */
+        underlying_symbols?: string
+        /**
+         * @description Include deliverables array in the response.
+         * @example true
+         */
+        show_deliverables?: boolean
+        /**
+         * @description Filter contracts by status (active/inactive). By default only active contracts are returned.
+         * @example active
+         */
+        status?: 'active' | 'inactive'
+        /**
+         * @description Filter contracts by the exact expiration date (format: YYYY-MM-DD).
+         * @example 2025-06-20
+         */
+        expiration_date?: string
+        /**
+         * @description Filter contracts with expiration date greater than or equal to the specified date.
+         * @example 2025-06-20
+         */
+        expiration_date_gte?: string
+        /**
+         * @description Filter contracts with expiration date less than or equal to the specified date. By default this is set to the next weekend.
+         * @example 2025-06-20
+         */
+        expiration_date_lte?: string
+        /**
+         * @description Filter contracts by the root symbol.
+         * @example AAPL
+         */
+        root_symbol?: string
+        /**
+         * @description Filter contracts by the type (call/put).
+         * @example call
+         */
+        type?: 'call' | 'put'
+        /**
+         * @description Filter contracts by the style (american/european).
+         * @example american
+         */
+        style?: 'american' | 'european'
+        /**
+         * @description Filter contracts with strike price greater than or equal to the specified value.
+         * @example 50
+         */
+        strike_price_gte?: number
+        /**
+         * @description Filter contracts with strike price less than or equal to the specified value.
          * @example 100
          */
-        ratelimit_limit: number;
+        strike_price_lte?: number
+        /** @description Used for pagination, this token retrieves the next page of results. It is obtained from the response of the preceding page when additional pages are available. */
+        page_token?: components['parameters']['PageToken']
         /**
-         * @description Request limit per minute remaining.
-         * @example 90
+         * @description The number of contracts to limit per page (default=100, max=10000).
+         * @example 100
          */
-        ratelimit_remaining: number;
+        limit?: number
         /**
-         * @description The UNIX epoch when the remaining quota changes.
-         * @example 1674044551
+         * @description The ppind(Penny Program Indicator) field indicates whether an option contract is eligible for penny price increments,
+         *     with `true` meaning it is part of the Penny Program and `false` meaning it is not.
+         * @example true
          */
-        ratelimit_reset: number;
-    };
-    pathItems: never;
-}
-export type $defs = Record<string, never>;
-export interface operations {
-    getAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    /**
-                     * @example {
-                     *       "id": "1d9eed04-be39-4e01-9b84-a48ac5bbafcf",
-                     *       "admin_configurations": {},
-                     *       "user_configurations": null,
-                     *       "account_number": "PALPACA_123",
-                     *       "status": "ACTIVE",
-                     *       "crypto_status": "ACTIVE",
-                     *       "currency": "USD",
-                     *       "buying_power": "245432.61",
-                     *       "regt_buying_power": "245432.61",
-                     *       "daytrading_buying_power": "0",
-                     *       "options_buying_power": "122716.305",
-                     *       "effective_buying_power": "245432.61",
-                     *       "non_marginable_buying_power": "122086.5",
-                     *       "bod_dtbp": 0,
-                     *       "cash": "122086.5",
-                     *       "accrued_fees": "0",
-                     *       "pending_transfer_in": "0",
-                     *       "portfolio_value": "123346.11",
-                     *       "pattern_day_trader": true,
-                     *       "trading_blocked": false,
-                     *       "transfers_blocked": false,
-                     *       "account_blocked": false,
-                     *       "created_at": "2023-01-01T18:20:20.272275Z",
-                     *       "trade_suspended_by_user": false,
-                     *       "multiplier": "2",
-                     *       "shorting_enabled": true,
-                     *       "equity": "123346.11",
-                     *       "last_equity": "122011.09751111286868",
-                     *       "long_market_value": "1259.61",
-                     *       "short_market_value": "0",
-                     *       "position_market_value": "1259.61",
-                     *       "initial_margin": "629.8",
-                     *       "maintenance_margin": "377.88",
-                     *       "last_maintenance_margin": "480.73",
-                     *       "sma": "123369.74",
-                     *       "daytrade_count": 0,
-                     *       "balance_asof": "2023-09-27",
-                     *       "crypto_tier": 1,
-                     *       "options_trading_level": 2,
-                     *       "intraday_adjustments": "0",
-                     *       "pending_reg_taf_fees": "0"
-                     *     }
-                     */
-                    "application/json": components["schemas"]["Account"];
-                };
-            };
-        };
-    };
-    getAllOrders: {
-        parameters: {
-            query?: {
-                /** @description Order status to be queried. open, closed or all. Defaults to open. */
-                status?: "open" | "closed" | "all";
-                /** @description The maximum number of orders in response. Defaults to 50 and max is 500. */
-                limit?: number;
-                /** @description The response will include only ones submitted after this timestamp (exclusive.) */
-                after?: string;
-                /** @description The response will include only ones submitted until this timestamp (exclusive.) */
-                until?: string;
-                /** @description The chronological order of response based on the submission time. asc or desc. Defaults to desc. */
-                direction?: "asc" | "desc";
-                /** @description If true, the result will roll up multi-leg orders under the legs field of primary order. */
-                nested?: boolean;
-                /** @description A comma-separated list of symbols to filter by (ex. “AAPL,TSLA,MSFT”). A currency pair is required for crypto orders (ex. “BTCUSD,BCHUSD,LTCUSD,ETCUSD”). */
-                symbols?: string;
-                /** @description Filters down to orders that have a matching side field set. */
-                side?: string;
-                /** @description A comma seperated list of asset classes, the response will include only orders in the specified asset classes. By specifying `us_option` as the class, you can query option orders by underlying symbol using the symbols parameter. */
-                asset_class?: ("us_equity" | "us_option" | "crypto" | "all")[];
-                /**
-                 * @description Return orders submitted before the order with this ID (exclusive).
-                 *     Mutually exclusive with `after_order_id`. Do not combine with `after`/`until`.
-                 */
-                before_order_id?: string;
-                /**
-                 * @description Return orders submitted after the order with this ID (exclusive).
-                 *     Mutually exclusive with `before_order_id`. Do not combine with `after`/`until`.
-                 */
-                after_order_id?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /**
-             * @description Successful response
-             *
-             *     An array of Order objects
-             */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Order"][];
-                };
-            };
-        };
-    };
-    postOrder: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description symbol, asset ID, or currency pair to identify the asset to trade, required for all order classes except for `mleg`. */
-                    symbol?: string;
-                    /** @description number of shares to trade. Can be fractionable for only market and day order types. Required for `mleg` order class, represents the number of units to trade of this strategy. */
-                    qty?: string;
-                    /** @description dollar amount to trade. Cannot work with `qty`. Can only work for market order types and day for time in force. */
-                    notional?: string;
-                    side?: components["schemas"]["OrderSide"];
-                    type: components["schemas"]["OrderType"];
-                    time_in_force: components["schemas"]["TimeInForce"];
-                    /**
-                     * @description Required if type is `limit` or `stop_limit`.
-                     *     In case of `mleg`, the limit_price parameter is expressed with the following notation:
-                     *     - A positive value indicates a debit, representing a cost or payment to be made.
-                     *     - A negative value signifies a credit, reflecting an amount to be received.
-                     */
-                    limit_price?: string;
-                    /** @description required if type is `stop` or `stop_limit` */
-                    stop_price?: string;
-                    /** @description this or `trail_percent` is required if type is `trailing_stop` */
-                    trail_price?: string;
-                    /** @description this or `trail_price` is required if type is `trailing_stop` */
-                    trail_percent?: string;
-                    /** @description (default) false. If true, order will be eligible to execute in premarket/afterhours. Only works with type limit and time_in_force day. */
-                    extended_hours?: boolean;
-                    /** @description A unique identifier for the order. Automatically generated if not sent. (<= 128 characters) */
-                    client_order_id?: string;
-                    order_class?: components["schemas"]["OrderClass"];
-                    /** @description list of order legs (<= 4) */
-                    legs?: components["schemas"]["MLegOrderLeg"][];
-                    /** @description Takes in a string/number value for limit_price */
-                    take_profit?: {
-                        /**
-                         * Format: decimal
-                         * @example 3.14
-                         */
-                        limit_price?: string;
-                    };
-                    /** @description Takes in string/number values for stop_price and limit_price */
-                    stop_loss?: {
-                        /**
-                         * Format: decimal
-                         * @example 3.14
-                         */
-                        stop_price?: string;
-                        /**
-                         * Format: decimal
-                         * @example 3.14
-                         */
-                        limit_price?: string;
-                    };
-                    position_intent?: components["schemas"]["PositionIntent"];
-                    advanced_instructions?: components["schemas"]["AdvancedInstructions"];
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Order"];
-                };
-            };
-            /**
-             * @description Forbidden
-             *
-             *     Buying power or shares is not sufficient.
-             */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /**
-             * @description Unprocessable
-             *
-             *     Input parameters are not recognized.
-             */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    deleteAllOrders: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /**
-             * @description Multi-Status with body.
-             *
-             *     an array of objects that include the order id and http status code for each status request.
-             */
-            207: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CanceledOrderResponse"][];
-                };
-            };
-            /** @description Failed to cancel order. */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getOrderByClientOrderId: {
-        parameters: {
-            query: {
-                /** @description The client-assigned order ID. */
-                client_order_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully retrieved the order matching the client_order_id. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Order"];
-                };
-            };
-        };
-    };
-    getOrderByOrderID: {
-        parameters: {
-            query?: {
-                /** @description If true, the result will roll up multi-leg orders under the legs field of primary order. */
-                nested?: boolean;
-            };
-            header?: never;
-            path: {
-                /** @description order id */
-                order_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Order"];
-                };
-            };
-        };
-    };
-    deleteOrderByOrderID: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description order id */
-                order_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description The order status is not cancelable. */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    patchOrderByOrderId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description order id */
-                order_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatchOrderRequest"];
-            };
-        };
-        responses: {
-            /**
-             * @description Successful response
-             *
-             *     The new Order object with the new order ID.
-             */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Order"];
-                };
-            };
-        };
-    };
-    getAllOpenPositions: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Position"][];
-                };
-            };
-        };
-    };
-    deleteAllOpenPositions: {
-        parameters: {
-            query?: {
-                /** @description If true is specified, cancel all open orders before liquidating all positions. */
-                cancel_orders?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /**
-             * @description Multi-Status with body.
-             *
-             *     an array of PositionClosed responses
-             */
-            207: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PositionClosedReponse"][];
-                };
-            };
-            /** @description Failed to liquidate */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getOpenPosition: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description symbol or assetId */
-                symbol_or_asset_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Position"];
-                };
-            };
-        };
-    };
-    deleteOpenPosition: {
-        parameters: {
-            query?: {
-                /** @description the number of shares to liquidate. Can accept up to 9 decimal points. Cannot work with percentage */
-                qty?: number;
-                /** @description percentage of position to liquidate. Must be between 0 and 100. Would only sell fractional if position is originally fractional. Can accept up to 9 decimal points. Cannot work with qty */
-                percentage?: number;
-            };
-            header?: never;
-            path: {
-                /** @description symbol or assetId */
-                symbol_or_asset_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /**
-             * @description Successful response
-             *
-             *     Returns the order created to close out this position
-             */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Order"];
-                };
-            };
-        };
-    };
-    optionExercise: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Option contract symbol or ID. */
-                symbol_or_contract_id: string;
-            };
-            cookie?: never;
-        };
-        /** @description Empty request body */
-        requestBody?: {
-            content: {
-                "*/*"?: never;
-            };
-        };
-        responses: {
-            /**
-             * @description Successful Response
-             *
-             *     Exercise instruction successfully submitted.
-             */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /**
-             * @description Forbidden
-             *
-             *     Available position quantity is not sufficient.
-             */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
-            /**
-             * @description Invalid Parameters.
-             *
-             *     One or more parameters provided are invalid.
-             */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
-        };
-    };
-    optionDoNotExercise: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Option contract symbol or ID. */
-                symbol_or_contract_id: string;
-            };
-            cookie?: never;
-        };
-        /** @description Empty request body */
-        requestBody?: {
-            content: {
-                "*/*"?: never;
-            };
-        };
-        responses: {
-            /**
-             * @description Successful Response
-             *
-             *     Do-not-exercise instruction successfully submitted.
-             */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /**
-             * @description Forbidden
-             *
-             *     Available position quantity is not sufficient or no position found.
-             */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
-            /**
-             * @description Invalid Parameters.
-             *
-             *     One or more parameters provided are invalid.
-             */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
-        };
-    };
-    getAccountPortfolioHistory: {
-        parameters: {
-            query?: {
-                /**
-                 * @description The duration of the data in `number` + `unit` format, such as 1D, where `unit` can be D for day, W for week, M for month and A for year. Defaults to 1M.
-                 *
-                 *     Only two of `start`, `end` and `period` can be specified at the same time.
-                 *
-                 *     For intraday timeframes (\<1D) only 30 days or less can be queried, for 1D resolutions there is no such limit, data is available since the
-                 *     creation of the account.
-                 */
-                period?: string;
-                /**
-                 * @description The resolution of time window. 1Min, 5Min, 15Min, 1H, or 1D. If omitted, 1Min for less than 7 days period,
-                 *     15Min for less than 30 days, or otherwise 1D.
-                 *
-                 *     For queries with longer than 30 days of `period`, the system only accepts 1D as `timeframe`.
-                 */
-                timeframe?: string;
-                /**
-                 * @description For intraday resolutions (<1D) this specfies which timestamps to return data points for:
-                 *
-                 *     Allowed values are:
-                 *     - **market_hours**
-                 *
-                 *       Only timestamps for the core requity trading hours are returned (usually 9:30am to 4:00pm, trading days only)
-                 *
-                 *     - **extended_hours**
-                 *
-                 *       Returns timestamps for the whole session including extended hours (usually 4:00am to 8:00pm, trading days only)
-                 *
-                 *     - **continuous**
-                 *
-                 *       Returns price data points 24/7 (for off-session times too). To calculate the equity values we are using the following prices:
-                 *
-                 *       Between 4:00am and 10:00pm on trading days the valuation will be calculated based on the last trade (extended hours and normal hours respectively).
-                 *
-                 *       After 10:00pm, until the next session open the equities will be valued at their official closing price on the primary exchange.
-                 */
-                intraday_reporting?: "market_hours" | "extended_hours" | "continuous";
-                /**
-                 * @description The timestamp the data is returned starting from in RFC3339 format (including timezone specification). Defaults to `end` minus `period`
-                 *
-                 *     If provided, the `start` value is always normalized to the `America/New_York` timezone and adjusted to the nearest `timeframe` interval, e.g. seconds are always truncated and the time is rounded backwards to the nearest ineterval of `1Min`, `5Min`, `15Min`, or `1H`.
-                 *
-                 *     If `timeframe=1D` and `start` is not a valid trading date, find the next available trading date. For example, if `start` occurs on Saturday or Sunday after converting to the America/New_York timezone, `start` is adjusted to the first weekday that is not a market holiday (e.g. Monday).
-                 *
-                 *     If `timeframe` is less than `1D` and `intraday_reporting` is not `continuous`, `start` always reflects the beginning of a market session. If `start` is between midnight and the end (inclusive) of an active trading day, `start` is set to the beginning of the session on the specified day. Otherwise, if `start` occurs outside of the market session, the next avaialble market date is used.
-                 *
-                 *     For example, when `intraday_reporting=market_hours` and `start=2023-10-19T23:59:59-04:00`, the provided `start` date occurs outside of the regular market session. The effective `start` timestamp is adjusted to the beginning of the next session: `2023-10-20T09:30:00-04:00`
-                 *
-                 *     `start` may be be combined with one of `end` or `period`.
-                 *
-                 *     Providing all of `start`, `end`, and `period` is invalid.
-                 */
-                start?: string;
-                /**
-                 * @description `pnl_reset` defines how we are calculating the baseline values for Profit And Loss (pnl) for queries with `timeframe` less than 1D (intraday queries).
-                 *
-                 *     The default behavior for intraday queries is that we reset the pnl value to the previous day's closing equity for each **trading** day.
-                 *
-                 *     In case of crypto (given it's continous nature), this might not be desired: specifying "no_reset" disables this behavior and all pnl values
-                 *     returned will be relative to the closing equity of the previous trading day.
-                 *
-                 *     For 1D resolution all PnL values are calculated relative to the `base_value`, we are not reseting the base value.
-                 */
-                pnl_reset?: "no_reset" | "per_day";
-                /**
-                 * @description The timestamp the data is returned up to in RFC3339 format (including timezone specification). Defaults to the current time.
-                 *
-                 *     If provided, the `end` value is always normalized to the `America/New_York` timezone and adjusted to the nearest `timeframe` interval, e.g. seconds are always truncated and the time is rounded backwards to the nearest ineterval of `1Min`, `5Min`, `15Min`, or `1H`.
-                 *
-                 *     When `intraday_reporting` is either `market_hours` or `extended_hours`, the `end` value is adjusted to not occur after session close on the specified day. For example if the `intraday_reporting` is `extended_hours`, and the timestamp specified is `2023-10-19T21:33:00-04:00`, `end` is adjusted to `2023-10-19T20:00:00-04:00`.
-                 *
-                 *     `end` may be combined with `start` or `period`.
-                 *
-                 *     Providing all of `start`, `end`, and `period` is invalid.
-                 */
-                end?: string;
-                /**
-                 * @description **deprecated**: Users are strongly advised to **rely on the `intraday_reporting` query parameter** for better control
-                 *     of the reporting range.
-                 *
-                 *     If true, include extended hours in the result. This is effective only for timeframe less than 1D.
-                 */
-                extended_hours?: string;
-                /** @description The cashflow activities to include in the report. One of 'ALL', 'NONE', or a comma-separated list of activity types. */
-                cashflow_types?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PortfolioHistory"];
-                };
-            };
-        };
-    };
-    getWatchlists: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WatchlistWithoutAsset"][];
-                };
-            };
-        };
-    };
-    postWatchlist: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateWatchlistRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    getWatchlistById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description watchlist id */
-                watchlist_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    updateWatchlistById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description watchlist id */
-                watchlist_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["UpdateWatchlistRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    addAssetToWatchlist: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description watchlist id */
-                watchlist_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description the symbol name to add to the watchlist */
-                    symbol?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    deleteWatchlistById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description watchlist id */
-                watchlist_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Watchlist not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getWatchlistByName: {
-        parameters: {
-            query: {
-                /** @description name of the watchlist */
-                name: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    updateWatchlistByName: {
-        parameters: {
-            query: {
-                /** @description name of the watchlist */
-                name: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["UpdateWatchlistRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    addAssetToWatchlistByName: {
-        parameters: {
-            query: {
-                /** @description name of the watchlist */
-                name: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /** @description the symbol name to add to the watchlist */
-                    symbol?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    deleteWatchlistByName: {
-        parameters: {
-            query: {
-                /** @description name of the watchlist */
-                name: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    removeAssetFromWatchlist: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Watchlist ID */
-                watchlist_id: string;
-                /** @description symbol name to remove from the watchlist content */
-                symbol: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Returns the updated watchlist */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Watchlist"];
-                };
-            };
-        };
-    };
-    getAccountConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AccountConfigurations"];
-                };
-            };
-        };
-    };
-    patchAccountConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["AccountConfigurations"];
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AccountConfigurations"];
-                };
-            };
-        };
-    };
-    getAccountActivities: {
-        parameters: {
-            query?: {
-                /** @description A comma-separated list of activity types used to filter the results. */
-                activity_types?: components["schemas"]["ActivityType"][];
-                /** @description The activity category. Cannot be used with "activity_types" parameter. */
-                category?: "trade_activity" | "non_trade_activity";
-                /** @description Filter activities by the activity date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
-                date?: string;
-                /** @description Get activities created before this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
-                until?: string;
-                /** @description Get activities created after this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
-                after?: string;
-                /** @description The chronological order of response based on the activity datetime. */
-                direction?: "asc" | "desc";
-                /** @description The maximum number of entries to return in the response. */
-                page_size?: number;
-                /** @description Token used for pagination. Provide the ID of the last activity from the last page to retrieve the next set of results. */
-                page_token?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description returns an array of Account activities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": (components["schemas"]["TradingActivities"] | components["schemas"]["NonTradeActivities"])[];
-                };
-            };
-        };
-    };
-    getAccountActivitiesByActivityType: {
-        parameters: {
-            query?: {
-                /** @description Filter activities by the activity date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
-                date?: string;
-                /** @description Get activities created before this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
-                until?: string;
-                /** @description Get activities created after this date. Both formats YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ are supported. */
-                after?: string;
-                /** @description The chronological order of response based on the activity datetime. */
-                direction?: "asc" | "desc";
-                /** @description The maximum number of entries to return in the response. */
-                page_size?: number;
-                /** @description Token used for pagination. Provide the ID of the last activity from the last page to retrieve the next set of results. */
-                page_token?: string;
-            };
-            header?: never;
-            path: {
-                /** @description The activity type you want to view entries for. A list of valid activity types can be found at the bottom of this page. */
-                activity_type: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description returns an array of Account activities */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": (components["schemas"]["TradingActivities"] | components["schemas"]["NonTradeActivities"])[];
-                };
-            };
-        };
-    };
-    getCalendar: {
-        parameters: {
-            query?: {
-                /** @description The first date to retrieve data for (inclusive) */
-                start?: string;
-                /** @description The last date to retrieve data for (inclusive) */
-                end?: string;
-                /** @description Indicates what start and end mean. Enum: ‘TRADING’ or ‘SETTLEMENT’. Default value is ‘TRADING’. If TRADING is specified, returns a calendar whose trading date matches start, end. If SETTLEMENT is specified, returns the calendar whose settlement date matches start and end. */
-                date_type?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Calendar"][];
-                };
-            };
-        };
-    };
-    getClock: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Clock"];
-                };
-            };
-        };
-    };
-    "get-v2-assets": {
-        parameters: {
-            query?: {
-                /** @description e.g. “active”. By default, all statuses are included. */
-                status?: string;
-                /** @description Defaults to us_equity. */
-                asset_class?: string;
-                /** @description Optional AMEX, ARCA, BATS, NYSE, NASDAQ, NYSEARCA or OTC */
-                exchange?: string;
-                /**
-                 * @description Comma separated values to query for more than one attribute. Assets which have any of the given attributes will be included.
-                 *     Supported values are `ptp_no_exception`, `ptp_with_exception`, `ipo`, `has_options`, `options_late_close`.
-                 */
-                attributes?: ("ptp_no_exception" | "ptp_with_exception" | "ipo" | "has_options" | "options_late_close")[];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An array of asset objects */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Assets"][];
-                };
-            };
-        };
-    };
-    "get-v2-assets-symbol_or_asset_id": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description symbol or assetId. CUSIP is also accepted for US equities. */
-                symbol_or_asset_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An Asset object */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Assets"];
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    "get-options-contracts": {
-        parameters: {
-            query?: {
-                /**
-                 * @description Filter contracts by one or more underlying symbols.
-                 * @example AAPL,SPY
-                 */
-                underlying_symbols?: string;
-                /**
-                 * @description Include deliverables array in the response.
-                 * @example true
-                 */
-                show_deliverables?: boolean;
-                /**
-                 * @description Filter contracts by status (active/inactive). By default only active contracts are returned.
-                 * @example active
-                 */
-                status?: "active" | "inactive";
-                /**
-                 * @description Filter contracts by the exact expiration date (format: YYYY-MM-DD).
-                 * @example 2025-06-20
-                 */
-                expiration_date?: string;
-                /**
-                 * @description Filter contracts with expiration date greater than or equal to the specified date.
-                 * @example 2025-06-20
-                 */
-                expiration_date_gte?: string;
-                /**
-                 * @description Filter contracts with expiration date less than or equal to the specified date. By default this is set to the next weekend.
-                 * @example 2025-06-20
-                 */
-                expiration_date_lte?: string;
-                /**
-                 * @description Filter contracts by the root symbol.
-                 * @example AAPL
-                 */
-                root_symbol?: string;
-                /**
-                 * @description Filter contracts by the type (call/put).
-                 * @example call
-                 */
-                type?: "call" | "put";
-                /**
-                 * @description Filter contracts by the style (american/european).
-                 * @example american
-                 */
-                style?: "american" | "european";
-                /**
-                 * @description Filter contracts with strike price greater than or equal to the specified value.
-                 * @example 50
-                 */
-                strike_price_gte?: number;
-                /**
-                 * @description Filter contracts with strike price less than or equal to the specified value.
-                 * @example 100
-                 */
-                strike_price_lte?: number;
-                /** @description Used for pagination, this token retrieves the next page of results. It is obtained from the response of the preceding page when additional pages are available. */
-                page_token?: components["parameters"]["PageToken"];
-                /**
-                 * @description The number of contracts to limit per page (default=100, max=10000).
-                 * @example 100
-                 */
-                limit?: number;
-                /**
-                 * @description The ppind(Penny Program Indicator) field indicates whether an option contract is eligible for penny price increments,
-                 *     with `true` meaning it is part of the Penny Program and `false` meaning it is not.
-                 * @example true
-                 */
-                ppind?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        option_contracts: components["schemas"]["OptionContract"][];
-                        next_page_token?: components["schemas"]["NextPageToken"];
-                    };
-                };
-            };
-        };
-    };
-    "get-option-contract-symbol_or_id": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description symbol or contract ID */
-                symbol_or_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An option contract */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OptionContract"];
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
-        };
-    };
-    UsTreasuries: {
-        parameters: {
-            query?: {
-                subtype?: components["schemas"]["treasury_subtype"];
-                bond_status?: components["schemas"]["bond_status"];
-                /**
-                 * @description A comma-separated list of CUSIPs with a limit of 1000.
-                 * @example 912810UG1,912797PM3
-                 */
-                cusips?: string;
-                /**
-                 * @description A comma-separated list of ISINs with a limit of 1000.
-                 * @example US912810UG12,US912797PM34
-                 */
-                isins?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    "X-RateLimit-Limit": components["headers"]["ratelimit_limit"];
-                    "X-RateLimit-Remaining": components["headers"]["ratelimit_remaining"];
-                    "X-RateLimit-Reset": components["headers"]["ratelimit_reset"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["us_treasuries_resp"];
-                };
-            };
-            400: components["responses"]["400"];
-            403: components["responses"]["403"];
-            429: components["responses"]["429"];
-            500: components["responses"]["500"];
-        };
-    };
-    UsCorporates: {
-        parameters: {
-            query?: {
-                bond_status?: components["schemas"]["bond_status"];
-                /**
-                 * @description A comma-separated list of ISINs with a limit of 1000.
-                 * @example US912810UG12,US912797PM34
-                 */
-                isins?: string;
-                /**
-                 * @description A comma-separated list of CUSIPs with a limit of 1000.
-                 * @example 912810UG1,912797PM3
-                 */
-                cusips?: string;
-                /**
-                 * @description A comma-separated list of tickers with a limit of 1000.
-                 * @example BAC,MSFT
-                 */
-                tickers?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    "X-RateLimit-Limit": components["headers"]["ratelimit_limit"];
-                    "X-RateLimit-Remaining": components["headers"]["ratelimit_remaining"];
-                    "X-RateLimit-Reset": components["headers"]["ratelimit_reset"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["us_corporates_resp"];
-                };
-            };
-            400: components["responses"]["400"];
-            401: components["responses"]["401"];
-            403: components["responses"]["403"];
-            429: components["responses"]["429"];
-            500: components["responses"]["500"];
-        };
-    };
-    "get-v2-corporate_actions-announcements-id": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The corporate announcement’s id */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        id?: string;
-                        corporate_actions_id?: string;
-                        /** @description A comma-delimited list of Dividend, Merger, Spinoff, or Split. */
-                        ca_type?: string;
-                        ca_sub_type?: string;
-                        initiating_symbol?: string;
-                        initiating_original_cusip?: string;
-                        target_symbol?: string;
-                        target_original_cusip?: string;
-                        declaration_date?: string;
-                        expiration_date?: string;
-                        record_date?: string;
-                        payable_date?: string;
-                        cash?: string;
-                        old_rate?: string;
-                        new_rate?: string;
-                    };
-                };
-            };
-        };
-    };
-    "get-v2-corporate_actions-announcements": {
-        parameters: {
-            query: {
-                /** @description A comma-delimited list of Dividend, Merger, Spinoff, or Split. */
-                ca_types: string;
-                /** @description The start (inclusive) of the date range when searching corporate action announcements. This should follow the YYYY-MM-DD format. The date range is limited to 90 days. */
-                since: string;
-                /** @description The end (inclusive) of the date range when searching corporate action announcements. This should follow the YYYY-MM-DD format. The date range is limited to 90 days. */
-                until: string;
-                /** @description The symbol of the company initiating the announcement. */
-                symbol?: string;
-                /** @description The CUSIP of the company initiating the announcement. */
-                cusip?: string;
-                /** @description declaration_date, ex_date, record_date, or payable_date */
-                date_type?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        id?: string;
-                        corporate_actions_id?: string;
-                        ca_type?: string;
-                        ca_sub_type?: string;
-                        initiating_symbol?: string;
-                        initiating_original_cusip?: string;
-                        target_symbol?: string;
-                        target_original_cusip?: string;
-                        declaration_date?: string;
-                        expiration_date?: string;
-                        record_date?: string;
-                        payable_date?: string;
-                        cash?: string;
-                        old_rate?: string;
-                        new_rate?: string;
-                        corporate_action_id?: string;
-                        ex_date?: string;
-                    }[];
-                };
-            };
-        };
-    };
-    listCryptoFundingWallets: {
-        parameters: {
-            query?: {
-                asset?: string;
-                /** @description Optional network identifier. Use to request wallets for a specific network when asset is a multi-chain crypto asset. If not specified, the default network (ehtereum) will be used. */
-                network?: "ethereum" | "solana";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A single wallet object if an asset is specified or an array of wallet objects if no asset is specified */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoWallet"];
-                };
-            };
-        };
-    };
-    listCryptoFundingTransfers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An array of transfer objects */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoTransfer"];
-                };
-            };
-        };
-    };
-    createCryptoTransferForAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCryptoTransferRequest"];
-            };
-        };
-        responses: {
-            /** @description Successfully requested a transfer. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoTransfer"];
-                };
-            };
-        };
-    };
-    getCryptoFundingTransfer: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The crypto transfer to retrieve */
-                transfer_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A single crypto transfer object */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoTransfer"];
-                };
-            };
-        };
-    };
-    listWhitelistedAddress: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An array of whitelisted objects */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WhitelistedAddress"];
-                };
-            };
-        };
-    };
-    createWhitelistedAddress: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The address to be whitelisted */
-                    address?: string;
-                    /** @description Symbol of underlying asset for the whitelisted address */
-                    asset?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successfully requested a whitelisted address */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WhitelistedAddress"];
-                };
-            };
-        };
-    };
-    deleteWhitelistedAddress: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The whitelisted address to delete */
-                whitelisted_address_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully deleted a whitelisted address */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getCryptoTransferEstimate: {
-        parameters: {
-            query?: {
-                /** @description The asset for the proposed transaction */
-                asset?: string;
-                /** @description The originating address of the proposed transaction */
-                from_address?: string;
-                /** @description The destination address of the proposed transaction */
-                to_address?: string;
-                /** @description The amount, denoted in the specified asset, of the proposed transaction */
-                amount?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        fee?: string;
-                    };
-                };
-            };
-        };
-    };
-    listCryptoPerpFundingWallets: {
-        parameters: {
-            query?: {
-                asset?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A single wallet object if an asset is specified or an array of wallet objects if no asset is specified */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoWallet"];
-                };
-            };
-        };
-    };
-    listCryptoPerpFundingTransfers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An array of transfer objects */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoTransfer"];
-                };
-            };
-        };
-    };
-    createCryptoPerpTransferForAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCryptoTransferRequest"];
-            };
-        };
-        responses: {
-            /** @description Successfully requested a transfer. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoTransfer"];
-                };
-            };
-        };
-    };
-    getCryptoPerpFundingTransfer: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The crypto transfer to retrieve */
-                transfer_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A single crypto transfer object */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CryptoTransfer"];
-                };
-            };
-        };
-    };
-    listWhitelistedPerpAddress: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description An array of whitelisted objects */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WhitelistedAddress"];
-                };
-            };
-        };
-    };
-    createWhitelistedPerpAddress: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description The address to be whitelisted */
-                    address?: string;
-                    /** @description Symbol of underlying asset for the whitelisted address */
-                    asset?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successfully requested a whitelisted address */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WhitelistedAddress"];
-                };
-            };
-        };
-    };
-    deleteWhitelistedPerpAddress: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The whitelisted address to delete */
-                whitelisted_address_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully deleted a whitelisted address */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getCryptoPerpTransferEstimate: {
-        parameters: {
-            query?: {
-                /** @description The asset for the proposed transaction */
-                asset?: string;
-                /** @description The originating address of the proposed transaction */
-                from_address?: string;
-                /** @description The destination address of the proposed transaction */
-                to_address?: string;
-                /** @description The amount, denoted in the specified asset, of the proposed transaction */
-                amount?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        fee?: string;
-                    };
-                };
-            };
-        };
-    };
-    getCryptoPerpAccountLeverage: {
-        parameters: {
-            query?: {
-                /** @description Symbol of underlying asset */
-                symbol?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Symbol of underlying asset */
-                        symbol?: string;
-                        leverage?: number;
-                    };
-                };
-            };
-        };
-    };
-    setCryptoPerpAccountLeverage: {
-        parameters: {
-            query?: {
-                /** @description Symbol of underlying asset */
-                symbol?: string;
-                /** @description Leverage for the underlying asset */
-                leverage?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Symbol of underlying asset */
-                        symbol?: string;
-                        leverage?: number;
-                    };
-                };
-            };
-        };
-    };
-    getCryptoPerpAccountVitals: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description MaintenanceMargin (USDT) is the sum of each position's individual maintenance margin */
-                        maintenance_margin?: number;
-                        /** @description CollateralBalance (USDT) is the sum of the unrealized PnL on each position plus TotalCollateral */
-                        collateral_balance?: number;
-                        /** @description TotalCollateral (USDT) across all collateral assets */
-                        total_collateral?: number;
-                        /** @description ProfitAndLoss (USDT) is the net of realized and unrealized PnL across all positions */
-                        profit_loss?: number;
-                    };
-                };
-            };
-        };
-    };
+        ppind?: boolean
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            option_contracts: components['schemas']['OptionContract'][]
+            next_page_token?: components['schemas']['NextPageToken']
+          }
+        }
+      }
+    }
+  }
+  'get-option-contract-symbol_or_id': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description symbol or contract ID */
+        symbol_or_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An option contract */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['OptionContract']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Error']
+        }
+      }
+    }
+  }
+  UsTreasuries: {
+    parameters: {
+      query?: {
+        subtype?: components['schemas']['treasury_subtype']
+        bond_status?: components['schemas']['bond_status']
+        /**
+         * @description A comma-separated list of CUSIPs with a limit of 1000.
+         * @example 912810UG1,912797PM3
+         */
+        cusips?: string
+        /**
+         * @description A comma-separated list of ISINs with a limit of 1000.
+         * @example US912810UG12,US912797PM34
+         */
+        isins?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          'X-RateLimit-Limit': components['headers']['ratelimit_limit']
+          'X-RateLimit-Remaining': components['headers']['ratelimit_remaining']
+          'X-RateLimit-Reset': components['headers']['ratelimit_reset']
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['us_treasuries_resp']
+        }
+      }
+      400: components['responses']['400']
+      403: components['responses']['403']
+      429: components['responses']['429']
+      500: components['responses']['500']
+    }
+  }
+  UsCorporates: {
+    parameters: {
+      query?: {
+        bond_status?: components['schemas']['bond_status']
+        /**
+         * @description A comma-separated list of ISINs with a limit of 1000.
+         * @example US912810UG12,US912797PM34
+         */
+        isins?: string
+        /**
+         * @description A comma-separated list of CUSIPs with a limit of 1000.
+         * @example 912810UG1,912797PM3
+         */
+        cusips?: string
+        /**
+         * @description A comma-separated list of tickers with a limit of 1000.
+         * @example BAC,MSFT
+         */
+        tickers?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          'X-RateLimit-Limit': components['headers']['ratelimit_limit']
+          'X-RateLimit-Remaining': components['headers']['ratelimit_remaining']
+          'X-RateLimit-Reset': components['headers']['ratelimit_reset']
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['us_corporates_resp']
+        }
+      }
+      400: components['responses']['400']
+      401: components['responses']['401']
+      403: components['responses']['403']
+      429: components['responses']['429']
+      500: components['responses']['500']
+    }
+  }
+  'get-v2-corporate_actions-announcements-id': {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The corporate announcement’s id */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            id?: string
+            corporate_actions_id?: string
+            /** @description A comma-delimited list of Dividend, Merger, Spinoff, or Split. */
+            ca_type?: string
+            ca_sub_type?: string
+            initiating_symbol?: string
+            initiating_original_cusip?: string
+            target_symbol?: string
+            target_original_cusip?: string
+            declaration_date?: string
+            expiration_date?: string
+            record_date?: string
+            payable_date?: string
+            cash?: string
+            old_rate?: string
+            new_rate?: string
+          }
+        }
+      }
+    }
+  }
+  'get-v2-corporate_actions-announcements': {
+    parameters: {
+      query: {
+        /** @description A comma-delimited list of Dividend, Merger, Spinoff, or Split. */
+        ca_types: string
+        /** @description The start (inclusive) of the date range when searching corporate action announcements. This should follow the YYYY-MM-DD format. The date range is limited to 90 days. */
+        since: string
+        /** @description The end (inclusive) of the date range when searching corporate action announcements. This should follow the YYYY-MM-DD format. The date range is limited to 90 days. */
+        until: string
+        /** @description The symbol of the company initiating the announcement. */
+        symbol?: string
+        /** @description The CUSIP of the company initiating the announcement. */
+        cusip?: string
+        /** @description declaration_date, ex_date, record_date, or payable_date */
+        date_type?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            id?: string
+            corporate_actions_id?: string
+            ca_type?: string
+            ca_sub_type?: string
+            initiating_symbol?: string
+            initiating_original_cusip?: string
+            target_symbol?: string
+            target_original_cusip?: string
+            declaration_date?: string
+            expiration_date?: string
+            record_date?: string
+            payable_date?: string
+            cash?: string
+            old_rate?: string
+            new_rate?: string
+            corporate_action_id?: string
+            ex_date?: string
+          }[]
+        }
+      }
+    }
+  }
+  listCryptoFundingWallets: {
+    parameters: {
+      query?: {
+        asset?: string
+        /** @description Optional network identifier. Use to request wallets for a specific network when asset is a multi-chain crypto asset. If not specified, the default network (ehtereum) will be used. */
+        network?: 'ethereum' | 'solana'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A single wallet object if an asset is specified or an array of wallet objects if no asset is specified */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoWallet']
+        }
+      }
+    }
+  }
+  listCryptoFundingTransfers: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An array of transfer objects */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoTransfer']
+        }
+      }
+    }
+  }
+  createCryptoTransferForAccount: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateCryptoTransferRequest']
+      }
+    }
+    responses: {
+      /** @description Successfully requested a transfer. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoTransfer']
+        }
+      }
+    }
+  }
+  getCryptoFundingTransfer: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The crypto transfer to retrieve */
+        transfer_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A single crypto transfer object */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoTransfer']
+        }
+      }
+    }
+  }
+  listWhitelistedAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An array of whitelisted objects */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WhitelistedAddress']
+        }
+      }
+    }
+  }
+  createWhitelistedAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description The address to be whitelisted */
+          address?: string
+          /** @description Symbol of underlying asset for the whitelisted address */
+          asset?: string
+        }
+      }
+    }
+    responses: {
+      /** @description Successfully requested a whitelisted address */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WhitelistedAddress']
+        }
+      }
+    }
+  }
+  deleteWhitelistedAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The whitelisted address to delete */
+        whitelisted_address_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully deleted a whitelisted address */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getCryptoTransferEstimate: {
+    parameters: {
+      query?: {
+        /** @description The asset for the proposed transaction */
+        asset?: string
+        /** @description The originating address of the proposed transaction */
+        from_address?: string
+        /** @description The destination address of the proposed transaction */
+        to_address?: string
+        /** @description The amount, denoted in the specified asset, of the proposed transaction */
+        amount?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            fee?: string
+          }
+        }
+      }
+    }
+  }
+  listCryptoPerpFundingWallets: {
+    parameters: {
+      query?: {
+        asset?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A single wallet object if an asset is specified or an array of wallet objects if no asset is specified */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoWallet']
+        }
+      }
+    }
+  }
+  listCryptoPerpFundingTransfers: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An array of transfer objects */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoTransfer']
+        }
+      }
+    }
+  }
+  createCryptoPerpTransferForAccount: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateCryptoTransferRequest']
+      }
+    }
+    responses: {
+      /** @description Successfully requested a transfer. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoTransfer']
+        }
+      }
+    }
+  }
+  getCryptoPerpFundingTransfer: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The crypto transfer to retrieve */
+        transfer_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description A single crypto transfer object */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CryptoTransfer']
+        }
+      }
+    }
+  }
+  listWhitelistedPerpAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description An array of whitelisted objects */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WhitelistedAddress']
+        }
+      }
+    }
+  }
+  createWhitelistedPerpAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description The address to be whitelisted */
+          address?: string
+          /** @description Symbol of underlying asset for the whitelisted address */
+          asset?: string
+        }
+      }
+    }
+    responses: {
+      /** @description Successfully requested a whitelisted address */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WhitelistedAddress']
+        }
+      }
+    }
+  }
+  deleteWhitelistedPerpAddress: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The whitelisted address to delete */
+        whitelisted_address_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully deleted a whitelisted address */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getCryptoPerpTransferEstimate: {
+    parameters: {
+      query?: {
+        /** @description The asset for the proposed transaction */
+        asset?: string
+        /** @description The originating address of the proposed transaction */
+        from_address?: string
+        /** @description The destination address of the proposed transaction */
+        to_address?: string
+        /** @description The amount, denoted in the specified asset, of the proposed transaction */
+        amount?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            fee?: string
+          }
+        }
+      }
+    }
+  }
+  getCryptoPerpAccountLeverage: {
+    parameters: {
+      query?: {
+        /** @description Symbol of underlying asset */
+        symbol?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            /** @description Symbol of underlying asset */
+            symbol?: string
+            leverage?: number
+          }
+        }
+      }
+    }
+  }
+  setCryptoPerpAccountLeverage: {
+    parameters: {
+      query?: {
+        /** @description Symbol of underlying asset */
+        symbol?: string
+        /** @description Leverage for the underlying asset */
+        leverage?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            /** @description Symbol of underlying asset */
+            symbol?: string
+            leverage?: number
+          }
+        }
+      }
+    }
+  }
+  getCryptoPerpAccountVitals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            /** @description MaintenanceMargin (USDT) is the sum of each position's individual maintenance margin */
+            maintenance_margin?: number
+            /** @description CollateralBalance (USDT) is the sum of the unrealized PnL on each position plus TotalCollateral */
+            collateral_balance?: number
+            /** @description TotalCollateral (USDT) across all collateral assets */
+            total_collateral?: number
+            /** @description ProfitAndLoss (USDT) is the net of realized and unrealized PnL across all positions */
+            profit_loss?: number
+          }
+        }
+      }
+    }
+  }
 }

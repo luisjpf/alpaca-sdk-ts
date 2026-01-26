@@ -1,5 +1,11 @@
 # Alpaca SDK for TypeScript
 
+[![CI](https://github.com/luisjpf/alpaca-sdk-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/luisjpf/alpaca-sdk-ts/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@alpaca-sdk/alpaca-sdk.svg)](https://www.npmjs.com/package/@alpaca-sdk/alpaca-sdk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green.svg)](https://nodejs.org/)
+
 Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data APIs.
 
 ## Features
@@ -8,7 +14,7 @@ Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data A
 - **Universal**: Works in Node.js 18+, Deno, Bun, browsers, and edge runtimes
 - **Minimal**: Native `fetch`, zero HTTP dependencies
 - **Tree-shakeable**: Import only what you need
-- **WebSocket Streaming (Preview)**: Real-time market data and trade updates - in development
+- **WebSocket Streaming**: Real-time market data and trade updates
 - **Modern**: ESM-first with CommonJS compatibility
 
 ## Installation
@@ -21,6 +27,7 @@ pnpm add @alpaca-sdk/alpaca-sdk
 pnpm add @alpaca-sdk/trading
 pnpm add @alpaca-sdk/market-data
 pnpm add @alpaca-sdk/broker
+pnpm add @alpaca-sdk/streaming
 ```
 
 ## Quick Start
@@ -56,14 +63,14 @@ const bars = await alpaca.marketData.stocks.getBars('AAPL', {
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| `@alpaca-sdk/alpaca-sdk` | Complete SDK with all APIs |
-| `@alpaca-sdk/trading` | Trading API (orders, positions, account) |
+| Package                   | Description                                     |
+| ------------------------- | ----------------------------------------------- |
+| `@alpaca-sdk/alpaca-sdk`  | Complete SDK with all APIs                      |
+| `@alpaca-sdk/trading`     | Trading API (orders, positions, account)        |
 | `@alpaca-sdk/market-data` | Market Data API (stocks, crypto, options, news) |
-| `@alpaca-sdk/broker` | Broker API (sub-accounts, funding, KYC) |
-| `@alpaca-sdk/streaming` | WebSocket clients for real-time data (preview) |
-| `@alpaca-sdk/core` | Shared utilities (auth, errors, types) |
+| `@alpaca-sdk/broker`      | Broker API (sub-accounts, funding, KYC)         |
+| `@alpaca-sdk/streaming`   | WebSocket clients for real-time data            |
+| `@alpaca-sdk/core`        | Shared utilities (auth, errors, types)          |
 
 ## Configuration
 
@@ -73,9 +80,9 @@ import { createTradingClient } from '@alpaca-sdk/trading'
 const client = createTradingClient({
   keyId: 'YOUR_API_KEY',
   secretKey: 'YOUR_SECRET_KEY',
-  paper: true,           // default: true
-  timeout: 30_000,       // default: 30s
-  maxRetries: 2,         // default: 2
+  paper: true, // default: true
+  timeout: 30_000, // default: 30s
+  maxRetries: 2, // default: 2
   baseUrl: 'custom-url', // optional override
 })
 ```
@@ -103,24 +110,97 @@ try {
 }
 ```
 
-## WebSocket Streaming (Preview)
+## WebSocket Streaming
 
-The streaming package is currently in development. All streaming methods will throw `NotImplementedError` until the feature is complete.
+Real-time market data and trade updates via WebSocket.
+
+### Stock Data Streaming
 
 ```typescript
-import { NotImplementedError } from '@alpaca-sdk/core'
+import { createStockStream } from '@alpaca-sdk/streaming'
 
-try {
-  alpaca.streams.stocks.connect()
-} catch (error) {
-  if (error instanceof NotImplementedError) {
-    console.log(`${error.feature} is not yet available`)
-    console.log(`See: ${error.docsUrl}`)
-  }
-}
+const stream = createStockStream({
+  keyId: 'YOUR_API_KEY',
+  secretKey: 'YOUR_SECRET_KEY',
+  feed: 'iex', // 'iex' (free), 'sip' (paid), or 'delayed_sip'
+})
+
+// Register handlers
+stream.onTrade((trade) => {
+  console.log(`Trade: ${trade.S} @ $${trade.p}`)
+})
+
+stream.onQuote((quote) => {
+  console.log(`Quote: ${quote.S} bid: $${quote.bp} ask: $${quote.ap}`)
+})
+
+stream.onBar((bar) => {
+  console.log(`Bar: ${bar.S} O:${bar.o} H:${bar.h} L:${bar.l} C:${bar.c}`)
+})
+
+stream.onConnect(() => console.log('Connected!'))
+stream.onError((err) => console.error('Error:', err))
+
+// Connect and subscribe
+stream.connect()
+stream.subscribeForTrades(['AAPL', 'MSFT', 'GOOGL'])
+stream.subscribeForQuotes(['AAPL'])
+stream.subscribeForBars(['AAPL'])
 ```
 
-We're actively working on WebSocket streaming support. Track progress in the repository issues.
+### Crypto Data Streaming
+
+```typescript
+import { createCryptoStream } from '@alpaca-sdk/streaming'
+
+const stream = createCryptoStream({
+  keyId: 'YOUR_API_KEY',
+  secretKey: 'YOUR_SECRET_KEY',
+  location: 'us', // 'us' (Alpaca), 'us-1' (Kraken US), 'eu-1' (Kraken EU)
+})
+
+stream.onTrade((trade) => {
+  console.log(`Crypto Trade: ${trade.S} @ $${trade.p}`)
+})
+
+stream.connect()
+stream.subscribeForTrades(['BTC/USD', 'ETH/USD'])
+```
+
+### Trade Updates Streaming
+
+```typescript
+import { createTradeUpdatesStream } from '@alpaca-sdk/streaming'
+
+const stream = createTradeUpdatesStream({
+  keyId: 'YOUR_API_KEY',
+  secretKey: 'YOUR_SECRET_KEY',
+  paper: true, // true for paper trading, false for live
+})
+
+stream.onTradeUpdate((update) => {
+  console.log(`Order ${update.event}: ${JSON.stringify(update.order)}`)
+})
+
+stream.connect()
+stream.subscribe()
+```
+
+### Stock Feed Types
+
+| Feed          | Description                   | Subscription      |
+| ------------- | ----------------------------- | ----------------- |
+| `iex`         | IEX Exchange data only        | Free (Basic plan) |
+| `sip`         | Full consolidated market data | Algo Trader Plus  |
+| `delayed_sip` | 15-minute delayed SIP data    | Free              |
+
+### Crypto Locations
+
+| Location | Exchange  | Notes                     |
+| -------- | --------- | ------------------------- |
+| `us`     | Alpaca    | Default, recommended      |
+| `us-1`   | Kraken US | Available in 23 US states |
+| `eu-1`   | Kraken EU | European markets          |
 
 ## Development
 
@@ -137,6 +217,9 @@ pnpm build
 # Run tests
 pnpm test
 
+# Run tests with coverage
+pnpm test:coverage
+
 # Lint code
 pnpm lint
 
@@ -148,6 +231,10 @@ pnpm typecheck
 
 - Node.js >= 18.0.0 (for native `fetch`)
 - pnpm >= 9.0.0
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
