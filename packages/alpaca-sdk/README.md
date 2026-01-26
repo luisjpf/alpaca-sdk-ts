@@ -63,8 +63,8 @@ const bars = await alpaca.marketData.stocks.getSymbolBars('AAPL', {
 
 ## Packages
 
-| Package                   | Description                                     |
-| ------------------------- | ----------------------------------------------- |
+| Package                | Description                                     |
+| ---------------------- | ----------------------------------------------- |
 | `@luisjpf/alpaca-sdk`  | Complete SDK with all APIs                      |
 | `@luisjpf/trading`     | Trading API (orders, positions, account)        |
 | `@luisjpf/market-data` | Market Data API (stocks, crypto, options, news) |

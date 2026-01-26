@@ -9,11 +9,7 @@ import { createBrokerClient } from '@luisjpf/broker'
 import type { BrokerClient } from '@luisjpf/broker'
 import { createMarketDataClient } from '@luisjpf/market-data'
 import type { MarketDataClient } from '@luisjpf/market-data'
-import {
-  createStockStream,
-  createCryptoStream,
-  createTradeUpdatesStream,
-} from '@luisjpf/streaming'
+import { createStockStream, createCryptoStream, createTradeUpdatesStream } from '@luisjpf/streaming'
 import type { StockStream, CryptoStream, TradeUpdatesStream } from '@luisjpf/streaming'
 
 export type AlpacaClientConfig = AlpacaConfig

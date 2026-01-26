@@ -7,11 +7,7 @@
 export * from '@luisjpf/core'
 
 // Trading - Export client factory and specific types
-export {
-  createTradingClient,
-  type TradingClient,
-  type TradingClientConfig,
-} from '@luisjpf/trading'
+export { createTradingClient, type TradingClient, type TradingClientConfig } from '@luisjpf/trading'
 
 // Trading types (namespaced to avoid conflicts)
 export type {
