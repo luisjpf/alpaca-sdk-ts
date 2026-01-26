@@ -57,20 +57,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
         with:
-          version: 9.15.0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Test with coverage
-        run: pnpm test:coverage
+          name: coverage
+          path: packages/
 
       - name: Coverage Report - Core
         uses: davelosert/vitest-coverage-report-action@v2

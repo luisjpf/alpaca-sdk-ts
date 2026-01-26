@@ -12,6 +12,9 @@ const RECONNECT_INITIAL_DELAY = 1000
 const RECONNECT_MAX_DELAY = 30000
 const RECONNECT_BACKOFF_MULTIPLIER = 2
 
+/** Connection timeout (30 seconds) */
+const CONNECTION_TIMEOUT = 30000
+
 /** Message types from the server */
 export interface ControlMessage {
   T: 'success' | 'error' | 'subscription'
@@ -54,6 +57,7 @@ export abstract class BaseStream {
   protected config: StreamConfig
   protected reconnectAttempts = 0
   protected reconnectTimer: ReturnType<typeof setTimeout> | null = null
+  protected connectionTimer: ReturnType<typeof setTimeout> | null = null
   protected shouldReconnect = true
   protected pendingSubscriptions: (() => void)[] = []
   protected eventHandlers = new Map<StreamEvent, Set<EventHandler>>()
@@ -109,6 +113,7 @@ export abstract class BaseStream {
   disconnect(): void {
     this.shouldReconnect = false
     this.clearReconnectTimer()
+    this.clearConnectionTimer()
 
     if (this.ws) {
       this.ws.close()
@@ -139,6 +144,17 @@ export abstract class BaseStream {
   }
 
   /**
+   * Remove all handlers for a specific event, or all handlers if no event specified.
+   */
+  removeAllListeners(event?: StreamEvent): void {
+    if (event) {
+      this.eventHandlers.delete(event)
+    } else {
+      this.eventHandlers.clear()
+    }
+  }
+
+  /**
    * Emit an event to all registered handlers.
    */
   protected emit(event: StreamEvent, data?: unknown): void {
@@ -160,6 +176,16 @@ export abstract class BaseStream {
   private doConnect(): void {
     this.setState('connecting')
 
+    // Set connection timeout
+    this.connectionTimer = setTimeout(() => {
+      if (this.state === 'connecting' || this.state === 'authenticating') {
+        this.emit('error', new Error('Connection timeout'))
+        if (this.ws) {
+          this.ws.close()
+        }
+      }
+    }, CONNECTION_TIMEOUT)
+
     const url = this.getUrl()
     this.ws = new WebSocket(url)
 
@@ -168,8 +194,8 @@ export abstract class BaseStream {
     }
 
     this.ws.onopen = () => {
+      // Wait for server's 'connected' message before authenticating
       this.setState('authenticating')
-      this.authenticate()
     }
 
     this.ws.onmessage = (event: WebSocket.MessageEvent) => {
@@ -275,6 +301,7 @@ export abstract class BaseStream {
    * Called when authentication is successful.
    */
   private onAuthenticated(): void {
+    this.clearConnectionTimer()
     this.setState('connected')
     this.reconnectAttempts = 0
     this.emit('connected')
@@ -339,6 +366,16 @@ export abstract class BaseStream {
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer)
       this.reconnectTimer = null
+    }
+  }
+
+  /**
+   * Clear the connection timeout timer.
+   */
+  private clearConnectionTimer(): void {
+    if (this.connectionTimer) {
+      clearTimeout(this.connectionTimer)
+      this.connectionTimer = null
     }
   }
 

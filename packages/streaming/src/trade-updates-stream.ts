@@ -108,8 +108,11 @@ class TradeUpdatesStreamImpl {
 
   subscribe(): void {
     if (this.state === 'connected') {
-      this.doSubscribe()
-    } else {
+      if (!this.isSubscribed) {
+        this.doSubscribe()
+      }
+    } else if (!this.pendingSubscribe) {
+      // Guard against double-queuing subscriptions
       this.pendingSubscribe = true
     }
   }
