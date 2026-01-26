@@ -2,7 +2,12 @@
  * Streaming types
  */
 
-export type StreamState = 'disconnected' | 'connecting' | 'authenticating' | 'connected' | 'error'
+export type StreamState =
+  | 'disconnected'
+  | 'connecting'
+  | 'authenticating'
+  | 'connected'
+  | 'error'
 
 export interface StreamConfig {
   keyId: string
@@ -10,6 +15,38 @@ export interface StreamConfig {
   paper?: boolean
   /** Use MessagePack encoding instead of JSON */
   useMsgpack?: boolean
+}
+
+/**
+ * Stock data feed types:
+ * - `sip` - Full SIP feed (requires paid Algo Trader Plus subscription)
+ * - `iex` - IEX feed only (available on free Basic plan)
+ * - `delayed_sip` - 15-minute delayed SIP data
+ */
+export type StockFeed = 'sip' | 'iex' | 'delayed_sip'
+
+/**
+ * Configuration for stock data streaming
+ */
+export interface StockStreamConfig extends StreamConfig {
+  /** Stock data feed to use. Defaults to 'iex'. */
+  feed?: StockFeed
+}
+
+/**
+ * Crypto data locations:
+ * - `us` - Alpaca US exchange
+ * - `us-1` - Kraken US (limited to 23 US states)
+ * - `eu-1` - Kraken EU
+ */
+export type CryptoLocation = 'us' | 'us-1' | 'eu-1'
+
+/**
+ * Configuration for crypto data streaming
+ */
+export interface CryptoStreamConfig extends StreamConfig {
+  /** Crypto exchange location. Defaults to 'us'. */
+  location?: CryptoLocation
 }
 
 export interface StreamEventHandlers<T> {
@@ -66,4 +103,49 @@ export interface TradeUpdate {
   price?: string
   qty?: string
   timestamp?: string
+}
+
+/**
+ * Message types for market data streams (stocks, crypto)
+ */
+export type MarketDataMessage = Trade | Quote | Bar
+
+/**
+ * Subscription action types for market data
+ */
+export interface MarketDataSubscription {
+  action: 'subscribe' | 'unsubscribe'
+  trades?: string[]
+  quotes?: string[]
+  bars?: string[]
+}
+
+/**
+ * Authentication message for market data streams
+ */
+export interface MarketDataAuth {
+  action: 'auth'
+  key: string
+  secret: string
+}
+
+/**
+ * Authentication message for trade updates stream
+ */
+export interface TradeUpdatesAuth {
+  action: 'authenticate'
+  data: {
+    key_id: string
+    secret_key: string
+  }
+}
+
+/**
+ * Listen message for trade updates stream
+ */
+export interface TradeUpdatesListen {
+  action: 'listen'
+  data: {
+    streams: string[]
+  }
 }

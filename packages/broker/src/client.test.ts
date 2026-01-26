@@ -770,8 +770,9 @@ const handlers = [
         )
       }
       // Return a download URL or content (depending on API design)
+      const docId = String(params.documentId)
       return HttpResponse.json({
-        download_url: `https://example.com/documents/${params.documentId}/download`,
+        download_url: `https://example.com/documents/${docId}/download`,
       })
     }
   ),

@@ -1094,7 +1094,7 @@ describe('watchlists', () => {
       const watchlistId = 'specific-wl-id'
 
       server.use(
-        http.put(`${BASE_URL}/v2/watchlists/:watchlistId`, async ({ params }) => {
+        http.put(`${BASE_URL}/v2/watchlists/:watchlistId`, ({ params }) => {
           capturedPath = params.watchlistId as string
           return HttpResponse.json(mockWatchlist)
         })
@@ -1159,7 +1159,7 @@ describe('watchlists', () => {
       const watchlistId = 'specific-wl-id'
 
       server.use(
-        http.post(`${BASE_URL}/v2/watchlists/:watchlistId`, async ({ params }) => {
+        http.post(`${BASE_URL}/v2/watchlists/:watchlistId`, ({ params }) => {
           capturedPath = params.watchlistId as string
           return HttpResponse.json(mockWatchlist)
         })
@@ -1246,7 +1246,7 @@ describe('watchlists', () => {
       server.use(
         http.delete(
           `${BASE_URL}/v2/watchlists/:watchlistId/:symbol`,
-          async ({ params }) => {
+          ({ params }) => {
             capturedWatchlistId = params.watchlistId as string
             capturedSymbol = params.symbol as string
             return HttpResponse.json(mockWatchlist)

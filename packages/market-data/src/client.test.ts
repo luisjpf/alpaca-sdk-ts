@@ -1242,7 +1242,7 @@ describe('Market Data Client', () => {
       expect(result.trades).toHaveProperty('AAPL')
       expect(result.trades).toHaveProperty('MSFT')
       expect(result.trades).toHaveProperty('GOOGL')
-      expect(result.trades!['AAPL']).toMatchObject({
+      expect(result.trades!.AAPL).toMatchObject({
         p: 150.50,
         s: 100,
       })
@@ -1306,7 +1306,7 @@ describe('Market Data Client', () => {
       expect(result.quotes).toBeDefined()
       expect(result.quotes).toHaveProperty('AAPL')
       expect(result.quotes).toHaveProperty('TSLA')
-      expect(result.quotes!['AAPL']).toMatchObject({
+      expect(result.quotes!.AAPL).toMatchObject({
         ap: 150.55,
         bp: 150.45,
       })
@@ -1380,10 +1380,10 @@ describe('Market Data Client', () => {
       expect(result.auctions).toBeDefined()
       expect(result.auctions).toHaveProperty('AAPL')
       expect(result.auctions).toHaveProperty('MSFT')
-      expect(result.auctions!['AAPL']).toHaveLength(1)
-      expect(result.auctions!['AAPL']![0]).toHaveProperty('d')
-      expect(result.auctions!['AAPL']![0]).toHaveProperty('o')
-      expect(result.auctions!['AAPL']![0]).toHaveProperty('c')
+      expect(result.auctions!.AAPL).toHaveLength(1)
+      expect(result.auctions!.AAPL![0]).toHaveProperty('d')
+      expect(result.auctions!.AAPL![0]).toHaveProperty('o')
+      expect(result.auctions!.AAPL![0]).toHaveProperty('c')
     })
   })
 
@@ -1412,7 +1412,7 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('A')
       expect(result).toHaveProperty('V')
-      expect(result['V']).toBe('IEX')
+      expect(result.V).toBe('IEX')
     })
   })
 
@@ -1663,8 +1663,8 @@ describe('Market Data Client', () => {
       expect(result.bars).toBeDefined()
       expect(result.bars).toHaveProperty('AAPL240119C00150000')
       expect(result.bars).toHaveProperty('AAPL240119P00150000')
-      expect(result.bars!['AAPL240119C00150000']).toHaveLength(1)
-      expect(result.bars!['AAPL240119C00150000']![0]).toMatchObject({
+      expect(result.bars!.AAPL240119C00150000).toHaveLength(1)
+      expect(result.bars!.AAPL240119C00150000![0]).toMatchObject({
         o: 5.25,
         h: 5.75,
         l: 5.00,
@@ -1684,8 +1684,8 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result.trades).toBeDefined()
       expect(result.trades).toHaveProperty('AAPL240119C00150000')
-      expect(result.trades!['AAPL240119C00150000']).toHaveLength(1)
-      expect(result.trades!['AAPL240119C00150000']![0]).toMatchObject({
+      expect(result.trades!.AAPL240119C00150000).toHaveLength(1)
+      expect(result.trades!.AAPL240119C00150000![0]).toMatchObject({
         p: 5.50,
         s: 10,
         x: 'C',
@@ -1705,7 +1705,7 @@ describe('Market Data Client', () => {
       expect(result.trades).toBeDefined()
       expect(result.trades).toHaveProperty('AAPL240119C00150000')
       expect(result.trades).toHaveProperty('AAPL240119P00150000')
-      expect(result.trades!['AAPL240119C00150000']).toMatchObject({
+      expect(result.trades!.AAPL240119C00150000).toMatchObject({
         p: 5.50,
         s: 10,
       })
@@ -1724,7 +1724,7 @@ describe('Market Data Client', () => {
       expect(result.quotes).toBeDefined()
       expect(result.quotes).toHaveProperty('AAPL240119C00150000')
       expect(result.quotes).toHaveProperty('AAPL240119P00150000')
-      expect(result.quotes!['AAPL240119C00150000']).toMatchObject({
+      expect(result.quotes!.AAPL240119C00150000).toMatchObject({
         ap: 5.60,
         as: 20,
         bp: 5.40,
@@ -1745,8 +1745,8 @@ describe('Market Data Client', () => {
       expect(result.snapshots).toBeDefined()
       expect(result.snapshots).toHaveProperty('AAPL240119C00150000')
       expect(result.snapshots).toHaveProperty('AAPL240119P00150000')
-      expect(result.snapshots!['AAPL240119C00150000']).toHaveProperty('latestTrade')
-      expect(result.snapshots!['AAPL240119C00150000']).toHaveProperty('latestQuote')
+      expect(result.snapshots!.AAPL240119C00150000).toHaveProperty('latestTrade')
+      expect(result.snapshots!.AAPL240119C00150000).toHaveProperty('latestQuote')
     })
   })
 
@@ -1760,8 +1760,8 @@ describe('Market Data Client', () => {
       expect(result.snapshots).toBeDefined()
       expect(result.snapshots).toHaveProperty('AAPL240119C00150000')
       expect(result.snapshots).toHaveProperty('AAPL240119P00150000')
-      expect(result.snapshots!['AAPL240119C00150000']).toHaveProperty('greeks')
-      expect(result.snapshots!['AAPL240119C00150000'].greeks).toMatchObject({
+      expect(result.snapshots!.AAPL240119C00150000).toHaveProperty('greeks')
+      expect(result.snapshots!.AAPL240119C00150000.greeks).toMatchObject({
         delta: 0.45,
         gamma: 0.02,
         theta: -0.05,
@@ -1790,7 +1790,7 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('A')
       expect(result).toHaveProperty('C')
-      expect(result['C']).toBe('CBOE')
+      expect(result.C).toBe('CBOE')
     })
   })
 
@@ -1984,8 +1984,9 @@ describe('Market Data Client', () => {
       expect(result).toBeDefined()
       expect(result.corporate_actions).toBeDefined()
       expect(result.corporate_actions).toHaveProperty('AAPL')
-      expect(result.corporate_actions!['AAPL']).toHaveLength(1)
-      expect(result.corporate_actions!['AAPL']![0]).toMatchObject({
+      expect(result.corporate_actions!.AAPL).toHaveLength(1)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(result.corporate_actions!.AAPL![0]).toMatchObject({
         id: 'ca-123456',
         corporate_actions_type: 'dividend',
         symbol: 'AAPL',
@@ -1999,7 +2000,8 @@ describe('Market Data Client', () => {
         symbols: 'AAPL',
       })
 
-      const action = result.corporate_actions!['AAPL']![0]
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+      const action = result.corporate_actions!.AAPL![0]
       expect(action).toHaveProperty('declaration_date')
       expect(action).toHaveProperty('ex_date')
       expect(action).toHaveProperty('record_date')

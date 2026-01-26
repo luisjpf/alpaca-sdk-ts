@@ -18,7 +18,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -29,7 +31,13 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
-  "keywords": ["alpaca", "streaming", "websocket", "real-time", "market-data"],
+  "keywords": [
+    "alpaca",
+    "streaming",
+    "websocket",
+    "real-time",
+    "market-data"
+  ],
   "author": "Luis JP Fleming <luis.j245@gmail.com>",
   "license": "MIT",
   "engines": {
@@ -37,7 +45,8 @@
   },
   "dependencies": {
     "@alpaca-sdk/core": "workspace:*",
-    "@msgpack/msgpack": "^3.0.0"
+    "@msgpack/msgpack": "^3.0.0",
+    "ws": "^8.19.0"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"
@@ -46,5 +55,8 @@
     "typescript": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1"
   }
 }
