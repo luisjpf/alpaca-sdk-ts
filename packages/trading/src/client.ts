@@ -8,6 +8,9 @@ import {
   resolveConfig,
   createApiKeyAuth,
   type RequestOptions,
+  unwrap,
+  unwrapList,
+  unwrapOptional,
 } from '@alpaca-sdk/core'
 import type { paths, components, operations } from './generated/trading-api'
 
@@ -65,20 +68,16 @@ export function createTradingClient(config: TradingClientConfig) {
     account: {
       /** Get account information */
       async get(options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/account', {
+        return unwrap(await client.GET('/v2/account', {
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Get account configurations */
       async getConfigurations(options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/account/configurations', {
+        return unwrap(await client.GET('/v2/account/configurations', {
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Update account configurations */
@@ -86,12 +85,10 @@ export function createTradingClient(config: TradingClientConfig) {
         updates: Partial<AccountConfigurations>,
         options?: RequestOptions
       ) {
-        const { data, error } = await client.PATCH('/v2/account/configurations', {
+        return unwrap(await client.PATCH('/v2/account/configurations', {
           body: updates,
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Get account activities */
@@ -99,12 +96,10 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['getAccountActivities']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.GET('/v2/account/activities', {
+        return unwrapList(await client.GET('/v2/account/activities', {
           params: { query: params },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
 
       /** Get portfolio history */
@@ -112,12 +107,10 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['getAccountPortfolioHistory']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.GET('/v2/account/portfolio/history', {
+        return unwrap(await client.GET('/v2/account/portfolio/history', {
           params: { query: params },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
     },
 
@@ -128,71 +121,58 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['getAllOrders']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.GET('/v2/orders', {
+        return unwrapList(await client.GET('/v2/orders', {
           params: { query: params },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
 
       /** Get order by ID */
       async get(orderId: string, options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/orders/{order_id}', {
+        return unwrap(await client.GET('/v2/orders/{order_id}', {
           params: { path: { order_id: orderId } },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Get order by client order ID */
       async getByClientOrderId(clientOrderId: string, options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/orders:by_client_order_id', {
+        return unwrap(await client.GET('/v2/orders:by_client_order_id', {
           params: { query: { client_order_id: clientOrderId } },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Create a new order */
       async create(order: OrderRequest, options?: RequestOptions) {
-        const { data, error } = await client.POST('/v2/orders', {
+        return unwrap(await client.POST('/v2/orders', {
           body: order,
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Replace an existing order */
       async replace(orderId: string, updates: PatchOrderRequest, options?: RequestOptions) {
-        const { data, error } = await client.PATCH('/v2/orders/{order_id}', {
+        return unwrap(await client.PATCH('/v2/orders/{order_id}', {
           params: { path: { order_id: orderId } },
           body: updates,
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Cancel an order */
       async cancel(orderId: string, options?: RequestOptions) {
-        const { error } = await client.DELETE('/v2/orders/{order_id}', {
+        unwrapOptional(await client.DELETE('/v2/orders/{order_id}', {
           params: { path: { order_id: orderId } },
           signal: options?.signal,
-        })
-        if (error) throw error
+        }))
       },
 
       /** Cancel all open orders */
       async cancelAll(options?: RequestOptions) {
-        const { data, error } = await client.DELETE('/v2/orders', {
+        return unwrapList(await client.DELETE('/v2/orders', {
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
     },
 
@@ -200,21 +180,17 @@ export function createTradingClient(config: TradingClientConfig) {
     positions: {
       /** List all open positions */
       async list(options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/positions', {
+        return unwrapList(await client.GET('/v2/positions', {
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
 
       /** Get position by symbol or asset ID */
       async get(symbolOrAssetId: string, options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/positions/{symbol_or_asset_id}', {
+        return unwrap(await client.GET('/v2/positions/{symbol_or_asset_id}', {
           params: { path: { symbol_or_asset_id: symbolOrAssetId } },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Close a position */
@@ -223,15 +199,13 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['deleteOpenPosition']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.DELETE('/v2/positions/{symbol_or_asset_id}', {
+        return unwrap(await client.DELETE('/v2/positions/{symbol_or_asset_id}', {
           params: {
             path: { symbol_or_asset_id: symbolOrAssetId },
             query: params,
           },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Close all positions */
@@ -239,12 +213,10 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['deleteAllOpenPositions']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.DELETE('/v2/positions', {
+        return unwrapList(await client.DELETE('/v2/positions', {
           params: { query: params },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
     },
 
@@ -255,22 +227,18 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['get-v2-assets']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.GET('/v2/assets', {
+        return unwrapList(await client.GET('/v2/assets', {
           params: { query: params },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
 
       /** Get asset by symbol or ID */
       async get(symbolOrAssetId: string, options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/assets/{symbol_or_asset_id}', {
+        return unwrap(await client.GET('/v2/assets/{symbol_or_asset_id}', {
           params: { path: { symbol_or_asset_id: symbolOrAssetId } },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
     },
 
@@ -278,11 +246,9 @@ export function createTradingClient(config: TradingClientConfig) {
     clock: {
       /** Get market clock */
       async get(options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/clock', {
+        return unwrap(await client.GET('/v2/clock', {
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
     },
 
@@ -293,12 +259,10 @@ export function createTradingClient(config: TradingClientConfig) {
         params?: operations['getCalendar']['parameters']['query'],
         options?: RequestOptions
       ) {
-        const { data, error } = await client.GET('/v2/calendar', {
+        return unwrapList(await client.GET('/v2/calendar', {
           params: { query: params },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
     },
 
@@ -306,21 +270,17 @@ export function createTradingClient(config: TradingClientConfig) {
     watchlists: {
       /** List all watchlists */
       async list(options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/watchlists', {
+        return unwrapList(await client.GET('/v2/watchlists', {
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data ?? []
+        }))
       },
 
       /** Get watchlist by ID */
       async get(watchlistId: string, options?: RequestOptions) {
-        const { data, error } = await client.GET('/v2/watchlists/{watchlist_id}', {
+        return unwrap(await client.GET('/v2/watchlists/{watchlist_id}', {
           params: { path: { watchlist_id: watchlistId } },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Create a new watchlist */
@@ -328,12 +288,10 @@ export function createTradingClient(config: TradingClientConfig) {
         params: { name: string; symbols?: string[] },
         options?: RequestOptions
       ) {
-        const { data, error } = await client.POST('/v2/watchlists', {
+        return unwrap(await client.POST('/v2/watchlists', {
           body: { name: params.name, symbols: params.symbols ?? [] },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Update a watchlist */
@@ -342,43 +300,36 @@ export function createTradingClient(config: TradingClientConfig) {
         params: { name: string; symbols?: string[] },
         options?: RequestOptions
       ) {
-        const { data, error } = await client.PUT('/v2/watchlists/{watchlist_id}', {
+        return unwrap(await client.PUT('/v2/watchlists/{watchlist_id}', {
           params: { path: { watchlist_id: watchlistId } },
           body: { name: params.name, symbols: params.symbols ?? [] },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Add symbol to watchlist */
       async addSymbol(watchlistId: string, symbol: string, options?: RequestOptions) {
-        const { data, error } = await client.POST('/v2/watchlists/{watchlist_id}', {
+        return unwrap(await client.POST('/v2/watchlists/{watchlist_id}', {
           params: { path: { watchlist_id: watchlistId } },
           body: { symbol },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Remove symbol from watchlist */
       async removeSymbol(watchlistId: string, symbol: string, options?: RequestOptions) {
-        const { data, error } = await client.DELETE('/v2/watchlists/{watchlist_id}/{symbol}', {
+        return unwrap(await client.DELETE('/v2/watchlists/{watchlist_id}/{symbol}', {
           params: { path: { watchlist_id: watchlistId, symbol } },
           signal: options?.signal,
-        })
-        if (error) throw error
-        return data!
+        }))
       },
 
       /** Delete a watchlist */
       async delete(watchlistId: string, options?: RequestOptions) {
-        const { error } = await client.DELETE('/v2/watchlists/{watchlist_id}', {
+        unwrapOptional(await client.DELETE('/v2/watchlists/{watchlist_id}', {
           params: { path: { watchlist_id: watchlistId } },
           signal: options?.signal,
-        })
-        if (error) throw error
+        }))
       },
     },
   }

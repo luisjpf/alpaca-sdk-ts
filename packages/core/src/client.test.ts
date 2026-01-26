@@ -503,6 +503,84 @@ describe('client', () => {
         }
       })
     })
+
+    describe('network failures', () => {
+      it('should throw AlpacaError on network failure', async () => {
+        server.use(
+          http.get('https://api.test.alpaca.markets/v2/network-fail', () => {
+            return HttpResponse.error()
+          })
+        )
+
+        const configNoRetry = { ...testConfig, maxRetries: 0 }
+
+        await expect(
+          fetchWithRetry(
+            'https://api.test.alpaca.markets/v2/network-fail',
+            { method: 'GET' },
+            configNoRetry
+          )
+        ).rejects.toThrow(AlpacaError)
+      })
+
+      it('should throw timeout error for aborted requests', async () => {
+        server.use(
+          http.get('https://api.test.alpaca.markets/v2/abort-test', async () => {
+            await delay(1000)
+            return HttpResponse.json({ data: 'slow' })
+          })
+        )
+
+        const configNoRetry = { ...testConfig, maxRetries: 0 }
+        const controller = new AbortController()
+
+        // Abort immediately
+        setTimeout(() => {
+          controller.abort()
+        }, 10)
+
+        await expect(
+          fetchWithRetry(
+            'https://api.test.alpaca.markets/v2/abort-test',
+            { method: 'GET' },
+            configNoRetry,
+            { signal: controller.signal }
+          )
+        ).rejects.toThrow('Request timeout')
+      })
+
+      it('should respect user-provided AbortSignal', async () => {
+        server.use(
+          http.get('https://api.test.alpaca.markets/v2/user-abort', async () => {
+            await delay(5000)
+            return HttpResponse.json({ data: 'very slow' })
+          })
+        )
+
+        const configWithLongTimeout = { ...testConfig, timeout: 10000, maxRetries: 0 }
+        const controller = new AbortController()
+
+        // Abort after 50ms (before timeout would trigger)
+        const abortPromise = new Promise<void>((resolve) => {
+          setTimeout(() => {
+            controller.abort()
+            resolve()
+          }, 50)
+        })
+
+        await expect(
+          Promise.all([
+            fetchWithRetry(
+              'https://api.test.alpaca.markets/v2/user-abort',
+              { method: 'GET' },
+              configWithLongTimeout,
+              { signal: controller.signal }
+            ),
+            abortPromise,
+          ])
+        ).rejects.toThrow('Request timeout')
+      })
+    })
   })
 
   describe('createApiFetch', () => {

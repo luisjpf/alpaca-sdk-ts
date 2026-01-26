@@ -600,7 +600,7 @@ describe('errors', () => {
     })
 
     it('should work with type narrowing', () => {
-      function getValue(): Result<number, ApiError> {
+      function getValue(): Result<number> {
         return ok(42)
       }
 
@@ -617,7 +617,7 @@ describe('errors', () => {
     })
 
     it('should work with error type narrowing', () => {
-      function getError(): Result<string, ApiError> {
+      function getError(): Result<string> {
         return err({
           type: 'rate_limit',
           message: 'Rate limited',
@@ -741,7 +741,7 @@ describe('errors', () => {
       function handleError(error: ApiError): string {
         if (isRateLimitError(error)) {
           // TypeScript should know error.retryAfter exists
-          return `Retry after ${error.retryAfter ?? 'unknown'} seconds`
+          return `Retry after ${String(error.retryAfter ?? 'unknown')} seconds`
         }
         if (isAuthenticationError(error)) {
           return 'Please re-authenticate'

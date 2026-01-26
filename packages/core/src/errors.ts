@@ -254,6 +254,28 @@ export class ServerError extends AlpacaError {
   }
 }
 
+/**
+ * Feature not yet implemented (501)
+ *
+ * Used for features that are planned but not yet available,
+ * such as WebSocket streaming in preview mode.
+ */
+export class NotImplementedError extends AlpacaError {
+  readonly feature: string
+  readonly docsUrl?: string
+
+  constructor(feature: string, docsUrl?: string) {
+    const message = docsUrl
+      ? `${feature} is not yet implemented. See: ${docsUrl}`
+      : `${feature} is not yet implemented. This feature is in development.`
+    super(message, ErrorType.Unknown, 0, 501)
+    this.name = 'NotImplementedError'
+    this.feature = feature
+    this.docsUrl = docsUrl
+    Object.setPrototypeOf(this, NotImplementedError.prototype)
+  }
+}
+
 // =============================================================================
 // Error Factory Functions
 // =============================================================================

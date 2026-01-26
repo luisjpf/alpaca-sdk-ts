@@ -25,13 +25,20 @@ describe('auth', () => {
       })
     })
 
-    it('should handle empty strings', () => {
-      const result = createApiKeyAuth('', '')
+    it('should throw error for empty keyId', () => {
+      expect(() => createApiKeyAuth('', 'secret')).toThrow('API Key ID cannot be empty')
+    })
 
-      expect(result).toEqual({
-        'APCA-API-KEY-ID': '',
-        'APCA-API-SECRET-KEY': '',
-      })
+    it('should throw error for empty secretKey', () => {
+      expect(() => createApiKeyAuth('valid-key', '')).toThrow('Secret Key cannot be empty')
+    })
+
+    it('should throw error for whitespace-only keyId', () => {
+      expect(() => createApiKeyAuth('   ', 'secret')).toThrow('API Key ID cannot be empty')
+    })
+
+    it('should throw error for whitespace-only secretKey', () => {
+      expect(() => createApiKeyAuth('valid-key', '  ')).toThrow('Secret Key cannot be empty')
     })
 
     it('should handle special characters in credentials', () => {
@@ -112,12 +119,12 @@ describe('auth', () => {
       expect(result.Authorization).toMatch(/^Bearer /)
     })
 
-    it('should handle empty token', () => {
-      const result = createOAuthAuth('')
+    it('should throw error for empty token', () => {
+      expect(() => createOAuthAuth('')).toThrow('OAuth token cannot be empty')
+    })
 
-      expect(result).toEqual({
-        Authorization: 'Bearer ',
-      })
+    it('should throw error for whitespace-only token', () => {
+      expect(() => createOAuthAuth('   ')).toThrow('OAuth token cannot be empty')
     })
   })
 

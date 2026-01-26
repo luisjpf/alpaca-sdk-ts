@@ -1,6 +1,6 @@
 # Alpaca SDK for TypeScript
 
-Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data APIs with WebSocket streaming support.
+Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data APIs.
 
 ## Features
 
@@ -8,7 +8,7 @@ Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data A
 - **Universal**: Works in Node.js 18+, Deno, Bun, browsers, and edge runtimes
 - **Minimal**: Native `fetch`, zero HTTP dependencies
 - **Tree-shakeable**: Import only what you need
-- **WebSocket Streaming**: Real-time market data and trade updates
+- **WebSocket Streaming (Preview)**: Real-time market data and trade updates - in development
 - **Modern**: ESM-first with CommonJS compatibility
 
 ## Installation
@@ -21,7 +21,6 @@ pnpm add @alpaca-sdk/alpaca-sdk
 pnpm add @alpaca-sdk/trading
 pnpm add @alpaca-sdk/market-data
 pnpm add @alpaca-sdk/broker
-pnpm add @alpaca-sdk/streaming
 ```
 
 ## Quick Start
@@ -53,13 +52,6 @@ const bars = await alpaca.marketData.stocks.getBars('AAPL', {
   end: '2024-01-31',
   timeframe: '1Day',
 })
-
-// Stream real-time trades
-alpaca.streams.stocks.onTrade((trade) => {
-  console.log(`${trade.S}: $${trade.p}`)
-})
-alpaca.streams.stocks.subscribeForTrades(['AAPL', 'GOOGL'])
-alpaca.streams.stocks.connect()
 ```
 
 ## Packages
@@ -70,7 +62,7 @@ alpaca.streams.stocks.connect()
 | `@alpaca-sdk/trading` | Trading API (orders, positions, account) |
 | `@alpaca-sdk/market-data` | Market Data API (stocks, crypto, options, news) |
 | `@alpaca-sdk/broker` | Broker API (sub-accounts, funding, KYC) |
-| `@alpaca-sdk/streaming` | WebSocket clients for real-time data |
+| `@alpaca-sdk/streaming` | WebSocket clients for real-time data (preview) |
 | `@alpaca-sdk/core` | Shared utilities (auth, errors, types) |
 
 ## Configuration
@@ -110,6 +102,25 @@ try {
   }
 }
 ```
+
+## WebSocket Streaming (Preview)
+
+The streaming package is currently in development. All streaming methods will throw `NotImplementedError` until the feature is complete.
+
+```typescript
+import { NotImplementedError } from '@alpaca-sdk/core'
+
+try {
+  alpaca.streams.stocks.connect()
+} catch (error) {
+  if (error instanceof NotImplementedError) {
+    console.log(`${error.feature} is not yet available`)
+    console.log(`See: ${error.docsUrl}`)
+  }
+}
+```
+
+We're actively working on WebSocket streaming support. Track progress in the repository issues.
 
 ## Development
 

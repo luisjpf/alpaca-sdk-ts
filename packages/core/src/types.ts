@@ -31,19 +31,6 @@ export interface ResolvedAlpacaConfig {
   baseUrl: string
 }
 
-/** API response wrapper */
-export type AlpacaResult<T> =
-  | { data: T; error: null }
-  | { data: null; error: AlpacaErrorResponse }
-
-/** Error response from Alpaca API */
-export interface AlpacaErrorResponse {
-  code: number
-  message: string
-  status: number
-  requestId?: string
-}
-
 /** Request options for individual API calls */
 export interface RequestOptions {
   /** Custom timeout for this request */

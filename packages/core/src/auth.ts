@@ -2,6 +2,16 @@
  * Authentication strategies for Alpaca APIs
  */
 
+/**
+ * Validates that a credential string is non-empty
+ * @throws Error if the credential is empty or whitespace-only
+ */
+function validateCredential(value: string, name: string): void {
+  if (!value || typeof value !== 'string' || value.trim().length === 0) {
+    throw new Error(`${name} cannot be empty`)
+  }
+}
+
 /** Authentication headers for Trading/Market Data APIs */
 export type ApiKeyAuth = {
   'APCA-API-KEY-ID': string
@@ -22,8 +32,11 @@ export type AuthHeaders = ApiKeyAuth | BasicAuth | OAuthAuth
 
 /**
  * Create API Key authentication headers
+ * @throws Error if keyId or secretKey is empty
  */
 export function createApiKeyAuth(keyId: string, secretKey: string): ApiKeyAuth {
+  validateCredential(keyId, 'API Key ID')
+  validateCredential(secretKey, 'Secret Key')
   return {
     'APCA-API-KEY-ID': keyId,
     'APCA-API-SECRET-KEY': secretKey,
@@ -32,8 +45,11 @@ export function createApiKeyAuth(keyId: string, secretKey: string): ApiKeyAuth {
 
 /**
  * Create HTTP Basic authentication header for Broker API
+ * @throws Error if keyId or secretKey is empty
  */
 export function createBasicAuth(keyId: string, secretKey: string): BasicAuth {
+  validateCredential(keyId, 'API Key ID')
+  validateCredential(secretKey, 'Secret Key')
   const credentials = btoa(`${keyId}:${secretKey}`)
   return {
     Authorization: `Basic ${credentials}`,
@@ -42,8 +58,10 @@ export function createBasicAuth(keyId: string, secretKey: string): BasicAuth {
 
 /**
  * Create OAuth Bearer token header
+ * @throws Error if token is empty
  */
 export function createOAuthAuth(token: string): OAuthAuth {
+  validateCredential(token, 'OAuth token')
   return {
     Authorization: `Bearer ${token}`,
   }
@@ -60,8 +78,11 @@ export interface WebSocketAuthMessage {
 
 /**
  * Create WebSocket authentication message
+ * @throws Error if keyId or secretKey is empty
  */
 export function createWebSocketAuth(keyId: string, secretKey: string): WebSocketAuthMessage {
+  validateCredential(keyId, 'API Key ID')
+  validateCredential(secretKey, 'Secret Key')
   return {
     action: 'auth',
     key: keyId,
@@ -71,8 +92,10 @@ export function createWebSocketAuth(keyId: string, secretKey: string): WebSocket
 
 /**
  * Create WebSocket OAuth authentication message
+ * @throws Error if token is empty
  */
 export function createWebSocketOAuth(token: string): WebSocketAuthMessage {
+  validateCredential(token, 'OAuth token')
   return {
     action: 'auth',
     key: 'oauth',

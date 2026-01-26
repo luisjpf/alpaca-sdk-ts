@@ -34,6 +34,9 @@ const DEFAULT_CONFIG = {
   maxRetries: 2,
 } as const
 
+/** Maximum retry backoff in milliseconds (5 minutes) to prevent DoS via malicious retry-after headers */
+const MAX_RETRY_BACKOFF_MS = 5 * 60 * 1000
+
 /**
  * Resolve configuration with defaults
  */
@@ -132,8 +135,14 @@ export async function fetchWithRetry<T>(
         let errorBody: AlpacaApiError
         try {
           errorBody = (await response.json()) as AlpacaApiError
-        } catch {
-          errorBody = { code: 0, message: response.statusText }
+        } catch (parseError) {
+          // Only handle JSON parse errors (non-JSON responses like HTML error pages)
+          // Re-throw other errors (network issues, memory errors, etc.)
+          if (parseError instanceof SyntaxError) {
+            errorBody = { code: 0, message: response.statusText }
+          } else {
+            throw parseError
+          }
         }
 
         const error = createAlpacaError(
@@ -146,7 +155,9 @@ export async function fetchWithRetry<T>(
 
         if (isRetryable(response.status) && attempt < config.maxRetries) {
           lastError = error
-          const backoff = retryAfterMs ?? calculateBackoff(attempt)
+          // Cap backoff to prevent DoS via malicious retry-after headers
+          const rawBackoff = retryAfterMs ?? calculateBackoff(attempt)
+          const backoff = Math.min(rawBackoff, MAX_RETRY_BACKOFF_MS)
           await sleep(backoff)
           continue
         }
@@ -155,8 +166,10 @@ export async function fetchWithRetry<T>(
       }
 
       // Handle empty responses (204 No Content)
+      // Note: Callers expecting 204 responses should type T to include undefined,
+      // or use this function only for endpoints that don't return 204.
       if (response.status === 204) {
-        return undefined as T
+        return undefined as unknown as T
       }
 
       return (await response.json()) as T
