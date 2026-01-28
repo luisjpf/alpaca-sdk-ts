@@ -487,6 +487,43 @@ describe('client', () => {
           expect((error as AlpacaError).message).toBe('Bad Gateway')
         }
       })
+
+      it('should re-throw non-SyntaxError during JSON parsing (wrapped as AlpacaError)', async () => {
+        // Create a custom error that's not a SyntaxError
+        const customError = new TypeError('Body already consumed')
+
+        // Mock global fetch to return a response that throws on .json()
+        const originalFetch = global.fetch
+        global.fetch = async () => {
+          return {
+            ok: false,
+            status: 500,
+            statusText: 'Internal Server Error',
+            headers: new Headers({ 'x-request-id': 'test-123' }),
+            json: () => {
+              throw customError
+            },
+          } as Response
+        }
+
+        const configNoRetry = { ...testConfig, maxRetries: 0 }
+
+        try {
+          await fetchWithRetry(
+            'https://api.test.alpaca.markets/v2/custom-error',
+            { method: 'GET' },
+            configNoRetry
+          )
+          expect.fail('Should have thrown')
+        } catch (error) {
+          // The error is re-thrown but then caught by the outer catch block
+          // which wraps non-AlpacaError into AlpacaError
+          expect(error).toBeInstanceOf(AlpacaError)
+          expect((error as AlpacaError).message).toBe('Body already consumed')
+        } finally {
+          global.fetch = originalFetch
+        }
+      })
     })
 
     describe('network failures', () => {

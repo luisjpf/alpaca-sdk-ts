@@ -16,6 +16,7 @@ import {
   InsufficientFundsError,
   MarketClosedError,
   ServerError,
+  NotImplementedError,
   // Factory functions
   createAlpacaError,
   createApiError,
@@ -303,6 +304,45 @@ describe('errors', () => {
 
     it('should extend AlpacaError', () => {
       const error = new ServerError('Test', 0, 500)
+
+      expect(error).toBeInstanceOf(AlpacaError)
+    })
+  })
+
+  describe('NotImplementedError', () => {
+    it('should create error with feature name and default message', () => {
+      const error = new NotImplementedError('WebSocket streaming')
+
+      expect(error.message).toBe(
+        'WebSocket streaming is not yet implemented. This feature is in development.'
+      )
+      expect(error.feature).toBe('WebSocket streaming')
+      expect(error.docsUrl).toBeUndefined()
+      expect(error.type).toBe('unknown')
+      expect(error.status).toBe(501)
+    })
+
+    it('should create error with feature name and docs URL', () => {
+      const error = new NotImplementedError(
+        'Options streaming',
+        'https://docs.alpaca.markets/options'
+      )
+
+      expect(error.message).toBe(
+        'Options streaming is not yet implemented. See: https://docs.alpaca.markets/options'
+      )
+      expect(error.feature).toBe('Options streaming')
+      expect(error.docsUrl).toBe('https://docs.alpaca.markets/options')
+    })
+
+    it('should have name set to "NotImplementedError"', () => {
+      const error = new NotImplementedError('Test feature')
+
+      expect(error.name).toBe('NotImplementedError')
+    })
+
+    it('should extend AlpacaError', () => {
+      const error = new NotImplementedError('Test feature')
 
       expect(error).toBeInstanceOf(AlpacaError)
     })
