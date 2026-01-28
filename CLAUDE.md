@@ -99,3 +99,9 @@ Dual error pattern in `@luisjpf/core`:
 - Type imports must use `import type` (enforced by eslint)
 - Unused vars prefixed with `_` are allowed
 - Tests use Vitest with MSW for API mocking
+
+## Git Conventions
+
+- Do NOT add `Co-Authored-By` lines to commit messages
+- Keep commit messages concise and descriptive
+- Use conventional commit format: `type: description` (e.g., `fix:`, `feat:`, `docs:`, `chore:`)
