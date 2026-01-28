@@ -20,18 +20,18 @@ interface SpecConfig {
 const specs: SpecConfig[] = [
   {
     input: 'specs/trading-api.json',
-    output: 'packages/trading/src/generated/trading-api.d.ts',
-    packageDir: 'packages/trading/src/generated',
+    output: 'src/trading/generated/trading-api.d.ts',
+    packageDir: 'src/trading/generated',
   },
   {
     input: 'specs/broker-api.json',
-    output: 'packages/broker/src/generated/broker-api.d.ts',
-    packageDir: 'packages/broker/src/generated',
+    output: 'src/broker/generated/broker-api.d.ts',
+    packageDir: 'src/broker/generated',
   },
   {
     input: 'specs/market-data-api.json',
-    output: 'packages/market-data/src/generated/market-data-api.d.ts',
-    packageDir: 'packages/market-data/src/generated',
+    output: 'src/market-data/generated/market-data-api.d.ts',
+    packageDir: 'src/market-data/generated',
   },
 ]
 

@@ -9,7 +9,7 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       exclude: ['node_modules/', 'dist/', '**/*.test.ts', '**/*.spec.ts', '**/generated/**'],
     },
-    include: ['packages/**/*.{test,spec}.ts'],
+    include: ['test/**/*.{test,spec}.ts'],
     exclude: ['node_modules', 'dist'],
   },
 })
