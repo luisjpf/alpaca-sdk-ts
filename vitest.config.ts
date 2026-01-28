@@ -6,10 +6,11 @@ export default defineConfig({
     environment: 'node',
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'json-summary', 'html'],
+      include: ['src/**/*.ts'],
       exclude: ['node_modules/', 'dist/', '**/*.test.ts', '**/*.spec.ts', '**/generated/**'],
     },
-    include: ['packages/**/*.{test,spec}.ts'],
+    include: ['test/**/*.{test,spec}.ts'],
     exclude: ['node_modules', 'dist'],
   },
 })

@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage
-          path: packages/*/coverage/
+          path: coverage/
 
   coverage-report:
     name: Coverage Report
@@ -61,55 +61,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage
-          path: packages/
+          path: coverage/
 
-      - name: Coverage Report - Core
+      - name: Coverage Report
         uses: davelosert/vitest-coverage-report-action@v2
         with:
-          name: '@alpaca-sdk/core'
-          json-summary-path: packages/core/coverage/coverage-summary.json
-          json-final-path: packages/core/coverage/coverage-final.json
-          vite-config-path: packages/core/vitest.config.ts
-
-      - name: Coverage Report - Trading
-        uses: davelosert/vitest-coverage-report-action@v2
-        with:
-          name: '@alpaca-sdk/trading'
-          json-summary-path: packages/trading/coverage/coverage-summary.json
-          json-final-path: packages/trading/coverage/coverage-final.json
-          vite-config-path: packages/trading/vitest.config.ts
-
-      - name: Coverage Report - Broker
-        uses: davelosert/vitest-coverage-report-action@v2
-        with:
-          name: '@alpaca-sdk/broker'
-          json-summary-path: packages/broker/coverage/coverage-summary.json
-          json-final-path: packages/broker/coverage/coverage-final.json
-          vite-config-path: packages/broker/vitest.config.ts
-
-      - name: Coverage Report - Market Data
-        uses: davelosert/vitest-coverage-report-action@v2
-        with:
-          name: '@alpaca-sdk/market-data'
-          json-summary-path: packages/market-data/coverage/coverage-summary.json
-          json-final-path: packages/market-data/coverage/coverage-final.json
-          vite-config-path: packages/market-data/vitest.config.ts
-
-      - name: Coverage Report - Streaming
-        uses: davelosert/vitest-coverage-report-action@v2
-        with:
-          name: '@alpaca-sdk/streaming'
-          json-summary-path: packages/streaming/coverage/coverage-summary.json
-          json-final-path: packages/streaming/coverage/coverage-final.json
-          vite-config-path: packages/streaming/vitest.config.ts
-
-      - name: Coverage Report - Alpaca SDK
-        uses: davelosert/vitest-coverage-report-action@v2
-        with:
-          name: '@alpaca-sdk/alpaca-sdk'
-          json-summary-path: packages/alpaca-sdk/coverage/coverage-summary.json
-          json-final-path: packages/alpaca-sdk/coverage/coverage-final.json
-          vite-config-path: packages/alpaca-sdk/vitest.config.ts
+          name: '@luisjpf/alpaca-sdk'
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+          vite-config-path: vitest.config.ts
 
   security-audit:
     name: Security Audit

@@ -4,65 +4,66 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TypeScript SDK for Alpaca's Trading, Broker, and Market Data APIs. Monorepo using pnpm workspaces with Turborepo for orchestration.
+TypeScript SDK for Alpaca's Trading, Broker, and Market Data APIs. Single package with folder-based organization.
 
 ## Commands
 
 ```bash
 pnpm install              # Install dependencies
-pnpm build                # Build all packages (uses turbo)
+pnpm build                # Build the package
 pnpm test                 # Run all tests
 pnpm test:coverage        # Run tests with coverage
-pnpm lint                 # Lint all packages
+pnpm lint                 # Lint source files
 pnpm lint:fix             # Fix linting issues
-pnpm typecheck            # Type check all packages
+pnpm typecheck            # Type check the project
 pnpm format               # Check formatting
 pnpm format:fix           # Fix formatting
 pnpm generate:types       # Generate TS types from OpenAPI specs
-pnpm clean                # Clean all dist folders
-
-# Single package commands (run from package directory)
-cd packages/trading && pnpm test      # Run tests for trading package only
-cd packages/core && pnpm lint:fix     # Fix lint in core package only
+pnpm clean                # Clean dist folder
 
 # Run single test file
-pnpm vitest run packages/core/src/auth.test.ts
+pnpm vitest run test/core/auth.test.ts
 ```
 
 ## Architecture
 
-### Package Structure
+### Folder Structure
 
 ```
-packages/
+src/
 ├── core/           # Foundation: auth, errors, base HTTP client, types
 ├── trading/        # Trading API (orders, positions, account)
 ├── market-data/    # Market Data API (stocks, crypto, options, news)
 ├── broker/         # Broker API (sub-accounts, funding, KYC)
 ├── streaming/      # WebSocket clients (real-time data)
-└── alpaca-sdk/     # Unified client re-exporting all packages
+├── client.ts       # Unified createAlpacaClient factory
+└── index.ts        # Main entry point re-exporting everything
+
+test/               # Test files mirroring src structure
+specs/              # OpenAPI specifications
+scripts/            # Type generation scripts
 ```
 
-### Dependency Graph
+### Module Dependencies
 
-`core` → (all other packages depend on core)
+`core` → (all other modules depend on core)
 `trading`, `broker`, `market-data` → use `openapi-fetch` with generated types
 `streaming` → uses `@msgpack/msgpack` for WebSocket messages
-`alpaca-sdk` → aggregates all packages into unified `createAlpacaClient()`
+`client.ts` → aggregates all modules into unified `createAlpacaClient()`
 
 ### Type Generation
 
 Types are auto-generated from OpenAPI specs in `/specs/` directory:
 
-- `specs/trading-api.json` → `packages/trading/src/generated/trading-api.d.ts`
-- `specs/broker-api.json` → `packages/broker/src/generated/broker-api.d.ts`
-- `specs/market-data-api.json` → `packages/market-data/src/generated/market-data-api.d.ts`
+- `specs/trading-api.json` → `src/trading/generated/trading-api.d.ts`
+- `specs/broker-api.json` → `src/broker/generated/broker-api.d.ts`
+- `specs/market-data-api.json` → `src/market-data/generated/market-data-api.d.ts`
 
 Run `pnpm generate:types` after updating any spec file.
 
 ### Client Pattern
 
-Each API package follows the same factory pattern:
+Each API module follows the same factory pattern:
 
 ```typescript
 // Factory creates typed client with namespaced methods
@@ -80,7 +81,7 @@ export function createTradingClient(config: AlpacaConfig) {
 
 ### Error System
 
-Dual error pattern in `@luisjpf/core`:
+Dual error pattern in `src/core`:
 
 - **Class-based**: `AuthenticationError`, `RateLimitError`, etc. for `instanceof` checks
 - **Discriminated unions**: `ApiError` type with `type` field for pattern matching
@@ -88,8 +89,7 @@ Dual error pattern in `@luisjpf/core`:
 
 ### Build Configuration
 
-- **tsup**: Builds each package to ESM + CJS with `.d.ts` declarations
-- **Turbo**: Orchestrates builds with dependency awareness (`^build` means build deps first)
+- **tsup**: Builds to ESM + CJS with `.d.ts` declarations
 - Target: ES2022, Node 18+
 
 ## Code Conventions
