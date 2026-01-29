@@ -37,7 +37,7 @@ jobs:
           echo "Tag version: $TAG_VERSION"
 
           # Check that the main package version matches the tag
-          PACKAGE_VERSION=$(node -p "require('./packages/alpaca-sdk/package.json').version")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
           echo "Package version: $PACKAGE_VERSION"
 
           if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
@@ -55,4 +55,3 @@ jobs:
 
       - name: Publish to npm with provenance
         run: npm publish --access public --provenance
-        working-directory: packages/alpaca-sdk
