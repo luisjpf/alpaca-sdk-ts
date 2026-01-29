@@ -10,7 +10,7 @@ jobs:
     name: Publish to npm
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write  # Required for creating GitHub releases
       id-token: write  # Required for npm provenance
     steps:
       - uses: actions/checkout@v4
@@ -55,3 +55,8 @@ jobs:
 
       - name: Publish to npm with provenance
         run: npm publish --access public --provenance
+
+      - name: Create GitHub Release
+        run: gh release create "${{ github.ref_name }}" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
