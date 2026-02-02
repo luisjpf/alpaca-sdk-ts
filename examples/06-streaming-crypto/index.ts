@@ -91,6 +91,24 @@ function main() {
     )
   })
 
+  // `onQuote` fires when the best bid or ask price changes. The spread
+  // (ask - bid) indicates liquidity — tighter spreads mean more liquid
+  // markets. BTC/USD typically has very tight spreads, while less popular
+  // pairs may show wider spreads, especially during low-volume periods.
+  //
+  // Quote fields:
+  //   S = symbol, bp = bid price, bs = bid size,
+  //   ap = ask price, as = ask size, t = timestamp
+  stream.onQuote((quote) => {
+    const spread = quote.ap - quote.bp
+    console.log(
+      `[Quote] ${quote.S} | ` +
+        `Bid: ${formatPrice(quote.bp)} (${quote.bs}) | ` +
+        `Ask: ${formatPrice(quote.ap)} (${quote.as}) | ` +
+        `Spread: ${formatPrice(spread)}`
+    )
+  })
+
   // `onBar` fires when a 1-minute aggregated bar completes. Bars
   // are great for building real-time candlestick charts or tracking
   // price trends without processing every individual trade.
@@ -122,6 +140,9 @@ function main() {
   // two most liquid cryptocurrency pairs, so you should see frequent
   // updates even outside of US market hours.
   stream.subscribeForTrades(['BTC/USD', 'ETH/USD'])
+
+  // Subscribe to quotes for BTC/USD to monitor the bid-ask spread.
+  stream.subscribeForQuotes(['BTC/USD'])
 
   // Subscribe to bars for both symbols. You will see one bar per
   // symbol per minute, giving a nice summary of recent activity.
