@@ -64,7 +64,9 @@ const client = createAlpacaClient(config)
 client.trading // Trading API
 client.marketData // Market Data API
 client.broker // Broker API
-client.streams.stocks.crypto.tradeUpdates // WebSocket streams //   Stock data stream //   Crypto data stream //   Trade updates stream
+client.streams.stocks // Stock data stream
+client.streams.crypto // Crypto data stream
+client.streams.tradeUpdates // Trade updates stream
 ```
 
 ### Individual Clients
@@ -87,8 +89,8 @@ The SDK does not read environment variables directly. The recommended pattern is
 
 ```ts
 const client = createAlpacaClient({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
 })
 ```
 
@@ -121,3 +123,8 @@ const orders = await client.trading.orders.list({ status: 'open' }, { timeout: 5
 ```
 
 See [Advanced Usage](./advanced.md) for more details on request options.
+
+## Examples
+
+- [Example 01 - Basic Setup](../examples/01-basic-setup/) -- Creating a client and making your first request
+- [Example 02 - Place Orders](../examples/02-place-order/) -- Using the trading client with different order types

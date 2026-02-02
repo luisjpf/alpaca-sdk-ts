@@ -67,10 +67,11 @@ async function main() {
     // 'new', 'fill', 'partial_fill', 'canceled', 'expired', 'rejected'
     console.log(`[Trade Update] Event: ${update.event}`)
 
-    // The order field contains the full order object with all its details.
-    // We cast it to a record to safely access its properties since the
-    // streaming type uses `unknown` for maximum flexibility.
-    const order = update.order as Record<string, unknown>
+    // The order field contains the full order object, but the SDK types it
+    // as `unknown` because it comes from the WebSocket without schema
+    // validation. We cast to a record to access its properties. In
+    // production, consider defining a typed interface for the order shape.
+    const order = update.order as Record<string, string> | null
     if (order) {
       console.log(`  Order ID:    ${order.id}`)
       console.log(`  Symbol:      ${order.symbol}`)

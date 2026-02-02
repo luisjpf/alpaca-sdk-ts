@@ -18,9 +18,17 @@ async function main() {
   // Paper mode is the default, but we set it explicitly here to be clear.
   // Paper trading behaves identically to live trading except it uses
   // simulated money, making it safe for testing order logic.
+  // Validate that credentials are set before proceeding.
+  const keyId = process.env.ALPACA_KEY_ID
+  const secretKey = process.env.ALPACA_SECRET_KEY
+  if (!keyId || !secretKey) {
+    console.error('Please set ALPACA_KEY_ID and ALPACA_SECRET_KEY environment variables')
+    process.exit(1)
+  }
+
   const alpaca = createAlpacaClient({
-    keyId: process.env.ALPACA_KEY_ID ?? '',
-    secretKey: process.env.ALPACA_SECRET_KEY ?? '',
+    keyId,
+    secretKey,
     paper: true,
   })
 

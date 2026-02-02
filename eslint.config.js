@@ -34,7 +34,10 @@ export default tseslint.config(
     files: ['examples/**/*.ts'],
     rules: {
       // Examples use template literals freely for demonstration clarity
-      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        { allowNumber: true, allowBoolean: true, allowNullish: true },
+      ],
       '@typescript-eslint/no-unnecessary-template-expression': 'off',
     },
   },

@@ -16,8 +16,8 @@ The SDK provides three WebSocket stream types for real-time data:
 import { createStockStream } from '@luisjpf/alpaca-sdk'
 
 const stream = createStockStream({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
   feed: 'iex',
 })
 
@@ -40,7 +40,6 @@ stream.subscribeForTrades(['AAPL', 'MSFT', 'TSLA'])
 | `keyId`      | `string`    | _required_ | API Key ID                      |
 | `secretKey`  | `string`    | _required_ | API Secret Key                  |
 | `feed`       | `StockFeed` | `'iex'`    | Data feed source                |
-| `paper`      | `boolean`   | `true`     | Paper trading environment       |
 | `useMsgpack` | `boolean`   | `false`    | Use MessagePack binary encoding |
 
 ### Feed Options
@@ -82,8 +81,8 @@ stream.subscribeForTrades(['AAPL', 'MSFT', 'TSLA'])
 import { createCryptoStream } from '@luisjpf/alpaca-sdk'
 
 const stream = createCryptoStream({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
   location: 'us',
 })
 
@@ -118,8 +117,8 @@ The trade updates stream delivers real-time order lifecycle events such as fills
 import { createTradeUpdatesStream } from '@luisjpf/alpaca-sdk'
 
 const stream = createTradeUpdatesStream({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
   paper: true,
 })
 
@@ -197,8 +196,8 @@ Enable binary MessagePack encoding for lower bandwidth usage:
 
 ```ts
 const stream = createStockStream({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
   useMsgpack: true,
 })
 ```
@@ -220,6 +219,12 @@ process.on('SIGTERM', () => {
   process.exit(0)
 })
 ```
+
+## Examples
+
+- [Example 05 - Streaming Stocks](../examples/05-streaming-stocks/) -- Real-time stock trades, quotes, and bars
+- [Example 06 - Streaming Crypto](../examples/06-streaming-crypto/) -- Real-time crypto data
+- [Example 07 - Trade Updates](../examples/07-trade-updates/) -- Order fill and cancellation events
 
 ## Further Reading
 

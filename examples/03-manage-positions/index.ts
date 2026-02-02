@@ -14,9 +14,17 @@ async function main() {
   // -----------------------------------------------------------------------
   // Step 1: Create the Alpaca client
   // -----------------------------------------------------------------------
+  // Validate that credentials are set before proceeding.
+  const keyId = process.env.ALPACA_KEY_ID
+  const secretKey = process.env.ALPACA_SECRET_KEY
+  if (!keyId || !secretKey) {
+    console.error('Please set ALPACA_KEY_ID and ALPACA_SECRET_KEY environment variables')
+    process.exit(1)
+  }
+
   const alpaca = createAlpacaClient({
-    keyId: process.env.ALPACA_KEY_ID ?? '',
-    secretKey: process.env.ALPACA_SECRET_KEY ?? '',
+    keyId,
+    secretKey,
     paper: true,
   })
 
@@ -132,12 +140,14 @@ async function main() {
     cancel_orders: true,
   })
 
-  // The response is an array of close orders, one per position.
+  // The response is an array of `PositionClosedResponse` objects, one per
+  // position. Each has `symbol`, `status` (HTTP status code as a string,
+  // e.g. "200"), and `body` (the actual Order object).
   console.log(`  Submitted ${closedOrders.length} close order(s)`)
-  for (const order of closedOrders) {
-    // Each item in the array contains the order details for the
-    // market sell created to close that particular position.
-    console.log(`  - ${order.symbol}: ${order.status}`)
+  for (const result of closedOrders) {
+    // Access the actual order details via `result.body`.
+    const orderStatus = result.body?.status ?? 'unknown'
+    console.log(`  - ${result.symbol}: ${orderStatus}`)
   }
 }
 

@@ -23,6 +23,10 @@ This example is configured to use **paper trading** (simulated money). No real m
 ALPACA_KEY_ID=your-key-id ALPACA_SECRET_KEY=your-secret-key npx tsx examples/02-place-order/index.ts
 ```
 
+## What You Will See
+
+The script places three orders (market, limit, stop-limit), lists recent orders showing their status, then cancels all open orders for cleanup.
+
 ## Order Types Reference
 
 | Type         | Description                                    | Required Fields                                  |

@@ -7,6 +7,10 @@ This example demonstrates real-time stock market data streaming via WebSocket:
 - Handling each event type with callback functions
 - Graceful shutdown on Ctrl+C
 
+## What You Will See
+
+A continuous stream of real-time trade, quote, and bar events for AAPL, MSFT, and GOOGL. The stream runs until you press Ctrl+C.
+
 ## Data Feeds
 
 Alpaca offers three stock data feeds:

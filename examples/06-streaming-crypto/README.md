@@ -7,6 +7,10 @@ This example demonstrates real-time cryptocurrency market data streaming via Web
 - Formatting crypto prices for display
 - Graceful shutdown on Ctrl+C
 
+## What You Will See
+
+A continuous stream of real-time crypto trades and bars for BTC/USD and ETH/USD. Runs 24/7 until you press Ctrl+C.
+
 ## Crypto vs Stock Streaming
 
 Crypto streaming is similar to stock streaming (Example 05) but with key differences:

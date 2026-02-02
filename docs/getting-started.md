@@ -28,8 +28,8 @@ bun add @luisjpf/alpaca-sdk
 import { createAlpacaClient } from '@luisjpf/alpaca-sdk'
 
 const client = createAlpacaClient({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
 })
 
 const account = await client.trading.account.get()
@@ -44,14 +44,15 @@ By default, the SDK connects to Alpaca's **paper trading** environment (`paper: 
 ```ts
 // Paper trading (default)
 const paper = createAlpacaClient({
-  keyId: 'your-key',
-  secretKey: 'your-secret',
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
 })
 
-// Live trading -- real money
+// Live trading -- REAL MONEY. Only use with live trading credentials
+// and a full understanding of the financial risks involved.
 const live = createAlpacaClient({
-  keyId: 'your-key',
-  secretKey: 'your-secret',
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
   paper: false,
 })
 ```
@@ -67,6 +68,10 @@ import { createBrokerClient } from '@luisjpf/alpaca-sdk'
 ```
 
 Each factory accepts the same `AlpacaConfig` and returns a typed client for that API.
+
+## Examples
+
+For runnable code demonstrating each SDK feature, see the [examples](../examples/) directory. Start with [Example 01 - Basic Setup](../examples/01-basic-setup/).
 
 ## Alpaca API Reference
 

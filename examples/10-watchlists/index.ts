@@ -97,7 +97,7 @@ async function main() {
   // The assets array contains full asset objects, not just symbol strings.
   // This gives you detailed info about each asset in the watchlist.
   for (const asset of fetchedWatchlist.assets ?? []) {
-    console.log(`    - ${asset.symbol?.padEnd(6)} (${asset.name}) [${asset.exchange}]`)
+    console.log(`    - ${asset.symbol.padEnd(6)} (${asset.name}) [${asset.exchange}]`)
   }
   console.log()
 

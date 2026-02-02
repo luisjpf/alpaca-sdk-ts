@@ -6,8 +6,8 @@ Every client factory exposes a `.raw` property -- an `openapi-fetch` client type
 
 ```ts
 const client = createTradingClient({
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
 })
 
 const { data, error } = await client.raw.GET('/v2/account')
@@ -88,10 +88,11 @@ Generated types are re-exported from the package as named types. For example:
 import type { TradingOrder, TradingAccount, StockBar, CryptoTrade, News } from '@luisjpf/alpaca-sdk'
 ```
 
-For full access to the generated `paths`, `components`, and `operations` types:
+The raw `paths`, `components`, and `operations` types are not re-exported from the main entry point (they would collide across Trading, Broker, and Market Data). If you need them, import directly from the generated files:
 
 ```ts
-import type { paths, components } from '@luisjpf/alpaca-sdk'
+import type { paths } from './src/trading/generated/trading-api'
+import type { paths as MarketDataPaths } from './src/market-data/generated/market-data-api'
 ```
 
 ## Auth Helpers
@@ -102,15 +103,15 @@ The SDK exports standalone auth functions. These are used internally by the clie
 import { createApiKeyAuth, createBasicAuth, createOAuthAuth } from '@luisjpf/alpaca-sdk'
 
 // API Key auth (Trading, Market Data)
-const apiKeyHeaders = createApiKeyAuth('your-key-id', 'your-secret')
+const apiKeyHeaders = createApiKeyAuth(process.env.ALPACA_KEY_ID!, process.env.ALPACA_SECRET_KEY!)
 // { 'APCA-API-KEY-ID': '...', 'APCA-API-SECRET-KEY': '...' }
 
 // HTTP Basic auth (Broker API)
-const basicHeaders = createBasicAuth('your-key-id', 'your-secret')
+const basicHeaders = createBasicAuth(process.env.BROKER_KEY_ID!, process.env.BROKER_SECRET_KEY!)
 // { 'Authorization': 'Basic ...' }
 
 // OAuth Bearer token
-const oauthHeaders = createOAuthAuth('your-oauth-token')
+const oauthHeaders = createOAuthAuth(process.env.ALPACA_OAUTH_TOKEN!)
 // { 'Authorization': 'Bearer ...' }
 ```
 
@@ -128,8 +129,8 @@ import { createMarketDataClient } from '@luisjpf/alpaca-sdk'
 import { createBrokerClient } from '@luisjpf/alpaca-sdk'
 
 const config = {
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
 }
 
 const trading = createTradingClient(config)
@@ -147,8 +148,8 @@ import {
 } from '@luisjpf/alpaca-sdk'
 
 const streamConfig = {
-  keyId: process.env.ALPACA_KEY_ID,
-  secretKey: process.env.ALPACA_SECRET_KEY,
+  keyId: process.env.ALPACA_KEY_ID!,
+  secretKey: process.env.ALPACA_SECRET_KEY!,
 }
 
 const stocks = createStockStream({ ...streamConfig, feed: 'iex' })

@@ -18,9 +18,17 @@ async function main() {
   // We only need the `marketData` namespace in this example, but we still
   // create the full unified client for simplicity. The other namespaces
   // (trading, broker, streams) are available but unused here.
+  // Validate that credentials are set before proceeding.
+  const keyId = process.env.ALPACA_KEY_ID
+  const secretKey = process.env.ALPACA_SECRET_KEY
+  if (!keyId || !secretKey) {
+    console.error('Please set ALPACA_KEY_ID and ALPACA_SECRET_KEY environment variables')
+    process.exit(1)
+  }
+
   const alpaca = createAlpacaClient({
-    keyId: process.env.ALPACA_KEY_ID ?? '',
-    secretKey: process.env.ALPACA_SECRET_KEY ?? '',
+    keyId,
+    secretKey,
     paper: true,
   })
 

@@ -7,6 +7,10 @@ This example demonstrates how to fetch market data using the Alpaca SDK:
 - **Snapshots** - A consolidated view of a stock's latest trade, latest quote, daily bar, and previous daily bar
 - **Latest trade** - The most recent executed trade for a symbol
 
+## What You Will See
+
+The script prints 30 days of AAPL daily bars (OHLCV), the latest bid/ask quote with spread, multi-symbol snapshots, and the latest MSFT trade.
+
 ## Historical vs Real-Time Data
 
 Alpaca provides two flavors of market data:

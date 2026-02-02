@@ -159,7 +159,7 @@ async function main() {
   console.log('      family_name: "Doe",')
   console.log('      date_of_birth: "1990-01-01",')
   console.log('      tax_id_type: "USA_SSN",')
-  console.log('      tax_id: "123-45-6789",')
+  console.log('      tax_id: "xxx-xx-xxxx",  // NEVER log real SSN values')
   console.log('      country_of_citizenship: "USA",')
   console.log('      country_of_tax_residence: "USA",')
   console.log('      funding_source: ["employment_income"]')

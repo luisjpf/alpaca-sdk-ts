@@ -131,7 +131,7 @@ import {
 } from '@luisjpf/alpaca-sdk'
 
 try {
-  await client.orders.create({ ... })
+  await client.trading.orders.create({ ... })
 } catch (error) {
   if (error instanceof RateLimitError) {
     // Auto-retried, but still failed after maxRetries
@@ -201,7 +201,7 @@ import {
 } from '@luisjpf/alpaca-sdk'
 
 try {
-  await client.orders.create({ ... })
+  await client.trading.orders.create({ ... })
 } catch (error) {
   if (error instanceof AlpacaError) {
     const apiError = error.toApiError()
@@ -328,8 +328,14 @@ pnpm test:coverage
 # Lint code
 pnpm lint
 
+# Lint examples
+pnpm lint:examples
+
 # Type check
 pnpm typecheck
+
+# Type check examples
+pnpm typecheck:examples
 ```
 
 ## Requirements

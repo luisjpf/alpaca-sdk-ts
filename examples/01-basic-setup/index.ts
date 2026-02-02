@@ -22,9 +22,17 @@ async function main() {
   // The `paper` option (defaults to true) tells the SDK to connect to
   // Alpaca's paper trading environment, which uses fake money so you
   // can test strategies without risking real funds.
+  // Validate that credentials are set before proceeding.
+  const keyId = process.env.ALPACA_KEY_ID
+  const secretKey = process.env.ALPACA_SECRET_KEY
+  if (!keyId || !secretKey) {
+    console.error('Please set ALPACA_KEY_ID and ALPACA_SECRET_KEY environment variables')
+    process.exit(1)
+  }
+
   const alpaca = createAlpacaClient({
-    keyId: process.env.ALPACA_KEY_ID ?? '',
-    secretKey: process.env.ALPACA_SECRET_KEY ?? '',
+    keyId,
+    secretKey,
     paper: true,
   })
 

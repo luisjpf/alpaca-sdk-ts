@@ -7,7 +7,7 @@ The SDK provides two complementary error patterns:
 1. **Class-based errors** -- use `instanceof` for try/catch flows
 2. **Discriminated unions** -- use `type` field for pattern matching
 
-Both patterns carry the same information. Choose whichever fits your codebase.
+Both patterns carry the same information. Choose whichever fits your codebase. See [Example 08](../examples/08-error-handling/) for a runnable demonstration of both patterns.
 
 ## Class-Based Errors
 
@@ -25,6 +25,7 @@ All errors extend the `AlpacaError` base class.
 | `ValidationError`        | 422    | `validation`         |
 | `RateLimitError`         | 429    | `rate_limit`         |
 | `ServerError`            | 500+   | `server`             |
+| `NotImplementedError`    | 501    | `not_implemented`    |
 
 ### Error Properties
 
@@ -183,6 +184,10 @@ const noRetry = createAlpacaClient({
   maxRetries: 0,
 })
 ```
+
+### Unknown Status Codes
+
+Status codes not matching any specific class produce a generic `AlpacaError` with `type: 'unknown'`.
 
 ## Request ID
 

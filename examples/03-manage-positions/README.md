@@ -7,6 +7,10 @@ This example demonstrates how to manage your portfolio positions with the Alpaca
 - Partially closing a position (selling only a portion of your shares)
 - Closing all positions at once (liquidating the portfolio)
 
+## What You Will See
+
+The script lists all open positions, fetches a specific AAPL position, partially closes it, then liquidates all remaining positions.
+
 ## What is a Position?
 
 A position represents your current holding in a particular stock or asset. When you buy shares, a position is created. The position tracks:
