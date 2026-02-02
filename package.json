@@ -29,6 +29,8 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
+    "lint:examples": "eslint examples/",
+    "typecheck:examples": "tsc --noEmit -p examples/tsconfig.json",
     "format": "prettier --check \"**/*.{ts,tsx,js,json,md}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
     "typecheck": "tsc --noEmit",
