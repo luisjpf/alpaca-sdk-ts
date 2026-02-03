@@ -17,6 +17,33 @@ Modern, type-safe TypeScript SDK for Alpaca's Trading, Broker, and Market Data A
 - **WebSocket Streaming**: Real-time market data and trade updates
 - **Modern**: ESM-first with CommonJS compatibility
 
+## Documentation
+
+- [Getting Started](docs/getting-started.md) - Installation, setup, first request
+- [Configuration](docs/configuration.md) - Client options, paper vs live, custom URLs
+- [Error Handling](docs/error-handling.md) - Error classes, type guards, retries
+- [Streaming](docs/streaming.md) - Real-time WebSocket data
+- [Advanced Usage](docs/advanced.md) - Raw client, AbortSignal, type generation
+
+For API-specific details (order types, timeframes, asset classes), see the [Alpaca API docs](https://docs.alpaca.markets).
+
+## Examples
+
+| Example                                          | Description                                           |
+| ------------------------------------------------ | ----------------------------------------------------- |
+| [Basic Setup](examples/01-basic-setup)           | Create a client, get account info, check market clock |
+| [Place Orders](examples/02-place-order)          | Market, limit, and stop-limit orders                  |
+| [Manage Positions](examples/03-manage-positions) | List, inspect, and close positions                    |
+| [Market Data](examples/04-market-data)           | Historical bars, latest quotes, snapshots             |
+| [Stream Stocks](examples/05-streaming-stocks)    | Real-time stock trades and quotes                     |
+| [Stream Crypto](examples/06-streaming-crypto)    | Real-time crypto data                                 |
+| [Trade Updates](examples/07-trade-updates)       | Listen for order fills and cancellations              |
+| [Error Handling](examples/08-error-handling)     | Both error handling patterns                          |
+| [Options Data](examples/09-options-data)         | Option chains, snapshots, quotes                      |
+| [Watchlists](examples/10-watchlists)             | Create and manage watchlists                          |
+| [News & Screener](examples/11-news-screener)     | News articles, most actives, movers                   |
+| [Broker Basics](examples/12-broker-basics)       | Sub-accounts and transfers                            |
+
 ## Installation
 
 ```bash
@@ -104,7 +131,7 @@ import {
 } from '@luisjpf/alpaca-sdk'
 
 try {
-  await client.orders.create({ ... })
+  await client.trading.orders.create({ ... })
 } catch (error) {
   if (error instanceof RateLimitError) {
     // Auto-retried, but still failed after maxRetries
@@ -174,7 +201,7 @@ import {
 } from '@luisjpf/alpaca-sdk'
 
 try {
-  await client.orders.create({ ... })
+  await client.trading.orders.create({ ... })
 } catch (error) {
   if (error instanceof AlpacaError) {
     const apiError = error.toApiError()
@@ -301,8 +328,14 @@ pnpm test:coverage
 # Lint code
 pnpm lint
 
+# Lint examples
+pnpm lint:examples
+
 # Type check
 pnpm typecheck
+
+# Type check examples
+pnpm typecheck:examples
 ```
 
 ## Requirements
