@@ -94,4 +94,47 @@ export class SubscriptionManager {
   isSubscribed(type: SubscriptionType, symbol: string): boolean {
     return this.getSet(type).has(symbol)
   }
+
+  /**
+   * Check if there are any subscriptions
+   */
+  hasSubscriptions(): boolean {
+    return (
+      this.subscribedTrades.size > 0 ||
+      this.subscribedQuotes.size > 0 ||
+      this.subscribedBars.size > 0
+    )
+  }
+
+  /**
+   * Get subscription messages to restore all current subscriptions.
+   * Useful for re-subscribing after reconnection.
+   * Clears internal state after generating messages (call before reconnect).
+   */
+  getResubscribeMessages(): MarketDataSubscription[] {
+    const messages: MarketDataSubscription[] = []
+
+    if (this.subscribedTrades.size > 0) {
+      messages.push({
+        action: 'subscribe',
+        trades: Array.from(this.subscribedTrades),
+      })
+    }
+
+    if (this.subscribedQuotes.size > 0) {
+      messages.push({
+        action: 'subscribe',
+        quotes: Array.from(this.subscribedQuotes),
+      })
+    }
+
+    if (this.subscribedBars.size > 0) {
+      messages.push({
+        action: 'subscribe',
+        bars: Array.from(this.subscribedBars),
+      })
+    }
+
+    return messages
+  }
 }

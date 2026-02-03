@@ -918,6 +918,50 @@ describe('streaming', () => {
         })
       )
     })
+
+    it('should restore subscriptions after reconnect', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      let ws = getMockWebSocket()
+
+      // First connection - authenticate and subscribe
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'connected' }])
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      stream.subscribeForTrades(['AAPL', 'MSFT'])
+      stream.subscribeForQuotes(['GOOG'])
+
+      // Simulate connection close (will trigger reconnect)
+      if (ws?.onclose) ws.onclose()
+
+      // Fast forward past reconnect delay
+      vi.advanceTimersByTime(1000)
+
+      // Second connection
+      ws = getMockWebSocket()
+      ws.send.mockClear()
+
+      simulateOpen(ws)
+      simulateMessage(ws, [{ T: 'success', msg: 'connected' }])
+      simulateMessage(ws, [{ T: 'success', msg: 'authenticated' }])
+
+      // Subscriptions should have been restored
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'subscribe',
+          trades: ['AAPL', 'MSFT'],
+        })
+      )
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'subscribe',
+          quotes: ['GOOG'],
+        })
+      )
+    })
   })
 
   describe('CryptoStream additional tests', () => {
@@ -1230,6 +1274,72 @@ describe('streaming', () => {
 
       const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
       expect(MockWS).toHaveBeenCalledTimes(1)
+    })
+
+    it('should emit error on connection timeout', () => {
+      vi.useFakeTimers()
+
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+
+      stream.onError(errorHandler)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      // Simulate socket open but no auth response
+      simulateOpen(ws)
+
+      // Fast forward past connection timeout (30 seconds)
+      vi.advanceTimersByTime(30000)
+
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Connection timeout',
+        })
+      )
+
+      // Should close the WebSocket on timeout
+      expect(ws.close).toHaveBeenCalled()
+
+      vi.useRealTimers()
+    })
+
+    it('should clear pending messages and subscriptions on disconnect', () => {
+      const stream = createStockStream(testConfig)
+
+      // Queue subscriptions before connecting
+      stream.subscribeForTrades(['AAPL'])
+      stream.subscribeForQuotes(['MSFT'])
+
+      // Connect
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      // Disconnect before authentication completes
+      stream.disconnect()
+
+      // Re-connect and authenticate
+      stream.connect()
+      const ws2 = getMockWebSocket()
+
+      simulateOpen(ws2)
+      simulateMessage(ws2, [{ T: 'success', msg: 'connected' }])
+      simulateMessage(ws2, [{ T: 'success', msg: 'authenticated' }])
+
+      // The old subscriptions should NOT be sent (they were cleared on disconnect)
+      // Only auth message should have been sent
+      const tradeCalls = ws2.send.mock.calls.filter((call: string[]) => {
+        try {
+          const parsed = JSON.parse(call[0]) as { action: string }
+          return parsed.action === 'subscribe'
+        } catch {
+          return false
+        }
+      })
+
+      expect(tradeCalls).toHaveLength(0)
     })
 
     it('should not create new connection if already connected', () => {

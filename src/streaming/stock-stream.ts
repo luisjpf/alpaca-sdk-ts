@@ -88,6 +88,16 @@ class StockStreamImpl extends BaseStream {
     }
   }
 
+  /**
+   * Restore subscriptions after reconnection.
+   */
+  protected onReconnected(): void {
+    const messages = this.subscriptions.getResubscribeMessages()
+    for (const message of messages) {
+      this.send(message)
+    }
+  }
+
   subscribeForTrades(symbols: string[]): void {
     this.queueOrSend(() => {
       const message = this.subscriptions.subscribe('trades', symbols)
