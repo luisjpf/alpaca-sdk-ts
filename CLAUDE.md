@@ -105,3 +105,19 @@ Dual error pattern in `src/core`:
 - Do NOT add `Co-Authored-By` lines to commit messages
 - Keep commit messages concise and descriptive
 - Use conventional commit format: `type: description` (e.g., `fix:`, `feat:`, `docs:`, `chore:`)
+
+## Releasing
+
+To release a new version:
+
+1. Update version in `package.json`
+2. Update `CHANGELOG.md` with the new version and changes
+3. Commit: `git commit -m "x.y.z"`
+4. Push: `git push`
+5. Create and push tag: `git tag vx.y.z && git push origin vx.y.z`
+
+**IMPORTANT:** Do NOT manually create GitHub releases with `gh release create`. The Release workflow automatically:
+- Publishes to npm with provenance
+- Creates the GitHub release with changelog
+
+Manually creating releases causes the workflow to fail and shows a failing badge on the repo.
