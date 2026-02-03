@@ -109,7 +109,7 @@ export class SubscriptionManager {
   /**
    * Get subscription messages to restore all current subscriptions.
    * Useful for re-subscribing after reconnection.
-   * Clears internal state after generating messages (call before reconnect).
+   * Does NOT clear internal state - subscriptions remain tracked.
    */
   getResubscribeMessages(): MarketDataSubscription[] {
     const messages: MarketDataSubscription[] = []

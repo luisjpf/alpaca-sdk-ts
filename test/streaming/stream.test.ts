@@ -1381,5 +1381,61 @@ describe('streaming', () => {
         })
       )
     })
+
+    it('should be in authenticating state after open', () => {
+      const stream = createStockStream(testConfig)
+      stream.connect()
+
+      const ws = getMockWebSocket()
+
+      // Before open, we're connecting
+      // After open but before auth response, we're authenticating
+      simulateOpen(ws)
+
+      // State should be authenticating (can't check directly but can verify
+      // that auth message was sent and we're not yet "connected")
+      expect(stream.isConnected()).toBe(false)
+      // Auth message should have been sent after receiving 'connected' message
+      simulateMessage(ws, [{ T: 'success', msg: 'connected' }])
+      expect(ws.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          action: 'auth',
+          key: 'test-key',
+          secret: 'test-secret',
+        })
+      )
+    })
+  })
+
+  describe('Queue limits', () => {
+    it('should emit error when message queue overflows', () => {
+      // Set readyState to CONNECTING (not OPEN) to trigger queueing
+      const MockWS = WebSocket as unknown as ReturnType<typeof vi.fn>
+      MockWS.mockImplementation(function (this: Record<string, unknown>) {
+        this.readyState = 0 // CONNECTING, not OPEN
+        this.send = vi.fn()
+        this.close = vi.fn()
+        this.binaryType = 'blob'
+        return this
+      })
+
+      const stream = createStockStream(testConfig)
+      const errorHandler = vi.fn()
+      stream.onError(errorHandler)
+      stream.connect()
+
+      // Queue more than 1000 subscriptions (each creates a pending message)
+      // Since we're not connected, messages will be queued
+      for (let i = 0; i <= 1000; i++) {
+        stream.subscribeForTrades([`SYM${i}`])
+      }
+
+      // The 1001st subscription should trigger an error
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.stringContaining('queue full') as string,
+        })
+      )
+    })
   })
 })

@@ -18,6 +18,9 @@ const CONNECTION_TIMEOUT = 30000
 /** Maximum number of messages to queue during disconnection */
 const MAX_PENDING_MESSAGES = 1000
 
+/** Maximum number of subscription callbacks to queue during disconnection */
+const MAX_PENDING_SUBSCRIPTIONS = 1000
+
 /** Message types from the server */
 export interface ControlMessage {
   T: 'success' | 'error' | 'subscription'
@@ -390,11 +393,21 @@ export abstract class BaseStream {
 
   /**
    * Queue a subscription to be sent when connected.
+   * If the queue is full, emits an error and drops the subscription.
    */
   protected queueOrSend(action: () => void): void {
     if (this.state === 'connected') {
       action()
     } else {
+      if (this.pendingSubscriptions.length >= MAX_PENDING_SUBSCRIPTIONS) {
+        this.emit(
+          'error',
+          new Error(
+            `Subscription queue full (max ${String(MAX_PENDING_SUBSCRIPTIONS)}). Subscription dropped.`
+          )
+        )
+        return
+      }
       this.pendingSubscriptions.push(action)
     }
   }

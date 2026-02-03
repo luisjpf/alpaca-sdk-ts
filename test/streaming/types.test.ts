@@ -80,6 +80,10 @@ describe('streaming type guards', () => {
     it('should return false for objects with wrong T value', () => {
       expect(isTrade({ T: 'x', S: 'AAPL' })).toBe(false)
     })
+
+    it('should return false for objects without S property', () => {
+      expect(isTrade({ T: 't' })).toBe(false)
+    })
   })
 
   describe('isQuote', () => {
@@ -154,6 +158,10 @@ describe('streaming type guards', () => {
     it('should return false for objects with wrong T value', () => {
       expect(isQuote({ T: 'x', S: 'AAPL' })).toBe(false)
     })
+
+    it('should return false for objects without S property', () => {
+      expect(isQuote({ T: 'q' })).toBe(false)
+    })
   })
 
   describe('isBar', () => {
@@ -227,6 +235,10 @@ describe('streaming type guards', () => {
 
     it('should return false for objects with wrong T value', () => {
       expect(isBar({ T: 'x', S: 'AAPL' })).toBe(false)
+    })
+
+    it('should return false for objects without S property', () => {
+      expect(isBar({ T: 'b' })).toBe(false)
     })
   })
 })
