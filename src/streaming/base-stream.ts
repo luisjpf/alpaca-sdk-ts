@@ -60,6 +60,7 @@ export abstract class BaseStream {
   protected connectionTimer: ReturnType<typeof setTimeout> | null = null
   protected shouldReconnect = true
   protected pendingSubscriptions: (() => void)[] = []
+  protected pendingMessages: object[] = []
   protected eventHandlers = new Map<StreamEvent, Set<EventHandler>>()
 
   constructor(config: StreamConfig) {
@@ -329,13 +330,22 @@ export abstract class BaseStream {
       subscribe()
     }
     this.pendingSubscriptions = []
+
+    // Send any messages that were queued during disconnection
+    for (const message of this.pendingMessages) {
+      this.send(message)
+    }
+    this.pendingMessages = []
   }
 
   /**
    * Send a message to the WebSocket server.
+   * If not connected, queues the message to be sent after reconnection.
    */
   protected send(message: object): void {
     if (this.ws?.readyState !== WebSocket.OPEN) {
+      // Queue message to be sent after reconnection
+      this.pendingMessages.push(message)
       return
     }
 

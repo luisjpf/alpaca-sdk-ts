@@ -5,14 +5,17 @@
  */
 
 import { BaseStream } from './base-stream'
-import type {
-  StockStreamConfig,
-  StockFeed,
-  Trade,
-  Quote,
-  Bar,
-  MarketDataAuth,
-  MarketDataSubscription,
+import { SubscriptionManager } from './subscription-manager'
+import {
+  isTrade,
+  isQuote,
+  isBar,
+  type StockStreamConfig,
+  type StockFeed,
+  type Trade,
+  type Quote,
+  type Bar,
+  type MarketDataAuth,
 } from './types'
 
 /** Base URL for stock data streaming */
@@ -56,9 +59,7 @@ export interface StockStream {
  */
 class StockStreamImpl extends BaseStream {
   private feed: StockFeed
-  private subscribedTrades = new Set<string>()
-  private subscribedQuotes = new Set<string>()
-  private subscribedBars = new Set<string>()
+  private subscriptions = new SubscriptionManager()
 
   constructor(config: StockStreamConfig) {
     super(config)
@@ -78,120 +79,54 @@ class StockStreamImpl extends BaseStream {
   }
 
   protected handleMessage(message: Record<string, unknown>): void {
-    const type = message.T as string
-
-    switch (type) {
-      case 't':
-        this.emit('trade', message as unknown as Trade)
-        break
-      case 'q':
-        this.emit('quote', message as unknown as Quote)
-        break
-      case 'b':
-        this.emit('bar', message as unknown as Bar)
-        break
+    if (isTrade(message)) {
+      this.emit('trade', message)
+    } else if (isQuote(message)) {
+      this.emit('quote', message)
+    } else if (isBar(message)) {
+      this.emit('bar', message)
     }
   }
 
   subscribeForTrades(symbols: string[]): void {
     this.queueOrSend(() => {
-      const newSymbols = symbols.filter((s) => !this.subscribedTrades.has(s))
-      if (newSymbols.length === 0) return
-
-      for (const symbol of newSymbols) {
-        this.subscribedTrades.add(symbol)
-      }
-
-      const message: MarketDataSubscription = {
-        action: 'subscribe',
-        trades: newSymbols,
-      }
-      this.send(message)
+      const message = this.subscriptions.subscribe('trades', symbols)
+      if (message) this.send(message)
     })
   }
 
   subscribeForQuotes(symbols: string[]): void {
     this.queueOrSend(() => {
-      const newSymbols = symbols.filter((s) => !this.subscribedQuotes.has(s))
-      if (newSymbols.length === 0) return
-
-      for (const symbol of newSymbols) {
-        this.subscribedQuotes.add(symbol)
-      }
-
-      const message: MarketDataSubscription = {
-        action: 'subscribe',
-        quotes: newSymbols,
-      }
-      this.send(message)
+      const message = this.subscriptions.subscribe('quotes', symbols)
+      if (message) this.send(message)
     })
   }
 
   subscribeForBars(symbols: string[]): void {
     this.queueOrSend(() => {
-      const newSymbols = symbols.filter((s) => !this.subscribedBars.has(s))
-      if (newSymbols.length === 0) return
-
-      for (const symbol of newSymbols) {
-        this.subscribedBars.add(symbol)
-      }
-
-      const message: MarketDataSubscription = {
-        action: 'subscribe',
-        bars: newSymbols,
-      }
-      this.send(message)
+      const message = this.subscriptions.subscribe('bars', symbols)
+      if (message) this.send(message)
     })
   }
 
   unsubscribeFromTrades(symbols: string[]): void {
     this.queueOrSend(() => {
-      const existingSymbols = symbols.filter((s) => this.subscribedTrades.has(s))
-      if (existingSymbols.length === 0) return
-
-      for (const symbol of existingSymbols) {
-        this.subscribedTrades.delete(symbol)
-      }
-
-      const message: MarketDataSubscription = {
-        action: 'unsubscribe',
-        trades: existingSymbols,
-      }
-      this.send(message)
+      const message = this.subscriptions.unsubscribe('trades', symbols)
+      if (message) this.send(message)
     })
   }
 
   unsubscribeFromQuotes(symbols: string[]): void {
     this.queueOrSend(() => {
-      const existingSymbols = symbols.filter((s) => this.subscribedQuotes.has(s))
-      if (existingSymbols.length === 0) return
-
-      for (const symbol of existingSymbols) {
-        this.subscribedQuotes.delete(symbol)
-      }
-
-      const message: MarketDataSubscription = {
-        action: 'unsubscribe',
-        quotes: existingSymbols,
-      }
-      this.send(message)
+      const message = this.subscriptions.unsubscribe('quotes', symbols)
+      if (message) this.send(message)
     })
   }
 
   unsubscribeFromBars(symbols: string[]): void {
     this.queueOrSend(() => {
-      const existingSymbols = symbols.filter((s) => this.subscribedBars.has(s))
-      if (existingSymbols.length === 0) return
-
-      for (const symbol of existingSymbols) {
-        this.subscribedBars.delete(symbol)
-      }
-
-      const message: MarketDataSubscription = {
-        action: 'unsubscribe',
-        bars: existingSymbols,
-      }
-      this.send(message)
+      const message = this.subscriptions.unsubscribe('bars', symbols)
+      if (message) this.send(message)
     })
   }
 

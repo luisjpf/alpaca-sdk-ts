@@ -197,8 +197,8 @@ export function createBrokerClient(config: BrokerClientConfig) {
         )
       },
 
-      /** Delete/cancel a transfer */
-      async delete(accountId: string, transferId: string, options?: RequestOptions) {
+      /** Delete/cancel a transfer. Returns void on success (204 No Content). */
+      async delete(accountId: string, transferId: string, options?: RequestOptions): Promise<void> {
         unwrapOptional(
           await client.DELETE('/v1/accounts/{account_id}/transfers/{transfer_id}', {
             params: { path: { account_id: accountId, transfer_id: transferId } },
@@ -235,8 +235,12 @@ export function createBrokerClient(config: BrokerClientConfig) {
         )
       },
 
-      /** Delete an ACH relationship */
-      async delete(accountId: string, achRelationshipId: string, options?: RequestOptions) {
+      /** Delete an ACH relationship. Returns void on success (204 No Content). */
+      async delete(
+        accountId: string,
+        achRelationshipId: string,
+        options?: RequestOptions
+      ): Promise<void> {
         unwrapOptional(
           await client.DELETE('/v1/accounts/{account_id}/ach_relationships/{ach_relationship_id}', {
             params: { path: { account_id: accountId, ach_relationship_id: achRelationshipId } },
@@ -301,8 +305,8 @@ export function createBrokerClient(config: BrokerClientConfig) {
           )
         },
 
-        /** Cancel an order */
-        async cancel(accountId: string, orderId: string, options?: RequestOptions) {
+        /** Cancel an order. Returns void on success (204 No Content). */
+        async cancel(accountId: string, orderId: string, options?: RequestOptions): Promise<void> {
           unwrapOptional(
             await client.DELETE('/v1/trading/accounts/{account_id}/orders/{order_id}', {
               params: { path: { account_id: accountId, order_id: orderId } },
