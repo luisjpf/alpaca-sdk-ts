@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4] - 2026-02-03
+
+### Added
+
+- **Type guards for streaming messages** - `isTrade()`, `isQuote()`, `isBar()` functions for runtime type validation
+- **SubscriptionManager class** - Extracted subscription tracking logic, reducing code duplication
+- **Message queueing during WebSocket disconnection** - Messages sent while disconnected are queued and sent after reconnection
+- **Subscription restoration on reconnect** - Subscriptions are automatically restored after WebSocket reconnection
+- **Queue overflow protection** - Both message and subscription queues limited to 1000 items with error emission
+
+### Fixed
+
+- **Explicit void return types** - Added `Promise<void>` return type for delete operations (orders, watchlists, transfers, ACH relationships)
+- **Type guard validation** - Type guards now validate both discriminant (T) and symbol (S) properties
+
+### Changed
+
+- **Streaming exports** - Type guards (`isTrade`, `isQuote`, `isBar`) and types (`Trade`, `Quote`, `Bar`, `TradeUpdate`) now exported from main package entry point
+
 ## [0.1.0] - 2026-01-26
 
 ### Added
