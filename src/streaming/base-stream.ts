@@ -15,6 +15,12 @@ const RECONNECT_BACKOFF_MULTIPLIER = 2
 /** Connection timeout (30 seconds) */
 const CONNECTION_TIMEOUT = 30000
 
+/** Maximum number of messages to queue during disconnection */
+const MAX_PENDING_MESSAGES = 1000
+
+/** Maximum number of subscription callbacks to queue during disconnection */
+const MAX_PENDING_SUBSCRIPTIONS = 1000
+
 /** Message types from the server */
 export interface ControlMessage {
   T: 'success' | 'error' | 'subscription'
@@ -60,6 +66,7 @@ export abstract class BaseStream {
   protected connectionTimer: ReturnType<typeof setTimeout> | null = null
   protected shouldReconnect = true
   protected pendingSubscriptions: (() => void)[] = []
+  protected pendingMessages: object[] = []
   protected eventHandlers = new Map<StreamEvent, Set<EventHandler>>()
 
   constructor(config: StreamConfig) {
@@ -80,6 +87,15 @@ export abstract class BaseStream {
    * Get the authentication message to send after connecting.
    */
   protected abstract getAuthMessage(): object
+
+  /**
+   * Called after successful authentication to restore subscriptions.
+   * Override in subclasses to implement subscription restoration.
+   */
+  protected onReconnected(): void {
+    // Default implementation does nothing
+    // Subclasses should override to restore subscriptions
+  }
 
   /**
    * Get the current connection state.
@@ -119,6 +135,10 @@ export abstract class BaseStream {
       this.ws.close()
       this.ws = null
     }
+
+    // Clear queued messages to prevent stale data on reconnect
+    this.pendingMessages = []
+    this.pendingSubscriptions = []
 
     this.setState('disconnected')
   }
@@ -319,23 +339,48 @@ export abstract class BaseStream {
    */
   private onAuthenticated(): void {
     this.clearConnectionTimer()
+    const wasReconnect = this.reconnectAttempts > 0
     this.setState('connected')
     this.reconnectAttempts = 0
     this.emit('connected')
     this.emit('authenticated')
+
+    // Restore subscriptions on reconnect
+    if (wasReconnect) {
+      this.onReconnected()
+    }
 
     // Process any pending subscriptions
     for (const subscribe of this.pendingSubscriptions) {
       subscribe()
     }
     this.pendingSubscriptions = []
+
+    // Send any messages that were queued during disconnection
+    for (const message of this.pendingMessages) {
+      this.send(message)
+    }
+    this.pendingMessages = []
   }
 
   /**
    * Send a message to the WebSocket server.
+   * If not connected, queues the message to be sent after reconnection.
+   * If the queue is full, emits an error and drops the message.
    */
   protected send(message: object): void {
     if (this.ws?.readyState !== WebSocket.OPEN) {
+      // Queue message to be sent after reconnection, with size limit
+      if (this.pendingMessages.length >= MAX_PENDING_MESSAGES) {
+        this.emit(
+          'error',
+          new Error(
+            `Message queue full (max ${String(MAX_PENDING_MESSAGES)}). Message dropped. Consider reconnecting.`
+          )
+        )
+        return
+      }
+      this.pendingMessages.push(message)
       return
     }
 
@@ -348,11 +393,21 @@ export abstract class BaseStream {
 
   /**
    * Queue a subscription to be sent when connected.
+   * If the queue is full, emits an error and drops the subscription.
    */
   protected queueOrSend(action: () => void): void {
     if (this.state === 'connected') {
       action()
     } else {
+      if (this.pendingSubscriptions.length >= MAX_PENDING_SUBSCRIPTIONS) {
+        this.emit(
+          'error',
+          new Error(
+            `Subscription queue full (max ${String(MAX_PENDING_SUBSCRIPTIONS)}). Subscription dropped.`
+          )
+        )
+        return
+      }
       this.pendingSubscriptions.push(action)
     }
   }

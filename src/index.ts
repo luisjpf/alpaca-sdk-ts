@@ -101,7 +101,7 @@ export type {
   Clock as BrokerClock,
 } from './broker'
 
-// Streaming - Export client factory and types
+// Streaming - Export client factory, types, and type guards
 export {
   createStockStream,
   type StockStream,
@@ -111,6 +111,14 @@ export {
   type TradeUpdatesStream,
   type StreamConfig,
   type StreamState,
+  // Type guards for streaming messages
+  isTrade,
+  isQuote,
+  isBar,
+  type Trade,
+  type Quote,
+  type Bar,
+  type TradeUpdate,
 } from './streaming'
 
 // Unified client

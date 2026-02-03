@@ -180,8 +180,8 @@ export function createTradingClient(config: TradingClientConfig) {
         )
       },
 
-      /** Cancel an order */
-      async cancel(orderId: string, options?: RequestOptions) {
+      /** Cancel an order. Returns void on success (204 No Content). */
+      async cancel(orderId: string, options?: RequestOptions): Promise<void> {
         unwrapOptional(
           await client.DELETE('/v2/orders/{order_id}', {
             params: { path: { order_id: orderId } },
@@ -373,8 +373,8 @@ export function createTradingClient(config: TradingClientConfig) {
         )
       },
 
-      /** Delete a watchlist */
-      async delete(watchlistId: string, options?: RequestOptions) {
+      /** Delete a watchlist. Returns void on success (204 No Content). */
+      async delete(watchlistId: string, options?: RequestOptions): Promise<void> {
         unwrapOptional(
           await client.DELETE('/v2/watchlists/{watchlist_id}', {
             params: { path: { watchlist_id: watchlistId } },

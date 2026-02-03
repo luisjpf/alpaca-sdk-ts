@@ -106,6 +106,48 @@ export interface TradeUpdate {
 export type MarketDataMessage = Trade | Quote | Bar
 
 /**
+ * Type guard to check if a message is a Trade.
+ * Validates both the discriminant (T) and the symbol (S) property.
+ */
+export function isTrade(message: unknown): message is Trade {
+  return (
+    message !== null &&
+    typeof message === 'object' &&
+    'T' in message &&
+    'S' in message &&
+    (message as Record<string, unknown>).T === 't'
+  )
+}
+
+/**
+ * Type guard to check if a message is a Quote.
+ * Validates both the discriminant (T) and the symbol (S) property.
+ */
+export function isQuote(message: unknown): message is Quote {
+  return (
+    message !== null &&
+    typeof message === 'object' &&
+    'T' in message &&
+    'S' in message &&
+    (message as Record<string, unknown>).T === 'q'
+  )
+}
+
+/**
+ * Type guard to check if a message is a Bar.
+ * Validates both the discriminant (T) and the symbol (S) property.
+ */
+export function isBar(message: unknown): message is Bar {
+  return (
+    message !== null &&
+    typeof message === 'object' &&
+    'T' in message &&
+    'S' in message &&
+    (message as Record<string, unknown>).T === 'b'
+  )
+}
+
+/**
  * Subscription action types for market data
  */
 export interface MarketDataSubscription {

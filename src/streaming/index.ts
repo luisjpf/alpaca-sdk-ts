@@ -6,15 +6,18 @@
 export { createStockStream, type StockStream } from './stock-stream'
 export { createCryptoStream, type CryptoStream } from './crypto-stream'
 export { createTradeUpdatesStream, type TradeUpdatesStream } from './trade-updates-stream'
-export type {
-  StreamConfig,
-  StreamState,
-  StockStreamConfig,
-  StockFeed,
-  CryptoStreamConfig,
-  CryptoLocation,
-  Trade,
-  Quote,
-  Bar,
-  TradeUpdate,
+export {
+  isTrade,
+  isQuote,
+  isBar,
+  type StreamConfig,
+  type StreamState,
+  type StockStreamConfig,
+  type StockFeed,
+  type CryptoStreamConfig,
+  type CryptoLocation,
+  type Trade,
+  type Quote,
+  type Bar,
+  type TradeUpdate,
 } from './types'
